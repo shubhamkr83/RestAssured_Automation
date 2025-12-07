@@ -685,13 +685,7 @@ public void testUserSchema() {
 
 ### **Made with ❤️ by Test Automation Engineers**
 
-[![GitHub stars](https://img.shields.io/github/stars/your-repo/api-automation?style=social)](https://github.com/your-repo/api-automation/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/your-repo/api-automation?style=social)](https://github.com/your-repo/api-automation/network/members)
-[![GitHub watchers](https://img.shields.io/github/watchers/your-repo/api-automation?style=social)](https://github.com/your-repo/api-automation/watchers)
-
----
-
-**Happy Testing! 🚀**
+**🛍️ Happy Testing! 🚀**
 
 [Back to Top](#-api-automation-framework) ⬆️
 

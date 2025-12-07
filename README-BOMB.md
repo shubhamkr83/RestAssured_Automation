@@ -501,28 +501,6 @@ Accept: application/json
 
 ---
 
-## 🎯 **Postman vs RestAssured Comparison**
-
-### **Migration Mapping**
-
-<div align="center">
-
-| 📦 Postman Feature | ➡️ | ✅ RestAssured Implementation |
-|----------------------|-----|----------------------------------|
-| **Pre-request scripts** | ➡️ | `@BeforeClass` methods |
-| **Test scripts** | ➡️ | `@Test` methods with Hamcrest |
-| **Collection variables** | ➡️ | Static class variables |
-| **Global variables** | ➡️ | `ConfigManager` properties |
-| **Environment variables** | ➡️ | `config.properties` |
-| **pm.test()** | ➡️ | `assertThat()` + Hamcrest matchers |
-| **pm.response.json()** | ➡️ | `JsonUtils.fromResponse()` |
-| **pm.expect()** | ➡️ | Hamcrest matchers (`equalTo`, `hasSize`) |
-| **Authentication** | ➡️ | `BaseTest` setup + JWT headers |
-
-</div>
-
----
-
 ## 📈 **Test Coverage Summary**
 
 <div align="center">
