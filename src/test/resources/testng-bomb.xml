@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="BOMB API Automation Test Suite" preserve-order="true">
+
+    <listeners>
+        <listener class-name="com.automation.listeners.TestListener"/>
+    </listeners>
+
+    <parameter name="env" value="default"/>
+
+    <test name="BOMB Login Tests" preserve-order="true">
+        <classes>
+            <class name="com.automation.tests.bomb.LoginApiTest"/>
+        </classes>
+    </test>
+
+    <test name="BOMB Catalog Search Tests" preserve-order="true">
+        <classes>
+            <class name="com.automation.tests.bomb.CatalogSearchApiTest"/>
+        </classes>
+    </test>
+
+    <test name="BOMB Catalog Assign Tests" preserve-order="true">
+        <classes>
+            <class name="com.automation.tests.bomb.CatalogAssignApiTest"/>
+        </classes>
+    </test>
+
+    <test name="BOMB Video Tests" preserve-order="true">
+        <classes>
+            <class name="com.automation.tests.bomb.VideoApiTest"/>
+        </classes>
+    </test>
+
+</suite>

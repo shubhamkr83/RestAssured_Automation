@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Post Schema",
+  "description": "JSON Schema for Post API response validation",
+  "type": "object",
+  "required": ["id", "userId", "title", "body"],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Unique identifier for the post"
+    },
+    "userId": {
+      "type": "integer",
+      "description": "ID of the user who created the post"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Title of the post"
+    },
+    "body": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Content body of the post"
+    }
+  }
+}
