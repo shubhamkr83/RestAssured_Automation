@@ -21,7 +21,6 @@
 ---
 
 ## **Project Summary**
-## **Project Summary**
 
 This is an **enterprise-grade REST API automation framework** built from the ground up to provide comprehensive testing capabilities for modern web APIs. The framework successfully converts a complete Postman collection into a robust, maintainable, and scalable Java-based testing solution.
 
@@ -677,64 +676,9 @@ public void testUserSchema() {
 |----------|-------------|
 | [README-BOMB.md](README-BOMB.md) | BOMB API specific documentation |
 | [README-BUYER-APP.md](README-BUYER-APP.md) | Buyer App API documentation |
-| [CONVERSION-SUMMARY.md](CONVERSION-SUMMARY.md) | Postman to RestAssured conversion details |
-| [BUYER-APP-ENDPOINTS-SUMMARY.md](BUYER-APP-ENDPOINTS-SUMMARY.md) | Complete endpoint inventory |
+
 
 ---
-
-## 🤝 **Contributing**
-
-Contributions are welcome! Please follow these steps:
-
-1. 🍴 Fork the repository
-2. 🌿 Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. ✍️ Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. 📤 Push to the branch (`git push origin feature/AmazingFeature`)
-5. 🔃 Open a Pull Request
-
----
-
-## 📞 **Support**
-
-If you encounter any issues or have questions:
-
-- 📧 **Email**: your.email@example.com
-- 💬 **Issues**: [GitHub Issues](https://github.com/your-repo/issues)
-- 📖 **Documentation**: Check the [Wiki](https://github.com/your-repo/wiki)
-
----
-
-## 🙏 **Acknowledgments**
-
-- **RestAssured** team for the amazing API testing library
-- **TestNG** team for the robust testing framework
-- **Allure** team for beautiful reporting
-- **Community** for continuous support and contributions
-
----
-
-## 📜 **License**
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
-```
-MIT License
-
-Copyright (c) 2024 API Automation Framework
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-```
-
----
-
 <div align="center">
 
 ## ⭐ **Star this repository if you find it helpful!**
