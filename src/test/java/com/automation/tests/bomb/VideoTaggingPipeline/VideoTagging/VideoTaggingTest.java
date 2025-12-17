@@ -1,11 +1,11 @@
-package com.automation.tests.bomb.Video_Tagging_pipeline.Video_Tagging;
+package com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.BombEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.request.VideoTaggingRequest;
 import com.automation.models.response.VideoTaggingResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Video Tagging Pipeline")
 @Feature("Video Tagging")
-public class Video_Tagging extends BaseTest {
+public class VideoTaggingTest extends BaseTest {
 
     private String authToken;
     private Response response;
@@ -45,32 +45,34 @@ public class Video_Tagging extends BaseTest {
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
+        logger.info("Using BOMB token from VariableManager");
 
         // Get video ID from previous test
-        if (Video_Tagging_Edit_Button.videoId != null) {
-            videoId = Video_Tagging_Edit_Button.videoId;
-            logger.info("Using video ID from previous test: {}", videoId);
+        // Use VariableManager to get video ID either from properties or set by previous test
+        String prevVideoId = VariableManager.getVideoId();
+        if (prevVideoId != null) {
+            videoId = prevVideoId;
+            logger.info("Using video ID from VariableManager: {}", videoId);
         } else {
             // Fallback to a default ID if not available
             videoId = "default_video_id";
-            logger.warn("Video ID not available from previous test, using default");
+            logger.warn("Video ID not available, using default");
         }
 
         // Get video title from previous test
-        if (Video_Title_Generation.videoTitle != null) {
-            videoTitle = Video_Title_Generation.videoTitle;
-            logger.info("Using video title from previous test: {}", videoTitle);
+        String prevVideoTitle = VariableManager.get("video_title");
+        if (prevVideoTitle != null) {
+            videoTitle = prevVideoTitle;
+            logger.info("Using video title from VariableManager: {}", videoTitle);
         } else {
             // Fallback to a default title if not available
             videoTitle = "Default Video Title";
-            logger.warn("Video title not available from previous test, using default");
+            logger.warn("Video title not available, using default");
         }
 
         // Build request body

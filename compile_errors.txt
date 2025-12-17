@@ -1,0 +1,475 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------< com.automation:api-automation-restassured >--------------
+[INFO] Building API Automation Framework 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ api-automation-restassured ---
+[INFO] Deleting C:\Users\HP\Documents\sk\codebase\api_restassured_automation\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ api-automation-restassured ---
+[INFO] skip non existing resourceDirectory C:\Users\HP\Documents\sk\codebase\api_restassured_automation\src\main\resources
+[INFO] 
+[INFO] --- compiler:3.12.1:compile (default-compile) @ api-automation-restassured ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 78 source files with javac [debug target 17] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ api-automation-restassured ---
+[INFO] Copying 10 resources from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.12.1:testCompile (default-testCompile) @ api-automation-restassured ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 56 source files with javac [debug target 17] to target\test-classes
+[INFO] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProfilePage/VideoViewActionTest.java: C:\Users\HP\Documents\sk\codebase\api_restassured_automation\src\test\java\com\automation\tests\buyerapp\ProfilePage\VideoViewActionTest.java uses or overrides a deprecated API.
+[INFO] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProfilePage/VideoViewActionTest.java: Recompile with -Xlint:deprecation for details.
+[INFO] Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/HomePage/ContinueYourJourneyTest.java:[177,84] incompatible types: no instance(s) of type variable(s) T exist so that org.hamcrest.Matcher<T> conforms to int
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/HomePage/ContinueYourJourneyTest.java:[179,78] incompatible types: no instance(s) of type variable(s) T exist so that org.hamcrest.Matcher<T> conforms to int
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/HomePage/ContinueYourJourneyTest.java:[212,67] incompatible types: no instance(s) of type variable(s) T exist so that org.hamcrest.Matcher<T> conforms to int
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoUploadAndAssignToEditor/VideoUploadMarkAsDoneTest.java:[46,13] cannot find symbol
+  symbol:   variable Video_Upload_All_Video_Assign_for_uploading_Thumbnail_Video
+  location: class com.automation.tests.bomb.Video_Tagging_pipeline.Video_Upload_and_Assign_to_Editor.VideoUploadMarkAsDoneTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoUploadAndAssignToEditor/VideoUploadMarkAsDoneTest.java:[47,24] cannot find symbol
+  symbol:   variable Video_Upload_All_Video_Assign_for_for_uploading_Thumbnail_Video
+  location: class com.automation.tests.bomb.Video_Tagging_pipeline.Video_Upload_and_Assign_to_Editor.VideoUploadMarkAsDoneTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/MarkAsDoneTest.java:[51,22] cannot find symbol
+  symbol:   variable BombEndpoints
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.MarkAsDoneTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogAssignToEditor/AssignToEditorTest.java:[215,49] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Assign_to_Editor.AssignToEditorTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogAssignToEditor/AssignToEditorTest.java:[217,95] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Assign_to_Editor.AssignToEditorTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogSearch/SearchWithProductFilterTest.java:[252,88] cannot find symbol
+  symbol:   variable PRODUCT_ID
+  location: class com.automation.tests.bomb.Catalog_Search.SearchWithProductFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogSearch/SearchWithProductFilterTest.java:[254,62] cannot find symbol
+  symbol:   variable PRODUCT_ID
+  location: class com.automation.tests.bomb.Catalog_Search.SearchWithProductFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTaggingTest.java:[50,13] cannot find symbol
+  symbol:   variable Catalog_Editor_Catalog_Tag
+  location: class com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTaggingTest.java:[51,25] cannot find symbol
+  symbol:   variable Catalog_Editor_Catalog_Tag
+  location: class com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTaggingTest.java:[61,13] cannot find symbol
+  symbol:   variable Catalog_Editor_Bot_Catalog_Title_Generate
+  location: class com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTaggingTest.java:[62,30] cannot find symbol
+  symbol:   variable Catalog_Editor_Bot_Catalog_Title_Generate
+  location: class com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogAssignToEditor/CatalogUploadedSearchBySellerFilterTest.java:[237,95] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Assign_to_Editor.CatalogUploadedSearchBySellerFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogAssignToEditor/CatalogUploadedSearchBySellerFilterTest.java:[238,53] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Assign_to_Editor.CatalogUploadedSearchBySellerFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogAssignToEditor/CatalogUploadedSearchBySellerFilterTest.java:[242,50] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Assign_to_Editor.CatalogUploadedSearchBySellerFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/HomePage/FeaturedCollectionTest.java:[56,39] cannot find symbol
+  symbol:   variable FEED_FEATURED_COLLECTION
+  location: class com.automation.constants.BuyerAppEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoTagging/VideoTaggingTest.java:[56,13] cannot find symbol
+  symbol:   variable Video_Tagging_Edit_Button
+  location: class com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging.VideoTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoTagging/VideoTaggingTest.java:[57,23] cannot find symbol
+  symbol:   variable Video_Tagging_Edit_Button
+  location: class com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging.VideoTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoTagging/VideoTaggingTest.java:[66,13] cannot find symbol
+  symbol:   variable Video_Title_Generation
+  location: class com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging.VideoTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoTagging/VideoTaggingTest.java:[67,26] cannot find symbol
+  symbol:   variable Video_Title_Generation
+  location: class com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging.VideoTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProductPage/ProductSimilarCollectionTest.java:[130,69] incompatible types: no instance(s) of type variable(s) T exist so that org.hamcrest.Matcher<T> conforms to int
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProductPage/ProductSimilarCollectionTest.java:[132,76] incompatible types: no instance(s) of type variable(s) T exist so that org.hamcrest.Matcher<T> conforms to int
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogSearch/SearchWithSellerFilterTest.java:[139,60] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Search.SearchWithSellerFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogSearch/SearchWithSellerFilterTest.java:[142,71] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Search.SearchWithSellerFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[46,9] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[47,13] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[47,43] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[48,13] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[49,83] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[51,81] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[67,65] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[257,36] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[258,69] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[262,64] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoUploadAndAssignToEditor/UploadThumbnailVideoTest.java:[61,13] cannot find symbol
+  symbol:   variable Video_Upload_All_Video_Assign_for_uploading_Thumbnail_Video
+  location: class com.automation.tests.bomb.Video_Tagging_pipeline.Video_Upload_and_Assign_to_Editor.UploadThumbnailVideoTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoUploadAndAssignToEditor/UploadThumbnailVideoTest.java:[62,24] cannot find symbol
+  symbol:   variable Video_Upload_All_Video_Assign_for_uploading_Thumbnail_Video
+  location: class com.automation.tests.bomb.Video_Tagging_pipeline.Video_Upload_and_Assign_to_Editor.UploadThumbnailVideoTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/UpdateCartTest.java:[51,17] cannot find symbol
+  symbol:   method pathParam(java.lang.String,java.lang.String)
+  location: class com.automation.models.request.UpdateCartRequest.UpdateCartRequestBuilder
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/UpdateCartTest.java:[62,40] cannot find symbol
+  symbol:   variable USER_UPDATE_CART
+  location: class com.automation.constants.BuyerAppEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[44,9] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[45,13] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[45,43] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[46,13] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[47,83] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[49,81] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[53,9] cannot find symbol
+  symbol:   variable sellerId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[54,13] cannot find symbol
+  symbol:   variable sellerId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[54,33] cannot find symbol
+  symbol:   variable sellerId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[55,13] cannot find symbol
+  symbol:   variable sellerId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[56,71] cannot find symbol
+  symbol:   variable sellerId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[58,69] cannot find symbol
+  symbol:   variable sellerId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[75,59] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[72,42] cannot find symbol
+  symbol:   variable sellerId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[218,36] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[219,69] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[223,66] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/AllCatalogsAssignedTest.java:[62,35] cannot find symbol
+  symbol:   variable CATALOG_EDITOR_ALL
+  location: class com.automation.constants.BombEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProfilePage/WatchedVideosTest.java:[47,39] cannot find symbol
+  symbol:   variable USER_VIEWED_VIDEOS
+  location: class com.automation.constants.BuyerAppEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProfilePage/VideoViewActionTest.java:[60,40] cannot find symbol
+  symbol:   variable ACTION
+  location: class com.automation.constants.BuyerAppEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProfilePage/VideoViewActionTest.java:[161,71] cannot find symbol
+  symbol:   variable VIDEO_ID
+  location: class com.automation.tests.buyerapp.ProfilePage.VideoViewActionTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProfilePage/VideoViewActionTest.java:[178,70] cannot find symbol
+  symbol:   variable USER_ID
+  location: class com.automation.tests.buyerapp.ProfilePage.VideoViewActionTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/SuitableForConfigTest.java:[47,39] cannot find symbol
+  symbol:   variable FEED_HOME_CONFIG
+  location: class com.automation.constants.BuyerAppEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[43,9] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[44,13] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[44,43] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[45,13] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[46,104] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[48,81] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[63,105] cannot find symbol
+  symbol:   variable catalogForAssignId
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[161,83] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[162,70] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[165,62] cannot find symbol
+  symbol:   variable SELLER_ID
+  location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProfilePage/UserProfileTest.java:[47,39] cannot find symbol
+  symbol:   variable USER_PROFILE
+  location: class com.automation.constants.BuyerAppEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/VideoFeedTvTest.java:[67,40] cannot find symbol
+  symbol:   variable FEED_TV
+  location: class com.automation.constants.BuyerAppEndpoints
+[INFO] 75 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  14.396 s
+[INFO] Finished at: 2025-12-17T17:31:37+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.12.1:testCompile (default-testCompile) on project api-automation-restassured: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/HomePage/ContinueYourJourneyTest.java:[177,84] incompatible types: no instance(s) of type variable(s) T exist so that org.hamcrest.Matcher<T> conforms to int
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/HomePage/ContinueYourJourneyTest.java:[179,78] incompatible types: no instance(s) of type variable(s) T exist so that org.hamcrest.Matcher<T> conforms to int
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/HomePage/ContinueYourJourneyTest.java:[212,67] incompatible types: no instance(s) of type variable(s) T exist so that org.hamcrest.Matcher<T> conforms to int
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoUploadAndAssignToEditor/VideoUploadMarkAsDoneTest.java:[46,13] cannot find symbol
+[ERROR]   symbol:   variable Video_Upload_All_Video_Assign_for_uploading_Thumbnail_Video
+[ERROR]   location: class com.automation.tests.bomb.Video_Tagging_pipeline.Video_Upload_and_Assign_to_Editor.VideoUploadMarkAsDoneTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoUploadAndAssignToEditor/VideoUploadMarkAsDoneTest.java:[47,24] cannot find symbol
+[ERROR]   symbol:   variable Video_Upload_All_Video_Assign_for_for_uploading_Thumbnail_Video
+[ERROR]   location: class com.automation.tests.bomb.Video_Tagging_pipeline.Video_Upload_and_Assign_to_Editor.VideoUploadMarkAsDoneTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/MarkAsDoneTest.java:[51,22] cannot find symbol
+[ERROR]   symbol:   variable BombEndpoints
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.MarkAsDoneTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogAssignToEditor/AssignToEditorTest.java:[215,49] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Assign_to_Editor.AssignToEditorTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogAssignToEditor/AssignToEditorTest.java:[217,95] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Assign_to_Editor.AssignToEditorTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogSearch/SearchWithProductFilterTest.java:[252,88] cannot find symbol
+[ERROR]   symbol:   variable PRODUCT_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Search.SearchWithProductFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogSearch/SearchWithProductFilterTest.java:[254,62] cannot find symbol
+[ERROR]   symbol:   variable PRODUCT_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Search.SearchWithProductFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTaggingTest.java:[50,13] cannot find symbol
+[ERROR]   symbol:   variable Catalog_Editor_Catalog_Tag
+[ERROR]   location: class com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTaggingTest.java:[51,25] cannot find symbol
+[ERROR]   symbol:   variable Catalog_Editor_Catalog_Tag
+[ERROR]   location: class com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTaggingTest.java:[61,13] cannot find symbol
+[ERROR]   symbol:   variable Catalog_Editor_Bot_Catalog_Title_Generate
+[ERROR]   location: class com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTaggingTest.java:[62,30] cannot find symbol
+[ERROR]   symbol:   variable Catalog_Editor_Bot_Catalog_Title_Generate
+[ERROR]   location: class com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogAssignToEditor/CatalogUploadedSearchBySellerFilterTest.java:[237,95] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Assign_to_Editor.CatalogUploadedSearchBySellerFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogAssignToEditor/CatalogUploadedSearchBySellerFilterTest.java:[238,53] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Assign_to_Editor.CatalogUploadedSearchBySellerFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogAssignToEditor/CatalogUploadedSearchBySellerFilterTest.java:[242,50] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Assign_to_Editor.CatalogUploadedSearchBySellerFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/HomePage/FeaturedCollectionTest.java:[56,39] cannot find symbol
+[ERROR]   symbol:   variable FEED_FEATURED_COLLECTION
+[ERROR]   location: class com.automation.constants.BuyerAppEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoTagging/VideoTaggingTest.java:[56,13] cannot find symbol
+[ERROR]   symbol:   variable Video_Tagging_Edit_Button
+[ERROR]   location: class com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging.VideoTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoTagging/VideoTaggingTest.java:[57,23] cannot find symbol
+[ERROR]   symbol:   variable Video_Tagging_Edit_Button
+[ERROR]   location: class com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging.VideoTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoTagging/VideoTaggingTest.java:[66,13] cannot find symbol
+[ERROR]   symbol:   variable Video_Title_Generation
+[ERROR]   location: class com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging.VideoTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoTagging/VideoTaggingTest.java:[67,26] cannot find symbol
+[ERROR]   symbol:   variable Video_Title_Generation
+[ERROR]   location: class com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging.VideoTaggingTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProductPage/ProductSimilarCollectionTest.java:[130,69] incompatible types: no instance(s) of type variable(s) T exist so that org.hamcrest.Matcher<T> conforms to int
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProductPage/ProductSimilarCollectionTest.java:[132,76] incompatible types: no instance(s) of type variable(s) T exist so that org.hamcrest.Matcher<T> conforms to int
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogSearch/SearchWithSellerFilterTest.java:[139,60] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Search.SearchWithSellerFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogSearch/SearchWithSellerFilterTest.java:[142,71] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Search.SearchWithSellerFilterTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[46,9] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[47,13] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[47,43] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[48,13] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[49,83] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[51,81] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[67,65] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[257,36] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[258,69] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogTagTest.java:[262,64] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogTagTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoUploadAndAssignToEditor/UploadThumbnailVideoTest.java:[61,13] cannot find symbol
+[ERROR]   symbol:   variable Video_Upload_All_Video_Assign_for_uploading_Thumbnail_Video
+[ERROR]   location: class com.automation.tests.bomb.Video_Tagging_pipeline.Video_Upload_and_Assign_to_Editor.UploadThumbnailVideoTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/VideoTaggingPipeline/VideoUploadAndAssignToEditor/UploadThumbnailVideoTest.java:[62,24] cannot find symbol
+[ERROR]   symbol:   variable Video_Upload_All_Video_Assign_for_uploading_Thumbnail_Video
+[ERROR]   location: class com.automation.tests.bomb.Video_Tagging_pipeline.Video_Upload_and_Assign_to_Editor.UploadThumbnailVideoTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/UpdateCartTest.java:[51,17] cannot find symbol
+[ERROR]   symbol:   method pathParam(java.lang.String,java.lang.String)
+[ERROR]   location: class com.automation.models.request.UpdateCartRequest.UpdateCartRequestBuilder
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/UpdateCartTest.java:[62,40] cannot find symbol
+[ERROR]   symbol:   variable USER_UPDATE_CART
+[ERROR]   location: class com.automation.constants.BuyerAppEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[44,9] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[45,13] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[45,43] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[46,13] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[47,83] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[49,81] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[53,9] cannot find symbol
+[ERROR]   symbol:   variable sellerId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[54,13] cannot find symbol
+[ERROR]   symbol:   variable sellerId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[54,33] cannot find symbol
+[ERROR]   symbol:   variable sellerId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[55,13] cannot find symbol
+[ERROR]   symbol:   variable sellerId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[56,71] cannot find symbol
+[ERROR]   symbol:   variable sellerId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[58,69] cannot find symbol
+[ERROR]   symbol:   variable sellerId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[75,59] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[72,42] cannot find symbol
+[ERROR]   symbol:   variable sellerId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[218,36] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[219,69] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogsGroupTest.java:[223,66] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogsGroupTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/AllCatalogsAssignedTest.java:[62,35] cannot find symbol
+[ERROR]   symbol:   variable CATALOG_EDITOR_ALL
+[ERROR]   location: class com.automation.constants.BombEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProfilePage/WatchedVideosTest.java:[47,39] cannot find symbol
+[ERROR]   symbol:   variable USER_VIEWED_VIDEOS
+[ERROR]   location: class com.automation.constants.BuyerAppEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProfilePage/VideoViewActionTest.java:[60,40] cannot find symbol
+[ERROR]   symbol:   variable ACTION
+[ERROR]   location: class com.automation.constants.BuyerAppEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProfilePage/VideoViewActionTest.java:[161,71] cannot find symbol
+[ERROR]   symbol:   variable VIDEO_ID
+[ERROR]   location: class com.automation.tests.buyerapp.ProfilePage.VideoViewActionTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProfilePage/VideoViewActionTest.java:[178,70] cannot find symbol
+[ERROR]   symbol:   variable USER_ID
+[ERROR]   location: class com.automation.tests.buyerapp.ProfilePage.VideoViewActionTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/SuitableForConfigTest.java:[47,39] cannot find symbol
+[ERROR]   symbol:   variable FEED_HOME_CONFIG
+[ERROR]   location: class com.automation.constants.BuyerAppEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[43,9] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[44,13] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[44,43] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[45,13] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[46,104] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[48,81] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[63,105] cannot find symbol
+[ERROR]   symbol:   variable catalogForAssignId
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[161,83] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[162,70] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/bomb/CatalogTagPipeline/CatalogEditor/CatalogSkipTest.java:[165,62] cannot find symbol
+[ERROR]   symbol:   variable SELLER_ID
+[ERROR]   location: class com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor.CatalogSkipTest
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/ProfilePage/UserProfileTest.java:[47,39] cannot find symbol
+[ERROR]   symbol:   variable USER_PROFILE
+[ERROR]   location: class com.automation.constants.BuyerAppEndpoints
+[ERROR] /C:/Users/HP/Documents/sk/codebase/api_restassured_automation/src/test/java/com/automation/tests/buyerapp/VideoFeedTvTest.java:[67,40] cannot find symbol
+[ERROR]   symbol:   variable FEED_TV
+[ERROR]   location: class com.automation.constants.BuyerAppEndpoints
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

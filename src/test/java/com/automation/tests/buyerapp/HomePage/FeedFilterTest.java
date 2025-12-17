@@ -11,7 +11,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Home Page")
 @Feature("Feed Filters API")
-public class Homepage_Feed_filter extends BaseTest {
+public class FeedFilterTest extends BaseTest {
 
     private static Response feedFilterResponse;
     private static FeedFilterResponse feedFilterResponseData;
@@ -42,7 +42,7 @@ public class Homepage_Feed_filter extends BaseTest {
         feedFilterResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .when()
                 .get(BuyerAppEndpoints.FEED_FILTERS);
 

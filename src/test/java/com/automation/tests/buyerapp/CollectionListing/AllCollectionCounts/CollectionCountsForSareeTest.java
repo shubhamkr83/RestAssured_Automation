@@ -15,7 +15,10 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -26,7 +29,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Collection Listing")
 @Feature("Collection Counts for Saree API")
-public class Collection_Counts_for_Saree extends BaseTest {
+public class CollectionCountsForSareeTest extends BaseTest {
 
     private static List<CollectionItemCount> collectionCounts;
     private String buyerAppBaseUrl;
@@ -45,7 +48,7 @@ public class Collection_Counts_for_Saree extends BaseTest {
         Response allCollectionsResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .queryParam("suitable_for", "saree")
                 .when()
                 .get(BuyerAppEndpoints.COLLECTION_ALL);
@@ -68,7 +71,7 @@ public class Collection_Counts_for_Saree extends BaseTest {
                 Response collectionByIdResponse = RestAssured.given()
                         .baseUri(buyerAppBaseUrl)
                         .contentType("application/json")
-                        .header("Authorization", "Bearer " + buyerAppToken)
+                        .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                         .queryParam("limit", 35)
                         .queryParam("offset", 0)
                         .when()

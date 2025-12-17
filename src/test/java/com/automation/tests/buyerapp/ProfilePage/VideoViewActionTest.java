@@ -12,7 +12,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Profile Page")
 @Feature("Video View Action API")
-public class Profile_Video_View extends BaseTest {
+public class VideoViewActionTest extends BaseTest {
 
     private static Response videoViewResponse;
     private static VideoViewActionResponse videoViewResponseData;
@@ -31,9 +31,8 @@ public class Profile_Video_View extends BaseTest {
     
     // Test data
     private static final String ACTION = "view";
-    private static final String CREATOR_ID = "657d985fc2381755996f2a7c";
-    private static final String USER_ID = "6818afbbbaaa875960578c7e";
-    private static final String VIDEO_ID = "681032fd9010791f25aed769";
+    private static final String VIDEO_ID = VariableManager.getVideoId();
+    private static final String USER_ID = VariableManager.getUserId();
 
     @BeforeClass
     public void setupBuyerApp() {
@@ -48,16 +47,16 @@ public class Profile_Video_View extends BaseTest {
         // Prepare request body
         VideoViewActionRequest requestBody = VideoViewActionRequest.builder()
                 .action(ACTION)
-                .creatorId(CREATOR_ID)
-                .userId(USER_ID)
-                .videoId(VIDEO_ID)
+                .creatorId(VariableManager.get("creator_id"))
+                .userId(VariableManager.get("user_id"))
+                .videoId(VariableManager.get("video_id", "681032fd9010791f25aed769"))
                 .build();
 
         // Send POST request with authentication
         videoViewResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .body(requestBody)
                 .when()
                 .post(BuyerAppEndpoints.ACTION);

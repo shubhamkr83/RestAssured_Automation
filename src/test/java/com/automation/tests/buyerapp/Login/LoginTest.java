@@ -6,6 +6,7 @@ import com.automation.constants.HttpStatus;
 import com.automation.models.request.BuyerLoginRequest;
 import com.automation.models.response.BuyerLoginResponse;
 import com.automation.utils.JsonUtils;
+import com.automation.utils.VariableManager;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -22,9 +23,9 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Authentication")
 @Feature("Login API")
-public class login extends BaseTest {
+public class LoginTest extends BaseTest {
 
-    public static String buyerAppToken; // Store token for other tests (equivalent to buyer_app_token)
+    // Token is now stored in VariableManager.setBuyerAppToken() - no static variable needed
     private static Response loginResponse;
     private static BuyerLoginResponse loginResponseData;
     private String buyerAppBaseUrl;
@@ -65,11 +66,16 @@ public class login extends BaseTest {
         assertThat("Access token should not be null",
                 loginResponseData.getData().getAccessToken(), notNullValue());
 
-        buyerAppToken = loginResponseData.getData().getAccessToken();
+        // Store access token using VariableManager (thread-safe)
+        VariableManager.setBuyerAppToken(loginResponseData.getData().getAccessToken());
+        
+        // Verify token was stored
+        String storedToken = VariableManager.getBuyerAppToken();
+        assertThat("Stored token should not be null", storedToken, notNullValue());
 
         logger.info("Response status verified: 200 OK");
-        logger.info("Access token stored successfully: {}...",
-                buyerAppToken.substring(0, Math.min(20, buyerAppToken.length())));
+        logger.info("Access token stored successfully in VariableManager: {}...",
+                storedToken.substring(0, Math.min(20, storedToken.length())));
     }
 
     @Test(description = "Validate response time is under threshold", priority = 2, dependsOnMethods = "testResponseStatusAndStoreToken", groups = "buyerapp")

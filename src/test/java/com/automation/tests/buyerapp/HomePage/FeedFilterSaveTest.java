@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 
 import java.util.Collections;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Home Page")
 @Feature("Feed Filter Save API")
-public class Homepage_Feed_Filter_Save extends BaseTest {
+public class FeedFilterSaveTest extends BaseTest {
 
     public static String suitableFor; // Store suitable_for value for other tests
     private static Response filterSaveResponse;
@@ -54,7 +54,7 @@ public class Homepage_Feed_Filter_Save extends BaseTest {
         filterSaveResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .body(request)
                 .when()
                 .post(BuyerAppEndpoints.FEED_FILTERS_SAVE);

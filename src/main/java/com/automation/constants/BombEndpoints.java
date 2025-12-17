@@ -22,6 +22,8 @@ public final class BombEndpoints {
     public static final String CATALOG_GROUP_UPLOAD = "/v1/admin/catalog/group/upload";
     public static final String EDITOR_SKIP_CATALOG = "/v1/admin/editor/assign/videos/skip";
     public static final String EDITOR_DONE_CATALOG = "/v1/admin/editor/assign/videos/done";
+    public static final String EDITOR_MARK_AS_DONE = "/v1/admin/editor/assign/videos/done";
+    public static final String CATALOG_EDITOR_ALL = "/v1/admin/editor/all";
 
     // Video endpoints
     public static final String VIDEOS_BY_SELLER = "/v1/admin/editor/edit/videos/{sellerId}";

@@ -11,7 +11,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -22,12 +22,11 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Product Page")
 @Feature("Product Similar Collection API")
-public class Product_Page_Product_Similar_Collection extends BaseTest {
+public class ProductSimilarCollectionTest extends BaseTest {
 
     private static Response relatedCollectionResponse;
     private static RelatedCollectionResponse relatedCollectionResponseData;
     private String buyerAppBaseUrl;
-    private static final String COLLECTION_ID = "67c59d8ff22202c05e7d612e";
 
     @BeforeClass
     public void setupBuyerApp() {
@@ -43,9 +42,10 @@ public class Product_Page_Product_Similar_Collection extends BaseTest {
         relatedCollectionResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .when()
-                .get("/v1/collection/" + COLLECTION_ID + "/related");
+                .pathParam("collectionId", VariableManager.get("collection_id"))
+                .get("/v1/collection/{collectionId}/related");
 
         // Parse response for other tests
         relatedCollectionResponseData = JsonUtils.fromResponse(relatedCollectionResponse, RelatedCollectionResponse.class);
@@ -127,9 +127,9 @@ public class Product_Page_Product_Similar_Collection extends BaseTest {
         // Verify 'name' and 'description' fields are non-empty strings in each result item
         responseData.forEach(item -> {
             assertThat("Name should not be empty",
-                    item.getName(), allOf(instanceOf(String.class), hasLength(greaterThanOrEqualTo(1))));
+                    item.getName(), not(emptyOrNullString()));
             assertThat("Description should not be empty",
-                    item.getDescription(), allOf(instanceOf(String.class), hasLength(greaterThanOrEqualTo(1))));
+                    item.getDescription(), not(emptyOrNullString()));
         });
 
         logger.info("Name and description fields validated as non-empty");

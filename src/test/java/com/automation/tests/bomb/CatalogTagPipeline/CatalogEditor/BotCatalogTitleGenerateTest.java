@@ -1,15 +1,18 @@
-package com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor;
+package com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.HttpStatus;
+import com.automation.models.request.BotCatalogTitleGenerateRequest;
 import com.automation.models.response.TitleGenerateResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -22,7 +25,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
-public class Catalog_Editor_Bot_Catalog_Title_Generate extends BaseTest {
+public class BotCatalogTitleGenerateTest extends BaseTest {
 
     private String authToken;
     private Response response;
@@ -36,24 +39,38 @@ public class Catalog_Editor_Bot_Catalog_Title_Generate extends BaseTest {
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
+        logger.info("Using BOMB token from VariableManager");
     }
 
     @Test(description = "Response status code is 200", priority = 1, groups = "bomb")
     @Story("Catalog Editor - Bot Catalog Title Generate")
     @Severity(SeverityLevel.BLOCKER)
     public void testStatusCode200() {
+        // Prepare request body with tags
+        BotCatalogTitleGenerateRequest requestBody = BotCatalogTitleGenerateRequest.builder()
+                .tags(Arrays.asList(
+                        "product : jeans",
+                        "quality / branding : first copy",
+                        "color : blue",
+                        "brand : DOWNY JEANS",
+                        "fabric : Rfd jeans",
+                        "length : 40",
+                        "",
+                        "",
+                        ""
+                ))
+                .build();
+
         // Send POST request to generate title
-        // Note: This endpoint may require a request body with tags
         response = RestAssured.given()
                 .header("authorization", "JWT " + authToken)
                 .header("Content-Type", "application/json")
+                .body(requestBody)
                 .when()
                 .post(TITLE_GENERATE_URL);
 

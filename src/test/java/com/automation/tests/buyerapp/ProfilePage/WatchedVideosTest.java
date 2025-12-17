@@ -11,7 +11,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Profile Page")
 @Feature("Watched Videos API")
-public class Profile_Watched_Videos extends BaseTest {
+public class WatchedVideosTest extends BaseTest {
 
     private static Response watchedVideosResponse;
     private static WatchedVideosResponse watchedVideosResponseData;
@@ -42,7 +42,7 @@ public class Profile_Watched_Videos extends BaseTest {
         watchedVideosResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .when()
                 .get(BuyerAppEndpoints.USER_VIEWED_VIDEOS);
 

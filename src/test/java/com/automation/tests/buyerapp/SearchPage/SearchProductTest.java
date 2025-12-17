@@ -11,7 +11,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Search Page")
 @Feature("Search Product API")
-public class Search_Search_Product extends BaseTest {
+public class SearchProductTest extends BaseTest {
 
     private static Response searchProductResponse;
     private static SearchProductResponse searchProductResponseData;
@@ -43,7 +43,7 @@ public class Search_Search_Product extends BaseTest {
         searchProductResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .queryParam("q", SEARCH_QUERY)
                 .queryParam("page", 1)
                 .queryParam("pageSize", 20)

@@ -11,7 +11,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Collection Listing")
 @Feature("Top Collection API")
-public class Collection_Tab_Top_Collection extends BaseTest {
+public class TopCollectionTest extends BaseTest {
 
     private static Response topCollectionResponse;
     private static TopCollectionResponse topCollectionResponseData;
@@ -42,7 +42,7 @@ public class Collection_Tab_Top_Collection extends BaseTest {
         topCollectionResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .when()
                 .get(BuyerAppEndpoints.COLLECTION_TOP);
 

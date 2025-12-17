@@ -6,6 +6,7 @@ import com.automation.constants.HttpStatus;
 import com.automation.models.request.LoginRequest;
 import com.automation.models.response.LoginResponse;
 import com.automation.utils.JsonUtils;
+import com.automation.utils.VariableManager;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -23,7 +24,7 @@ import static org.hamcrest.Matchers.*;
 @Feature("Login API")
 public class LoginApiTest extends BaseTest {
 
-        public static String bombToken; // Store token for other tests
+        // Token is now stored in VariableManager.setToken() - no static variable needed
         private static Response loginResponse;
         private static LoginResponse loginResponseData;
 
@@ -144,13 +145,16 @@ public class LoginApiTest extends BaseTest {
         @Story("User Login")
         @Severity(SeverityLevel.BLOCKER)
         public void testStoreAccessToken() {
-                // Store access token in collection variables (equivalent to bomb_token)
-                bombToken = loginResponseData.getData().getAccessToken();
+                // Store access token using VariableManager (thread-safe)
+                String accessToken = loginResponseData.getData().getAccessToken();
+                VariableManager.setToken(accessToken);
 
-                assertThat("Stored token should not be null", bombToken, notNullValue());
-                assertThat("Stored token should not be empty", bombToken, not(emptyOrNullString()));
+                // Verify token was stored
+                String storedToken = VariableManager.getToken();
+                assertThat("Stored token should not be null", storedToken, notNullValue());
+                assertThat("Stored token should not be empty", storedToken, not(emptyOrNullString()));
 
-                logger.info("Access token stored successfully in bombToken variable: {}...",
-                                bombToken.substring(0, Math.min(20, bombToken.length())));
+                logger.info("Access token stored successfully in VariableManager: {}...",
+                                storedToken.substring(0, Math.min(20, storedToken.length())));
         }
 }

@@ -1,10 +1,10 @@
-package com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Assign_to_Editor;
+package com.automation.tests.bomb.CatalogTagPipeline.CatalogAssignToEditor;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.BombEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.response.CatalogUploadedResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
@@ -24,27 +24,26 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Assign to Editor")
-public class Catalog_Assign_Catalog_Uploaded_Search_by_Seller_Filter extends BaseTest {
+public class CatalogUploadedSearchBySellerFilterTest extends BaseTest {
 
     private String authToken;
     private Response response;
     private CatalogUploadedResponse catalogUploadedResponse;
 
     // Seller ID for filtering
-    private static final String SELLER_ID = "63ee780c9689be92acce8f35";
+    private static final String SELLER_ID = VariableManager.getSellerId();
 
     // Store catalog ID for assignment (status = 0)
     public static String catalogForAssignId;
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
+        logger.info("Using BOMB token from VariableManager");
     }
 
     @Test(description = "Response status code should be 200", priority = 1, groups = "bomb")
@@ -57,7 +56,7 @@ public class Catalog_Assign_Catalog_Uploaded_Search_by_Seller_Filter extends Bas
                 .header("authorization", "JWT " + authToken)
                 .header("source", "bizupChat")
                 .queryParam("limit", 600)
-                .queryParam("seller", SELLER_ID)
+                .queryParam("seller_id", VariableManager.get("seller_id"))
                 .when()
                 .get(BombEndpoints.CATALOG);
 

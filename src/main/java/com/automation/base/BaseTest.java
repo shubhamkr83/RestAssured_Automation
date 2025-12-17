@@ -2,6 +2,7 @@ package com.automation.base;
 
 import com.automation.config.ConfigManager;
 import com.automation.utils.RestClient;
+import com.automation.utils.VariableManager;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -12,6 +13,7 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Optional;
@@ -35,6 +37,17 @@ public abstract class BaseTest {
         logger.info("Initializing test suite with environment: {}", env);
         System.setProperty("env", env);
         config = ConfigManager.getInstance();
+        
+        // Initialize VariableManager for dynamic variable management
+        VariableManager.initialize();
+        logger.info("VariableManager initialized with {} variables", VariableManager.count());
+    }
+
+    @AfterSuite(alwaysRun = true)
+    public void afterSuite() {
+        // Cleanup VariableManager to prevent memory leaks
+        VariableManager.cleanup();
+        logger.info("Test suite execution completed, VariableManager cleaned up");
     }
 
     @BeforeClass(alwaysRun = true)

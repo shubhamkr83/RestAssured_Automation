@@ -1,9 +1,10 @@
-package com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor;
+package com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.HttpStatus;
+import com.automation.constants.BombEndpoints;
 import com.automation.models.response.MarkAsDoneResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
@@ -23,29 +24,20 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
-public class MarkAsDone extends BaseTest {
+public class MarkAsDoneTest extends BaseTest {
 
     private String authToken;
     private Response response;
     private MarkAsDoneResponse markAsDoneResponse;
 
-    // Full endpoint URL (different base URL: api.bizup.app instead of
-    // bomb.bizup.app)
-    private static final String MARK_AS_DONE_URL = "https://api.bizup.app/v1/admin/editor/assign/videos/done";
-
-    // IDs
-    private static final String SELLER_ID = "63ee780c9689be92acce8f35";
-    private static final String CATALOG_ID = "682584c0240b174c4c1a55f4"; // Hardcoded in Postman
-
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
+        logger.info("Using BOMB token from VariableManager");
     }
 
     @Test(description = "Response status code is 200", priority = 1, groups = "bomb")
@@ -57,7 +49,7 @@ public class MarkAsDone extends BaseTest {
                 .header("authorization", "JWT " + authToken)
                 .header("Content-Type", "application/json")
                 .when()
-                .put(MARK_AS_DONE_URL + "/" + SELLER_ID + "/" + CATALOG_ID);
+                .put(BombEndpoints.EDITOR_MARK_AS_DONE + "/" + VariableManager.get("seller_id") + "/" + VariableManager.get("catalog_id", "682584c0240b174c4c1a55f4"));
 
         // Parse response for other tests
         markAsDoneResponse = JsonUtils.fromResponse(response, MarkAsDoneResponse.class);

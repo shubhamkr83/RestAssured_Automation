@@ -1,10 +1,10 @@
-package com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Assign_to_Editor;
+package com.automation.tests.bomb.CatalogTagPipeline.CatalogAssignToEditor;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.BombEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.response.CatalogAssignResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Assign to Editor")
-public class Catalog_Assign_Assign_to_Editor extends BaseTest {
+public class AssignToEditorTest extends BaseTest {
 
     private String authToken;
     private Response response;
@@ -31,28 +31,23 @@ public class Catalog_Assign_Assign_to_Editor extends BaseTest {
 
     // Collection variables (equivalent to Postman collection variables)
     private String catalogForAssignId;
-    private static final String SELLER_ID = "63ee780c9689be92acce8f35";
-    private static final String EDITOR_ID = "64f8a9b2c3d4e5f6a7b8c9d0"; // Replace with actual editor ID
+    private static final String SELLER_ID = VariableManager.getSellerId();
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
-
-        // Get catalog ID from previous test
-        if (Catalog_Assign_Catalog_Uploaded_Search_by_Seller_Filter.catalogForAssignId != null) {
-            catalogForAssignId = Catalog_Assign_Catalog_Uploaded_Search_by_Seller_Filter.catalogForAssignId;
-            logger.info("Using catalog for assign ID from previous test: {}", catalogForAssignId);
+        logger.info("Using BOMB token from VariableManager");
+        // Get catalog ID from VariableManager or use fallback
+        catalogForAssignId = VariableManager.get("catalog_foassign_id");
+        if (catalogForAssignId == null || catalogForAssignId.isEmpty()) {
+            catalogForAssignId = VariableManager.get("catalog_foassign_id", "6822f5dac17c6dcd589ba173");
+            logger.warn("Catalog for assign ID not available, using fallback: {}", catalogForAssignId);
         } else {
-            // Fallback to a default ID if not available
-            catalogForAssignId = "6822f5dac17c6dcd589ba173";
-            logger.warn("Catalog for assign ID not available from previous test, using default: {}",
-                    catalogForAssignId);
+            logger.info("Using catalog for assign ID from VariableManager: {}", catalogForAssignId);
         }
     }
 
@@ -60,11 +55,38 @@ public class Catalog_Assign_Assign_to_Editor extends BaseTest {
     @Story("Catalog Assign - Assign to Editor")
     @Severity(SeverityLevel.BLOCKER)
     public void testStatusCode200AndMessageOK() {
+        // Prepare request body with editor information
+        String requestBody = "{\n" +
+                "    \"editor\": {\n" +
+                "        \"_id\": \"652e699e42e117518ebb86cd\",\n" +
+                "        \"name\": \"Shubham Kumar\",\n" +
+                "        \"role\": [\n" +
+                "            \"editor_review\",\n" +
+                "            \"admin\",\n" +
+                "            \"editor_catalog\",\n" +
+                "            \"editor_video\",\n" +
+                "            \"pipeline_online\",\n" +
+                "            \"pipeline_onground\",\n" +
+                "            \"pipeline_wa\",\n" +
+                "            \"manage_seller\",\n" +
+                "            \"manage_buyer\",\n" +
+                "            \"salesman\",\n" +
+                "            \"whatsapp_message\"\n" +
+                "        ],\n" +
+                "        \"status\": 1,\n" +
+                "        \"phoneNumber\": \"+916204843730\",\n" +
+                "        \"user_id\": \"64f180feaa90ffbd54b330f5\",\n" +
+                "        \"label\": \"Shubham Kumar\",\n" +
+                "        \"value\": \"64f180feaa90ffbd54b330f5\"\n" +
+                "    }\n" +
+                "}";
+
         // Send POST request to assign catalog to editor
         response = RestAssured.given()
                 .spec(requestSpec)
                 .header("authorization", "JWT " + authToken)
                 .header("source", "bizupChat")
+                .body(requestBody)
                 .when()
                 .post(BombEndpoints.CATALOG_ASSIGN + "/" + catalogForAssignId);
 

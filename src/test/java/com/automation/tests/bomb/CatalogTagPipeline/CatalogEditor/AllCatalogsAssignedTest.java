@@ -1,11 +1,11 @@
-package com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor;
+package com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.BombEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.response.CatalogEditorResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
 import com.automation.utils.JsonUtils;
+import com.automation.utils.VariableManager;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -26,27 +26,24 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
-public class Catalog_Editor_All_Catalogs_Assigned extends BaseTest {
+public class AllCatalogsAssignedTest extends BaseTest {
 
     private String authToken;
     private Response response;
     private CatalogEditorResponse catalogEditorResponse;
 
     // Editor ID (using seller_id as per Postman script)
-    private static final String EDITOR_ID = "63ee780c9689be92acce8f35";
 
-    // Store catalog ID for assignment (status = 0)
-    public static String catalogForAssignId;
+    // Catalog ID is now stored in VariableManager - no static variable needed
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
+        logger.info("Using BOMB token from VariableManager");
     }
 
     @Test(description = "Response status code is 200", priority = 1, groups = "bomb")
@@ -59,10 +56,10 @@ public class Catalog_Editor_All_Catalogs_Assigned extends BaseTest {
                 .header("authorization", "JWT " + authToken)
                 .header("source", "bizupChat")
                 .queryParam("limit", 20)
-                .queryParam("editor", EDITOR_ID)
+                .queryParam("editor", VariableManager.get("editor_id"))
                 .queryParam("sort", "status")
                 .when()
-                .get(BombEndpoints.CATALOG);
+                .get(BombEndpoints.CATALOG_EDITOR_ALL + VariableManager.get("editor_id"));
 
         // Parse response for other tests
         catalogEditorResponse = JsonUtils.fromResponse(response, CatalogEditorResponse.class);
@@ -170,9 +167,10 @@ public class Catalog_Editor_All_Catalogs_Assigned extends BaseTest {
                 }
 
                 if (foundId != null) {
-                    catalogForAssignId = foundId;
-                    assertThat("Catalog for assign ID should be set", catalogForAssignId, notNullValue());
-                    logger.info("Found and set catalog foassign ID with status 0: {}", catalogForAssignId);
+                    VariableManager.set("catalog_foassign_id", foundId);
+                    String storedId = VariableManager.get("catalog_foassign_id");
+                    assertThat("Catalog for assign ID should be set", storedId, notNullValue());
+                    logger.info("Found and set catalog foassign ID with status 0 in VariableManager: {}", foundId);
                 } else {
                     logger.warn("No items with status 0 found");
                 }

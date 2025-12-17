@@ -1,10 +1,10 @@
-package com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor;
+package com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.BombEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.response.CatalogEditorResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
@@ -25,24 +25,21 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
-public class Catalog_Editor_Fetch_Catalog_Uploaded extends BaseTest {
+public class FetchCatalogUploadedTest extends BaseTest {
 
     private String authToken;
     private Response response;
     private CatalogEditorResponse catalogEditorResponse;
 
-    // Seller ID for the endpoint
-    private static final String SELLER_ID = "63ee780c9689be92acce8f35";
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
+        logger.info("Using BOMB token from VariableManager");
     }
 
     @Test(description = "Response status code is 200", priority = 1, groups = "bomb")
@@ -54,10 +51,10 @@ public class Catalog_Editor_Fetch_Catalog_Uploaded extends BaseTest {
                 .spec(requestSpec)
                 .header("authorization", "JWT " + authToken)
                 .header("source", "bizupChat")
-                .queryParam("limit", 20)
+                .queryParam("seller_id", VariableManager.get("seller_id"))
                 .queryParam("mode", "all")
                 .when()
-                .get(BombEndpoints.EDITOR_ASSIGN_CATALOG + "/" + SELLER_ID);
+                .get(BombEndpoints.EDITOR_ASSIGN_CATALOG + "/" + VariableManager.get("seller_id"));
 
         // Parse response for other tests
         catalogEditorResponse = JsonUtils.fromResponse(response, CatalogEditorResponse.class);

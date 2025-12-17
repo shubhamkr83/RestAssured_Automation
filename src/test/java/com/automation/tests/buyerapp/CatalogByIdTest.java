@@ -11,7 +11,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -22,12 +22,11 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Catalog")
 @Feature("Catalog By ID API")
-public class Catalog extends BaseTest {
+public class CatalogByIdTest extends BaseTest {
 
     private static Response catalogResponse;
     private static CatalogByIdDetailResponse catalogResponseData;
     private String buyerAppBaseUrl;
-    private static final String LIVE_CATALOG_ID = "67c59d8ff22202c05e7d612e"; // Default catalog ID
 
     @BeforeClass
     public void setupBuyerApp() {
@@ -43,9 +42,10 @@ public class Catalog extends BaseTest {
         catalogResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .when()
-                .get("/v1/catalog/" + LIVE_CATALOG_ID);
+                .pathParam("catalogId", VariableManager.get("live_catalog_id", "67c59d8ff22202c05e7d612e"))
+                .get("/v1/catalog/{catalogId}");
 
         // Parse response for other tests
         catalogResponseData = JsonUtils.fromResponse(catalogResponse, CatalogByIdDetailResponse.class);

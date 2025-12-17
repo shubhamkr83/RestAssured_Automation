@@ -11,7 +11,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Home Page")
 @Feature("Continue Your Journey API")
-public class Homepage_Continue_your_Journey extends BaseTest {
+public class ContinueYourJourneyTest extends BaseTest {
 
     private static Response journeyCollectionResponse;
     private static JourneyCollectionResponse journeyCollectionResponseData;
@@ -42,7 +42,7 @@ public class Homepage_Continue_your_Journey extends BaseTest {
         journeyCollectionResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .when()
                 .get(BuyerAppEndpoints.FEED_JOURNEY_COLLECTION);
 
@@ -174,9 +174,9 @@ public class Homepage_Continue_your_Journey extends BaseTest {
         // Test that ThumbnailDriveLink and thumbnail_url are non-empty strings
         journeyCollectionResponseData.getData().getResult().forEach(item -> {
             assertThat("ThumbnailDriveLink should not be empty",
-                    item.getThubmbnailDriveLink(), allOf(instanceOf(String.class), hasLength(greaterThanOrEqualTo(1))));
+                    item.getThubmbnailDriveLink(), not(emptyOrNullString()));
             assertThat("Thumbnail_url should not be empty",
-                    item.getThumbnail_url(), allOf(instanceOf(String.class), hasLength(greaterThanOrEqualTo(1))));
+                    item.getThumbnail_url(), not(emptyOrNullString()));
         });
 
         logger.info("Thumbnail fields validated as non-empty strings");
@@ -209,7 +209,7 @@ public class Homepage_Continue_your_Journey extends BaseTest {
         // Test that id is a non-empty string
         journeyCollectionResponseData.getData().getResult().forEach(item -> {
             assertThat("Id should not be empty",
-                    item.getId(), allOf(instanceOf(String.class), hasLength(greaterThanOrEqualTo(1))));
+                    item.getId(), not(emptyOrNullString()));
         });
 
         logger.info("Id fields validated as non-empty strings");

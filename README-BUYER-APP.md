@@ -386,7 +386,7 @@ mvn clean test -Dtest=com.automation.tests.buyerapp.*
 │                  BuyerLoginApiTest                       │
 └──────────────────────────────────────────────────┘
                          │
-                         │ Stores buyerAppToken
+                         │ Stores VariableManager.getBuyerAppToken()
                          ↓
         ┌──────────────────────────────┐
         │   Shared Across All Tests   │
@@ -405,7 +405,7 @@ mvn clean test -Dtest=com.automation.tests.buyerapp.*
 
 | Step | Test Class | Actions | Output |
 |------|-----------|---------|--------|
-| **1** | `BuyerLoginApiTest` | • Authenticate buyer<br>• Generate JWT tokens | 🔑 `buyerAppToken` (static) |
+| **1** | `BuyerLoginApiTest` | • Authenticate buyer<br>• Generate JWT tokens | 🔑 `VariableManager.getBuyerAppToken()` (static) |
 | **2** | `HomePageApiTest` | • Test feed filters<br>• Validate banners<br>• Test catalog feed | 🎯 `suitableFor` (for filtering) |
 | **3** | `CollectionsApiTest` | • Test collections<br>• Validate filtering | 📦 `collectionId` (for future) |
 | **4** | `ProfileAndConfigApiTest` | • Validate auth<br>• Test app config | 👤 User profile data |
@@ -652,7 +652,7 @@ mvn clean test -DsuiteXmlFile=src/test/resources/testng-buyerapp.xml
   - Configured separately
 
 - 🔑 **Token Variables:**
-  - `buyerAppToken` (Buyer App)
+  - `VariableManager.getBuyerAppToken()` (Buyer App)
   - `bombToken` (BOMB API)
   - Stored separately
 

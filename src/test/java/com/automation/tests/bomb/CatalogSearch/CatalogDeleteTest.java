@@ -1,10 +1,10 @@
-package com.automation.tests.bomb.Catalog_Search;
+package com.automation.tests.bomb.CatalogSearch;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.BombEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.response.CatalogEditResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Catalog Management")
 @Feature("Catalog Delete")
-public class Catalog_Search_Catalog_Delete extends BaseTest {
+public class CatalogDeleteTest extends BaseTest {
 
     private String authToken;
     private Response response;
@@ -32,21 +32,20 @@ public class Catalog_Search_Catalog_Delete extends BaseTest {
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
+        logger.info("Using BOMB token from VariableManager");
 
-        // Get catalog ID from Seller Filter test or use default
-        if (Catalog_Search_with_Seller_Filter.liveCatalogId != null) {
-            deleteCatalogId = Catalog_Search_with_Seller_Filter.liveCatalogId;
-            logger.info("Using catalog ID from Seller Filter test for deletion: {}", deleteCatalogId);
+        // Get delete catalog ID from VariableManager or use fallback
+        deleteCatalogId = VariableManager.get("delete_catalog_id");
+        if (deleteCatalogId == null || deleteCatalogId.isEmpty()) {
+            deleteCatalogId = VariableManager.get("catalog_foassign_id", "6822f5dac17c6dcd589ba173");
+            logger.warn("Delete catalog ID not available, using fallback: {}", deleteCatalogId);
         } else {
-            deleteCatalogId = "6822f5dac17c6dcd589ba173"; // Default catalog ID
-            logger.warn("Catalog ID not available from Seller Filter test, using default: {}", deleteCatalogId);
+            logger.info("Using delete catalog ID from VariableManager: {}", deleteCatalogId);
         }
     }
 

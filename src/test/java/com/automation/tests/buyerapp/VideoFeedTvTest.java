@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Video Feed")
 @Feature("Video Feed (T.V) API")
-public class VideoFeed_TV extends BaseTest {
+public class VideoFeedTvTest extends BaseTest {
 
     private static Response videoFeedResponse;
     private static VideoFeedResponse videoFeedResponseData;
@@ -61,7 +61,7 @@ public class VideoFeed_TV extends BaseTest {
         videoFeedResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .body(requestBody)
                 .when()
                 .post(BuyerAppEndpoints.FEED_TV);

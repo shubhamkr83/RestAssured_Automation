@@ -1,11 +1,11 @@
-package com.automation.tests.bomb.Video_Tagging_pipeline.Video_Upload_and_Assign_to_Editor;
+package com.automation.tests.bomb.VideoTaggingPipeline.VideoUploadAndAssignToEditor;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.BombEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.request.VideoUploadRequest;
 import com.automation.models.response.VideoUploadResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Video Tagging Pipeline")
 @Feature("Video Upload and Assign to Editor")
-public class Video_Upload extends BaseTest {
+public class VideoUploadTest extends BaseTest {
 
     private String authToken;
     private Response response;
@@ -53,13 +53,12 @@ public class Video_Upload extends BaseTest {
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
+        logger.info("Using BOMB token from VariableManager");
 
         // Build request body with complete seller and editor information
         requestBody = VideoUploadRequest.builder()

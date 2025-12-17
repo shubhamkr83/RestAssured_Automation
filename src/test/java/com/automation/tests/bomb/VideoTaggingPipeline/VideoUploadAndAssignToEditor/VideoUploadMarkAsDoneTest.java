@@ -1,10 +1,10 @@
-package com.automation.tests.bomb.Video_Tagging_pipeline.Video_Upload_and_Assign_to_Editor;
+package com.automation.tests.bomb.VideoTaggingPipeline.VideoUploadAndAssignToEditor;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.BombEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.response.VideoUploadMarkAsDoneResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
@@ -24,29 +24,28 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Video Tagging Pipeline")
 @Feature("Video Upload and Assign to Editor")
-public class Video_Upload_mark_as_done extends BaseTest {
+public class VideoUploadMarkAsDoneTest extends BaseTest {
 
     private String authToken;
     private Response response;
     private VideoUploadMarkAsDoneResponse videoUploadMarkAsDoneResponse;
 
     // IDs
-    private static final String SELLER_ID = "63ee780c9689be92acce8f35";
+    private static final String SELLER_ID = "64f180feaa90ffbd54b330f5";
     private String uploadId;
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
-
+        logger.info("Using BOMB token from VariableManager");
         // Get upload ID from previous test
-        if (Video_Upload_All_Video_Assign_for_uploading_Thumbnail_Video.uploadId != null) {
-            uploadId = Video_Upload_All_Video_Assign_for_uploading_Thumbnail_Video.uploadId;
+        String prevUploadId = VariableManager.get("uploadId");
+        if (prevUploadId != null) {
+            uploadId = prevUploadId;
             logger.info("Using upload ID from previous test: {}", uploadId);
         } else {
             // Fallback to a default ID if not available

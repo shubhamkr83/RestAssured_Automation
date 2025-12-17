@@ -11,7 +11,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Configuration")
 @Feature("Suitable For Config API")
-public class Suitable_for_Config extends BaseTest {
+public class SuitableForConfigTest extends BaseTest {
 
     private static Response configResponse;
     private static SuitableForConfigResponse configResponseData;
@@ -42,7 +42,7 @@ public class Suitable_for_Config extends BaseTest {
         configResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .when()
                 .get(BuyerAppEndpoints.FEED_HOME_CONFIG);
 

@@ -1,11 +1,11 @@
-package com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor;
+package com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.BombEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.request.CatalogTaggingRequest;
 import com.automation.models.response.CatalogTaggingResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
@@ -13,6 +13,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,7 +26,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
-public class Catalog_Editor_Catalog_Tagging extends BaseTest {
+public class CatalogTaggingTest extends BaseTest {
 
     private String authToken;
     private Response response;
@@ -39,28 +40,29 @@ public class Catalog_Editor_Catalog_Tagging extends BaseTest {
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
-
+        logger.info("Using BOMB token from VariableManager");
         // Get catalog ID from previous test
-        if (Catalog_Editor_Catalog_Tag.catalogId != null) {
-            catalogId = Catalog_Editor_Catalog_Tag.catalogId;
-            logger.info("Using catalog ID from previous test: {}", catalogId);
+        String prevCatalogId = VariableManager.get("catalog_id");
+        if (prevCatalogId != null) {
+            catalogId = prevCatalogId;
+            logger.info("Using catalog ID from VariableManager: {}", catalogId);
         } else {
-            // Fallback to a default ID if not available
-            catalogId = "6822f5dac17c6dcd589ba173";
-            logger.warn("Catalog ID not available from previous test, using default: {}", catalogId);
+            // Fallback to default ID from VariableManager
+            catalogId = VariableManager.get("catalog_foassign_id", "6822f5dac17c6dcd589ba173");
+            logger.warn("Catalog ID not available from previous test, using default from VariableManager: {}",
+                    catalogId);
         }
 
         // Get generated title from previous test
-        if (Catalog_Editor_Bot_Catalog_Title_Generate.generatedTitle != null) {
-            generatedTitle = Catalog_Editor_Bot_Catalog_Title_Generate.generatedTitle;
-            logger.info("Using generated title from previous test: {}", generatedTitle);
+        String prevTitle = VariableManager.get("generated_title");
+        if (prevTitle != null) {
+            generatedTitle = prevTitle;
+            logger.info("Using generated title from VariableManager: {}", generatedTitle);
         } else {
             generatedTitle = "Test Catalog Title";
             logger.warn("Generated title not available, using default: {}", generatedTitle);
@@ -76,11 +78,22 @@ public class Catalog_Editor_Catalog_Tagging extends BaseTest {
     @Story("Catalog Editor - Catalog Tagging")
     @Severity(SeverityLevel.BLOCKER)
     public void testStatusCode200() {
-        // Build request body
+        // Build request body with correct structure
         CatalogTaggingRequest request = CatalogTaggingRequest.builder()
+                .productId(expectedProductId)
+                .tags(Arrays.asList(
+                        "65e718501cb2887f2f9e833f",
+                        "645cc306af2a39420d51dfc6",
+                        "674d9fc4848ffedcd98cf97b",
+                        "677d256deaf239c6f3c0599b",
+                        "677d260f5725977833481865"
+                ))
+                .suggested(new ArrayList<>())
+                .images(new ArrayList<>())
                 .title(generatedTitle)
-                .priceText(expectedPrice)
-                .productTags(Arrays.asList(expectedProductId))
+                .price(expectedPrice)
+                .isQc(false)
+                .isSet(false)
                 .build();
 
         // Send PUT request to tag catalog

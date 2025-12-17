@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Collection Listing")
 @Feature("Similar Collection for Readymade API")
-public class Collection_Tab_Collection_Similar_Collection_Readymade extends BaseTest {
+public class SimilarCollectionForReadymadeTest extends BaseTest {
 
     private static List<SimilarCollectionData> similarCollectionData;
     private String buyerAppBaseUrl;
@@ -48,7 +48,7 @@ public class Collection_Tab_Collection_Similar_Collection_Readymade extends Base
         Response allCollectionsResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .queryParam("suitable_for", "readymade")
                 .when()
                 .get(BuyerAppEndpoints.COLLECTION_ALL);
@@ -71,7 +71,7 @@ public class Collection_Tab_Collection_Similar_Collection_Readymade extends Base
                 Response similarResponse = RestAssured.given()
                         .baseUri(buyerAppBaseUrl)
                         .contentType("application/json")
-                        .header("Authorization", "Bearer " + buyerAppToken)
+                        .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                         .when()
                         .get("/v1/collection/" + collection.get_id() + "/similar");
 

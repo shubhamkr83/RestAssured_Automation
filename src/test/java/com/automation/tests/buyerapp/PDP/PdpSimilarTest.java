@@ -11,7 +11,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -22,12 +22,11 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App PDP")
 @Feature("PDP Similar Catalog API")
-public class PDP_PDP_Similar extends BaseTest {
+public class PdpSimilarTest extends BaseTest {
 
     private static Response pdpSimilarResponse;
     private static PdpSimilarResponse pdpSimilarResponseData;
     private String buyerAppBaseUrl;
-    private static final String LIVE_CATALOG_ID = "67c59d8ff22202c05e7d612e"; // Default catalog ID
 
     @BeforeClass
     public void setupBuyerApp() {
@@ -43,11 +42,12 @@ public class PDP_PDP_Similar extends BaseTest {
         pdpSimilarResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .queryParam("size", 20)
                 .queryParam("page", 0)
                 .when()
-                .get("/v1/catalog/" + LIVE_CATALOG_ID + "/similar");
+                .pathParam("catalogId", VariableManager.get("live_catalog_id", "67c59d8ff22202c05e7d612e"))
+                .get("/v1/catalog/{catalogId}/similar");
 
         // Parse response for other tests
         pdpSimilarResponseData = JsonUtils.fromResponse(pdpSimilarResponse, PdpSimilarResponse.class);

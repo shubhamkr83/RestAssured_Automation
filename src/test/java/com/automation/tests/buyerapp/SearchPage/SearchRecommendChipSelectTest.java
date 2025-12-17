@@ -11,9 +11,9 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
-import static com.automation.tests.buyerapp.SearchPage.Search_Recommended_Chips.searchRecommend;
-import static com.automation.tests.buyerapp.SearchPage.Search_Recommended_Chips.searchRecommendId;
+import com.automation.utils.VariableManager;
+import static com.automation.tests.buyerapp.SearchPage.SearchRecommendedChipsTest.searchRecommend;
+import static com.automation.tests.buyerapp.SearchPage.SearchRecommendedChipsTest.searchRecommendId;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Search Page")
 @Feature("Search Recommend Chip Select API")
-public class Search_Recommend_Chip_Select extends BaseTest {
+public class SearchRecommendChipSelectTest extends BaseTest {
 
     private static Response searchChipSelectResponse;
     private static SearchRecommendChipSelectResponse searchChipSelectResponseData;
@@ -52,7 +52,7 @@ public class Search_Recommend_Chip_Select extends BaseTest {
         searchChipSelectResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .queryParam("q", searchQuery)
                 .queryParam("product", productId)
                 .queryParam("page", 1)

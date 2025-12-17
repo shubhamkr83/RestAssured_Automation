@@ -11,8 +11,8 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
-import static com.automation.tests.buyerapp.HomePage.Homepage_Feed_Filter_Save.suitableFor;
+import com.automation.utils.VariableManager;
+import static com.automation.tests.buyerapp.HomePage.FeedFilterSaveTest.suitableFor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Home Page")
 @Feature("Home Catalog Feed API")
-public class Homepage_Catalog_Feed extends BaseTest {
+public class CatalogFeedTest extends BaseTest {
 
     private static Response catalogFeedResponse;
     private static HomeCatalogFeedResponse catalogFeedResponseData;
@@ -48,7 +48,7 @@ public class Homepage_Catalog_Feed extends BaseTest {
         catalogFeedResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .queryParam("size", 6)
                 .queryParam("page", 0)
                 .queryParam("suitable_for", suitableForParam)
@@ -117,7 +117,7 @@ public class Homepage_Catalog_Feed extends BaseTest {
         Response response = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .queryParam("size", 6)
                 .queryParam("page", 0)
                 .queryParam("suitable_for", "")
@@ -147,7 +147,7 @@ public class Homepage_Catalog_Feed extends BaseTest {
         Response response = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .queryParam("size", 50)
                 .queryParam("page", 0)
                 .queryParam("suitable_for", suitableForParam)
@@ -178,7 +178,7 @@ public class Homepage_Catalog_Feed extends BaseTest {
         Response response = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .header("Accept-Language", "hi") // Hindi language
                 .queryParam("size", 6)
                 .queryParam("page", 0)

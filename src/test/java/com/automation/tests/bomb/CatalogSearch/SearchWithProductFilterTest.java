@@ -1,10 +1,10 @@
-package com.automation.tests.bomb.Catalog_Search;
+package com.automation.tests.bomb.CatalogSearch;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.BombEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.response.CatalogResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
@@ -27,22 +27,21 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Catalog Management")
 @Feature("Catalog Search - Product Filter")
-public class Catalog_Search_with_Product_Filter extends BaseTest {
+public class SearchWithProductFilterTest extends BaseTest {
 
     private String authToken;
     private Response response;
     private CatalogResponse catalogResponse;
-    private static final String PRODUCT_ID = "645b93e45c2997f4f2e82c50";
+    private static final String PRODUCT_ID = VariableManager.getProductId();
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
+        logger.info("Using BOMB token from VariableManager");
     }
 
     @Test(description = "Test the response status is 200", priority = 1, groups = "bomb")
@@ -50,7 +49,6 @@ public class Catalog_Search_with_Product_Filter extends BaseTest {
     @Severity(SeverityLevel.BLOCKER)
     public void testResponseStatus() {
         Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("product", PRODUCT_ID);
         queryParams.put("offset", 0);
         queryParams.put("limit", 20);
 

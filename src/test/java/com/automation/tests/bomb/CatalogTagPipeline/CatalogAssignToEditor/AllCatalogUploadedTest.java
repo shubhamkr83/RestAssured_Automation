@@ -1,11 +1,11 @@
-package com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Assign_to_Editor;
+package com.automation.tests.bomb.CatalogTagPipeline.CatalogAssignToEditor;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.BombEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.response.CatalogUploadedResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
 import com.automation.utils.JsonUtils;
+import com.automation.utils.VariableManager;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Assign to Editor")
-public class Catalog_Assign_All_catalog_uploaded extends BaseTest {
+public class AllCatalogUploadedTest extends BaseTest {
 
     private String authToken;
     private Response response;
@@ -31,13 +31,12 @@ public class Catalog_Assign_All_catalog_uploaded extends BaseTest {
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
+        logger.info("Using BOMB token from VariableManager");
     }
 
     @Test(description = "Response status code should be 200 (OK)", priority = 1, groups = "bomb")

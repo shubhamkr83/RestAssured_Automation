@@ -11,8 +11,8 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
-import static com.automation.tests.buyerapp.HomePage.Homepage_Feed_Filter_Save.suitableFor;
+import com.automation.utils.VariableManager;
+import static com.automation.tests.buyerapp.HomePage.FeedFilterSaveTest.suitableFor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Home Page")
 @Feature("Feed Banners API")
-public class Homepage_Banners extends BaseTest {
+public class BannersTest extends BaseTest {
 
     private static Response bannersResponse;
     private static BannersResponse bannersResponseData;
@@ -48,7 +48,7 @@ public class Homepage_Banners extends BaseTest {
         bannersResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .queryParam("suitable_for", suitableForParam)
                 .when()
                 .get(BuyerAppEndpoints.FEED_BANNERS);

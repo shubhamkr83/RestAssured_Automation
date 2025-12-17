@@ -1,10 +1,10 @@
-package com.automation.tests.bomb.Video_Tagging_pipeline.Video_Upload_and_Assign_to_Editor;
+package com.automation.tests.bomb.VideoTaggingPipeline.VideoUploadAndAssignToEditor;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.BombEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.response.VideoAssignUploadResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
@@ -25,27 +25,26 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Video Tagging Pipeline")
 @Feature("Video Upload and Assign to Editor")
-public class Video_Upload_All_Video_Assign_for_uploading_Thumbnail_Video extends BaseTest {
+public class AllVideoAssignForUploadingThumbnailVideoTest extends BaseTest {
 
     private String authToken;
     private Response response;
     private VideoAssignUploadResponse videoAssignUploadResponse;
 
     // Seller ID
-    private static final String SELLER_ID = "63ee780c9689be92acce8f35";
+    private static final String SELLER_ID = "64f180feaa90ffbd54b330f5";
 
     // Store upload ID for future tests
     public static String uploadId;
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
+        logger.info("Using BOMB token from VariableManager");
     }
 
     @Test(description = "Set upload_id to collectionVariables", priority = 1, groups = "bomb")
@@ -72,6 +71,9 @@ public class Video_Upload_All_Video_Assign_for_uploading_Thumbnail_Video extends
             uploadId = videoAssignUploadResponse.getData().getData().get(0).get_id();
             assertThat("Upload ID should be set", uploadId, notNullValue());
 
+            // Save to VariableManager for subsequent tests
+            VariableManager.set("uploadId", uploadId);
+            
             logger.info("Set upload ID: {}", uploadId);
         } else {
             logger.warn("No data items to set upload ID");

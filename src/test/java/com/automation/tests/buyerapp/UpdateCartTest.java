@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import static com.automation.tests.buyerapp.Login.login.buyerAppToken;
+import com.automation.utils.VariableManager;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Cart")
 @Feature("Update Cart API")
-public class Update_Cart extends BaseTest {
+public class UpdateCartTest extends BaseTest {
 
     private static Response updateCartResponse;
     private static UpdateCartResponse updateCartResponseData;
@@ -34,8 +34,6 @@ public class Update_Cart extends BaseTest {
     
     // Test data
     private static final Integer QUANTITY = 1;
-    private static final String CART_ID = "68383213df5a92a14ddba268";
-    private static final String LIVE_CATALOG_ID = "67c59d8ff22202c05e7d612e";
 
     @BeforeClass
     public void setupBuyerApp() {
@@ -50,15 +48,15 @@ public class Update_Cart extends BaseTest {
         // Prepare request body
         UpdateCartRequest requestBody = UpdateCartRequest.builder()
                 .quantity(QUANTITY)
-                .cart_id(CART_ID)
-                .cat_id(LIVE_CATALOG_ID)
+                .cart_id(VariableManager.get("cart_id", "68383213df5a92a14ddba268"))
+                .cat_id(VariableManager.get("live_catalog_id", "67c59d8ff22202c05e7d612e"))
                 .build();
 
         // Send POST request with authentication
         updateCartResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + buyerAppToken)
+                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
                 .body(requestBody)
                 .when()
                 .post(BuyerAppEndpoints.USER_UPDATE_CART);

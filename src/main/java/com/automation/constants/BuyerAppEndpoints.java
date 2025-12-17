@@ -22,6 +22,9 @@ public final class BuyerAppEndpoints {
     public static final String FEED_HOME_CATALOG = "/v1/feed/home/catalog";
     public static final String FEED_HOME_TRENDING = "/v1/feed/home/trending";
     public static final String FEED_NEW_THIS_WEEK = "/v1/feed/new-this-week";
+    public static final String FEED_FEATURED_COLLECTION = "/v1/feed/featured/collection";
+    public static final String FEED_HOME_CONFIG = "/v1/feed/home/config";
+    public static final String FEED_TV = "/v1/feed/tv";
 
     // Search endpoints
     public static final String USER_SEARCH = "/v1/user/search";
@@ -34,7 +37,11 @@ public final class BuyerAppEndpoints {
     // Profile & Config endpoints
     public static final String APP_UPDATE = "/api/appConfig/app-update";
     public static final String SUITABLE_FOR_CONFIG = "/api/appConfig/suitable-for";
+    public static final String USER_PROFILE = "/v1/user/profile";
+    public static final String USER_VIEWED_VIDEOS = "/v1/user/viewed/videos";
+    public static final String ACTION = "/v1/user/action";
 
     // Cart endpoints
     public static final String CART = "/v1/cart";
+    public static final String USER_UPDATE_CART = "/v1/user/cart/update";
 }

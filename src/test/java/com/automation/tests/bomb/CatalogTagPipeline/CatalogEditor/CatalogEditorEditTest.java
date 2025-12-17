@@ -1,10 +1,10 @@
-package com.automation.tests.bomb.Catalog_Tag_Pipeline.Catalog_Editor;
+package com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.BombEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.response.CatalogEditGroupResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
-public class Catalog_Editor_Catalog_Edit extends BaseTest {
+public class CatalogEditorEditTest extends BaseTest {
 
     private String authToken;
     private Response response;
@@ -35,23 +35,20 @@ public class Catalog_Editor_Catalog_Edit extends BaseTest {
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
+        logger.info("Using BOMB token from VariableManager");
 
-        // Get catalog ID from previous test
-        if (Catalog_Editor_All_Catalogs_Assigned.catalogForAssignId != null) {
-            catalogForAssignId = Catalog_Editor_All_Catalogs_Assigned.catalogForAssignId;
-            logger.info("Using catalog for assign ID from previous test: {}", catalogForAssignId);
+        // Get catalog ID from VariableManager or use fallback
+        catalogForAssignId = VariableManager.get("catalog_foassign_id");
+        if (catalogForAssignId == null || catalogForAssignId.isEmpty()) {
+            catalogForAssignId = VariableManager.get("catalog_foassign_id", "6822f5dac17c6dcd589ba173");
+            logger.warn("Catalog for assign ID not available, using default: {}", catalogForAssignId);
         } else {
-            // Fallback to a default ID if not available
-            catalogForAssignId = "6822f5dac17c6dcd589ba173";
-            logger.warn("Catalog for assign ID not available from previous test, using default: {}",
-                    catalogForAssignId);
+            logger.info("Using catalog for assign ID from VariableManager: {}", catalogForAssignId);
         }
     }
 

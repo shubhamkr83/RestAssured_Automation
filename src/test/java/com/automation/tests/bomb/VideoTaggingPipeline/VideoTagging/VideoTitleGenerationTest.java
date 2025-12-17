@@ -1,10 +1,10 @@
-package com.automation.tests.bomb.Video_Tagging_pipeline.Video_Tagging;
+package com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging;
 
 import com.automation.base.BaseTest;
 import com.automation.constants.HttpStatus;
 import com.automation.models.request.VideoTitleGenerationRequest;
 import com.automation.models.response.VideoTitleGenerationResponse;
-import com.automation.tests.bomb.Login.LoginApiTest;
+import com.automation.utils.VariableManager;
 import com.automation.utils.JsonUtils;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("BOMB Video Tagging Pipeline")
 @Feature("Video Tagging")
-public class Video_Title_Generation extends BaseTest {
+public class VideoTitleGenerationTest extends BaseTest {
 
     private String authToken;
     private Response response;
@@ -44,13 +44,12 @@ public class Video_Title_Generation extends BaseTest {
 
     @BeforeClass
     public void setupAuth() {
-        // Ensure login test runs first and token is available
-        if (LoginApiTest.bombToken != null) {
-            authToken = LoginApiTest.bombToken;
-            logger.info("Using BOMB token from LoginApiTest");
-        } else {
+        // Get token from VariableManager (thread-safe)
+        authToken = VariableManager.getToken();
+        if (authToken == null || authToken.isEmpty()) {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
+        logger.info("Using BOMB token from VariableManager");
 
         // Build request body with tags
         requestTags = Arrays.asList(
