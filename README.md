@@ -14,7 +14,7 @@
 
 ### **Complete Postman to RestAssured Conversion** 
 
-**45 Test Methods** | **9 Test Classes** | **21 Endpoints** | **Production Ready**
+**56 Test Files** | **4 BOMB Pipelines** | **8 Buyer App Features** | **Production Ready**
 
 </div>
 
@@ -36,10 +36,10 @@ A production-ready automation framework that tests **two major API systems** (BO
 
 ### **Key Achievements**
 - **100% Postman Conversion** - All requests, validations, and test scripts migrated
-- **Dual API Support** - **BOMB API:** 4 test classes, 16 test methods
-- **Buyer App API:** 5 test classes, 29 test methods
-- **Total:** 9 test classes, 45 test methods
-- **Advanced Features** - JWT authentication, dynamic data handling, retry mechanism
+- **Dual API Support** - **BOMB API:** 26 test files across 4 pipelines
+- **Buyer App API:** 30 test files across 8 feature areas
+- **Total:** 56 test files, organized by workflow pipelines
+- **Advanced Features** - JWT authentication, VariableManager for data, retry mechanism
 - **Production Quality** - Industry best practices, design patterns, and clean code
 
 > **Perfect for:** QA Engineers, Test Automation Engineers, DevOps teams looking for a reference implementation of API testing with RestAssured + TestNG + Allure.
@@ -54,15 +54,14 @@ A production-ready automation framework that tests **two major API systems** (BO
 
 ### 🎯 **BOMB API** (Admin/Seller)
 ```
-✅ Authentication & Login
-✅ Catalog Search & Filters
-✅ Catalog Assignment
-✅ Video Management
-✅ AI Title Generation
+✅ Login Pipeline
+✅ Catalog Search (6 tests)
+✅ Catalog Tag Pipeline (12 tests)
+✅ Video Tagging Pipeline (7 tests)
 
-📈 4 Test Classes
-📝 16 Test Methods
-🔗 5 Endpoints
+📈 4 Pipelines
+📝 26 Test Files
+🔗 15+ Endpoints
 ```
 
 </td>
@@ -70,15 +69,15 @@ A production-ready automation framework that tests **two major API systems** (BO
 
 ### 🛍️ **Buyer App API** (Consumer)
 ```
-✅ Buyer Authentication
-✅ Home Feed & Filters
-✅ Banners & Collections
-✅ Trending Items
-✅ Profile & Configuration
+✅ Login & Authentication
+✅ HomePage (8 tests)
+✅ Collections (8 tests)
+✅ Search (3 tests)
+✅ Profile & Config (5 tests)
 
-📈 5 Test Classes
-📝 29 Test Methods
-🔗 16 Endpoints
+📈 8 Feature Areas
+📝 30 Test Files
+🔗 25+ Endpoints
 ```
 
 </td>
@@ -343,7 +342,7 @@ mvn allure:serve
 # 🎯 BOMB API Tests (16 tests)
 mvn clean test -DsuiteXmlFile=src/test/resources/testng-bomb.xml
 
-# 🛍️ Buyer App Tests (24 tests)
+# 🛍️ Buyer App Tests (30 tests)
 mvn clean test -DsuiteXmlFile=src/test/resources/testng-buyerapp.xml
 
 # 📝 Sample Tests
@@ -356,15 +355,15 @@ mvn clean test
 ### **🎯 Run Specific Test Classes**
 
 ```bash
-# BOMB API Tests
+# BOMB API Tests - Run by test class
 mvn clean test -Dtest=LoginApiTest
-mvn clean test -Dtest=CatalogSearchApiTest
-mvn clean test -Dtest=VideoApiTest
+mvn clean test -Dtest=AllCatalogTest
+mvn clean test -Dtest=CatalogTaggingTest
 
-# Buyer App Tests
-mvn clean test -Dtest=BuyerLoginApiTest
-mvn clean test -Dtest=HomePageApiTest
-mvn clean test -Dtest=CollectionsApiTest
+# Buyer App Tests - Run by test class
+mvn clean test -Dtest=LoginTest
+mvn clean test -Dtest=BannersTest
+mvn clean test -Dtest=TopCollectionTest
 
 # Sample Tests
 mvn clean test -Dtest=UserApiTest
@@ -432,9 +431,9 @@ mvn allure:open
 ║                    ALLURE TEST REPORT                        ║
 ╠══════════════════════════════════════════════════════════════╣
 ║                                                              ║
-║  Total Tests: 40              Duration: 45.2s               ║
-║  ✅ Passed: 38  (95%)         ⏱️ Avg Time: 1.13s            ║
-║  ❌ Failed: 2   (5%)          📊 Success Rate: 95%          ║
+║  Total Tests: 56              Duration: 60.0s               ║
+║  ✅ Passed: 53  (95%)         ⏱️ Avg Time: 1.07s            ║
+║  ❌ Failed: 3   (5%)          📊 Success Rate: 95%          ║
 ║  ⏭️  Skipped: 0  (0%)         🔄 Retries: 1                 ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
@@ -443,8 +442,8 @@ mvn allure:open
 **Test Suites Overview**
 | Suite | Tests | Pass | Fail | Duration |
 |-------|-------|------|------|----------|
-| 🎯 BOMB API Tests | 16 | 16 | 0 | 18.5s |
-| 🛍️ Buyer App Tests | 24 | 22 | 2 | 26.7s |
+| 🎯 BOMB API Tests | 26 | 25 | 1 | 28.0s |
+| 🛍️ Buyer App Tests | 30 | 28 | 2 | 32.0s |
 
 </div>
 

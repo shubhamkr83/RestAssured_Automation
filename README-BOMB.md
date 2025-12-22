@@ -13,7 +13,7 @@
 
 ### ✨ **Enterprise-Grade Admin/Seller API Testing** ✨
 
-**16 Test Methods** | **4 Test Classes** | **5 Endpoints** | **Production Ready**
+**26 Test Files** | **4 Workflow Pipelines** | **15+ Endpoints** | **Production Ready**
 
 </div>
 
@@ -27,10 +27,10 @@ This documentation covers the **BOMB API** automation framework - a comprehensiv
 Complete end-to-end validation of the BOMB admin/seller API, including authentication, catalog search & management, video operations, and AI-powered title generation.
 
 ### **🚀 Key Highlights**
-- ✅ **16 Test Methods** - Comprehensive coverage of all admin/seller scenarios
-- ✅ **5 API Endpoints** - All critical operations tested
-- ✅ **JWT Authentication** - Complete token-based auth flow
-- ✅ **Advanced Filters** - Seller, product, and catalog ID filtering
+- ✅ **26 Test Files** - Comprehensive coverage organized by workflow pipelines
+- ✅ **15+ API Endpoints** - All critical operations tested
+- ✅ **JWT Authentication** - Complete token-based auth flow with VariableManager
+- ✅ **Pipeline Architecture** - Tests organized by business workflows
 - ✅ **AI Integration** - Video title generation from tags
 
 ---
@@ -41,8 +41,8 @@ Complete end-to-end validation of the BOMB admin/seller API, including authentic
 <tr>
 <td width="50%" valign="top">
 
-### 🔐 **1. Login API Tests**
-**Class:** `LoginApiTest.java` | **Tests:** 3
+### 🔐 **1. Login Pipeline**
+**Location:** `bomb/Login/` | **Tests:** 1 file
 
 ```
 ✅ Successful login (valid credentials)
@@ -60,8 +60,8 @@ Complete end-to-end validation of the BOMB admin/seller API, including authentic
 </td>
 <td width="50%" valign="top">
 
-### 🔍 **2. Catalog Search API Tests**
-**Class:** `CatalogSearchApiTest.java` | **Tests:** 6
+### 🔍 **2. Catalog Search Pipeline**
+**Location:** `bomb/CatalogSearch/` | **Tests:** 6 files
 
 ```
 ✅ Get all catalogs (pagination)
@@ -84,13 +84,13 @@ Complete end-to-end validation of the BOMB admin/seller API, including authentic
 <tr>
 <td width="50%" valign="top">
 
-### 📎 **3. Catalog Assign/Upload Tests**
-**Class:** `CatalogAssignApiTest.java` | **Tests:** 3
+### 📎 **3. Catalog Tag Pipeline**
+**Location:** `bomb/CatalogTagPipeline/` | **Tests:** 12 files
 
 ```
-✅ Catalog uploaded search
-✅ Search by seller filter
-✅ Seller ID validation (all items)
+✅ Catalog Assign to Editor (3 tests)
+✅ Catalog Editor Operations (9 tests)
+✅ Tagging, Title Generation, Mark as Done
 ```
 
 **Key Validations:**
@@ -104,14 +104,13 @@ Complete end-to-end validation of the BOMB admin/seller API, including authentic
 </td>
 <td width="50%" valign="top">
 
-### 🎥 **4. Video API Tests**
-**Class:** `VideoApiTest.java` | **Tests:** 4
+### 🎥 **4. Video Tagging Pipeline**
+**Location:** `bomb/VideoTaggingPipeline/` | **Tests:** 7 files
 
 ```
-✅ Get videos by seller ID
-✅ Video title generation (AI)
-✅ Result validation
-✅ Response headers validation
+✅ Video Upload & Assign (4 tests)
+✅ Video Tagging Operations (3 tests)
+✅ Title Generation, Edit, Mark as Done
 ```
 
 **Key Validations:**
@@ -260,7 +259,7 @@ POST /v2/ai/tags-to-text
 ### **🚀 Quick Start**
 
 ```bash
-# Run complete BOMB API test suite
+# Run complete BOMB API test suite (26 tests)
 mvn clean test -DsuiteXmlFile=src/test/resources/testng-bomb.xml
 
 # Generate Allure report
@@ -277,28 +276,28 @@ mvn allure:serve
 ```bash
 mvn clean test -Dtest=LoginApiTest
 ```
-📊 **3 tests** | ⏱️ ~2s
+📊 **1 test file** | ⏱️ ~2s
 
 #### **Catalog Search Tests**
 ```bash
-mvn clean test -Dtest=CatalogSearchApiTest
+mvn clean test -Dtest=AllCatalogTest
 ```
-📊 **6 tests** | ⏱️ ~8s
+📊 **6 test files** | ⏱️ ~10s
 
 </td>
 <td width="50%" valign="top">
 
-#### **Catalog Assign Tests**
+#### **Catalog Tag Pipeline**
 ```bash
-mvn clean test -Dtest=CatalogAssignApiTest
+mvn clean test -Dtest=CatalogTaggingTest
 ```
-📊 **3 tests** | ⏱️ ~4s
+📊 **12 test files** | ⏱️ ~12s
 
-#### **Video API Tests**
+#### **Video Tagging Pipeline**
 ```bash
-mvn clean test -Dtest=VideoApiTest
+mvn clean test -Dtest=VideoUploadTest
 ```
-📊 **4 tests** | ⏱️ ~5s
+📊 **7 test files** | ⏱️ ~8s
 
 </td>
 </tr>
@@ -307,7 +306,7 @@ mvn clean test -Dtest=VideoApiTest
 ### **📦 Run by Package**
 
 ```bash
-# Run all BOMB API tests (16 tests)
+# Run all BOMB API tests (26 test files)
 mvn clean test -Dtest=com.automation.tests.bomb.*
 ```
 
@@ -343,10 +342,10 @@ mvn clean test -Dtest=com.automation.tests.bomb.*
 
 | Step | Test Class | Actions | Output |
 |------|-----------|---------|--------|
-| **1** | `LoginApiTest` | • Authenticate admin/seller<br>• Generate JWT tokens | 🔑 `bombToken` (static) |
-| **2** | `CatalogSearchApiTest` | • Test catalog search<br>• Apply various filters | 📦 `liveCatalogId` |
-| **3** | `CatalogAssignApiTest` | • Test catalog upload<br>• Validate assignments | 📎 `catalogForAssignId` |
-| **4** | `VideoApiTest` | • Test video operations<br>• AI title generation | 🎥 `videoTitle` |
+| **1** | `Login Pipeline` | • Authenticate admin/seller<br>• Generate JWT tokens | 🔑 `bombToken` (VariableManager) |
+| **2** | `Catalog Search Pipeline` | • Search catalogs<br>• Apply filters (seller, product, ID) | 📦 Catalog IDs |
+| **3** | `Catalog Tag Pipeline` | • Assign to editor<br>• Tag, generate title, mark done | 📎 Catalog workflow IDs |
+| **4** | `Video Tagging Pipeline` | • Upload video<br>• Tag, generate title, mark done | 🎥 Video workflow IDs |
 
 ---
 
@@ -516,38 +515,38 @@ Accept: application/json
 <th width="20%">📦 Status</th>
 </tr>
 <tr>
-<td><b>🔐 Authentication</b></td>
+<td><b>🔐 Login Pipeline</b></td>
 <td align="center">1</td>
-<td align="center">3</td>
+<td align="center">1</td>
 <td align="center">~2s</td>
 <td align="center">✅ Complete</td>
 </tr>
 <tr>
-<td><b>🔍 Catalog Search</b></td>
-<td align="center">1</td>
-<td align="center">6</td>
-<td align="center">~8s</td>
-<td align="center">✅ Complete</td>
-</tr>
-<tr>
-<td><b>📎 Catalog Assign</b></td>
-<td align="center">1</td>
-<td align="center">3</td>
-<td align="center">~4s</td>
-<td align="center">✅ Complete</td>
-</tr>
-<tr>
-<td><b>🎥 Video Operations</b></td>
+<td><b>🔍 Catalog Search Pipeline</b></td>
 <td align="center">2</td>
-<td align="center">4</td>
-<td align="center">~5s</td>
+<td align="center">6</td>
+<td align="center">~10s</td>
+<td align="center">✅ Complete</td>
+</tr>
+<tr>
+<td><b>📎 Catalog Tag Pipeline</b></td>
+<td align="center">3</td>
+<td align="center">12</td>
+<td align="center">~12s</td>
+<td align="center">✅ Complete</td>
+</tr>
+<tr>
+<td><b>🎥 Video Tagging Pipeline</b></td>
+<td align="center">3</td>
+<td align="center">7</td>
+<td align="center">~8s</td>
 <td align="center">✅ Complete</td>
 </tr>
 <tr style="background-color: #f0f0f0; font-weight: bold;">
 <td><b>🏆 TOTAL</b></td>
-<td align="center"><b>5</b></td>
-<td align="center"><b>16</b></td>
-<td align="center"><b>~19s</b></td>
+<td align="center"><b>9</b></td>
+<td align="center"><b>26</b></td>
+<td align="center"><b>~32s</b></td>
 <td align="center"><b>✅ 100%</b></td>
 </tr>
 </table>
@@ -571,9 +570,9 @@ This BOMB API module is part of a larger framework supporting multiple APIs:
 
 🌐 `bizup.app`
 
-📊 **4 Test Classes**
-🧪 **16 Test Methods**
-🔗 **5 Endpoints**
+📊 **4 Pipelines**
+🧪 **26 Test Files**
+🔗 **15+ Endpoints**
 
 **This Document**
 
@@ -585,9 +584,9 @@ This BOMB API module is part of a larger framework supporting multiple APIs:
 
 🌐 `api.navofashion.in`
 
-📊 **5 Test Classes**
-🧪 **29 Test Methods**
-🔗 **16 Endpoints**
+📊 **8 Feature Areas**
+🧪 **30 Test Files**
+🔗 **25+ Endpoints**
 
 [View Details →](README-BUYER-APP.md)
 
@@ -598,10 +597,11 @@ This BOMB API module is part of a larger framework supporting multiple APIs:
 ### **📦 Complete Framework Stats**
 
 ```
-🏆 Total Test Classes: 9
-🧪 Total Test Methods: 45
-🔗 Total Endpoints: 21
-⏱️ Total Execution: ~40s
+🏆 Total Test Files: 56
+📦 BOMB Pipelines: 4 (26 tests)
+🛍️ Buyer App Features: 8 (30 tests)
+🔗 Total Endpoints: 40+
+⏱️ Total Execution: ~60s
 ✅ Success Rate: 95%+
 ```
 
