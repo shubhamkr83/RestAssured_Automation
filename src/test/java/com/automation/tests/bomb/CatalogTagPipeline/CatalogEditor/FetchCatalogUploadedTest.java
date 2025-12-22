@@ -54,7 +54,7 @@ public class FetchCatalogUploadedTest extends BaseTest {
                 .queryParam("seller_id", VariableManager.get("seller_id"))
                 .queryParam("mode", "all")
                 .when()
-                .get(BombEndpoints.EDITOR_ASSIGN_CATALOG + "/" + VariableManager.get("seller_id"));
+                .post(BombEndpoints.EDITOR_ASSIGN_CATALOG + "/" + VariableManager.get("seller_id"));
 
         // Parse response for other tests
         catalogEditorResponse = JsonUtils.fromResponse(response, CatalogEditorResponse.class);

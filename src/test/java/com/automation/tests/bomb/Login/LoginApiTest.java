@@ -141,7 +141,7 @@ public class LoginApiTest extends BaseTest {
                                                 Math.min(20, loginResponseData.getData().getRefreshToken().length())));
         }
 
-        @Test(description = "Store access token in collection variables", priority = 7, dependsOnMethods = "testAccessTokenExists", groups = "bomb")
+        @Test(description = "Store access token in collection variables and persist to file", priority = 7, dependsOnMethods = "testAccessTokenExists", groups = "bomb")
         @Story("User Login")
         @Severity(SeverityLevel.BLOCKER)
         public void testStoreAccessToken() {
@@ -149,12 +149,16 @@ public class LoginApiTest extends BaseTest {
                 String accessToken = loginResponseData.getData().getAccessToken();
                 VariableManager.setToken(accessToken);
 
-                // Verify token was stored
+                // Verify token was stored in memory
                 String storedToken = VariableManager.getToken();
                 assertThat("Stored token should not be null", storedToken, notNullValue());
                 assertThat("Stored token should not be empty", storedToken, not(emptyOrNullString()));
 
                 logger.info("Access token stored successfully in VariableManager: {}...",
                                 storedToken.substring(0, Math.min(20, storedToken.length())));
+
+                // Persist token to file for cross-execution access
+                VariableManager.saveTokenToFile();
+                logger.info("Access token persisted to test-variables.properties file");
         }
 }

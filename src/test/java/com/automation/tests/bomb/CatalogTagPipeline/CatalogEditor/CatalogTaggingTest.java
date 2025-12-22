@@ -59,7 +59,7 @@ public class CatalogTaggingTest extends BaseTest {
         }
 
         // Get generated title from previous test
-        String prevTitle = VariableManager.get("generated_title");
+        String prevTitle = VariableManager.get("generatedTitle");
         if (prevTitle != null) {
             generatedTitle = prevTitle;
             logger.info("Using generated title from VariableManager: {}", generatedTitle);
@@ -68,10 +68,10 @@ public class CatalogTaggingTest extends BaseTest {
             logger.warn("Generated title not available, using default: {}", generatedTitle);
         }
 
-        // Set expected values (these would typically come from previous tests or test
-        // data)
+        // Set expected values (these would typically come from previous tests or test data)
         expectedPrice = 100.0;
-        expectedProductId = "test_product_id";
+        expectedProductId = VariableManager.get("product_id", "641d692fcebb994dcaf4571b");
+        logger.info("Using product ID: {}", expectedProductId);
     }
 
     @Test(description = "Status code is successful 200", priority = 1, groups = "bomb")
@@ -103,7 +103,7 @@ public class CatalogTaggingTest extends BaseTest {
                 .header("source", "bizupChat")
                 .body(request)
                 .when()
-                .put(BombEndpoints.CATALOG + "/" + catalogId);
+                .post(BombEndpoints.CATALOG + "/" + catalogId);
 
         // Parse response for other tests
         catalogTaggingResponse = JsonUtils.fromResponse(response, CatalogTaggingResponse.class);

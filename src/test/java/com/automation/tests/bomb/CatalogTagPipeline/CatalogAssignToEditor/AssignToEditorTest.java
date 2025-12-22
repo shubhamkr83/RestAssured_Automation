@@ -31,7 +31,7 @@ public class AssignToEditorTest extends BaseTest {
 
     // Collection variables (equivalent to Postman collection variables)
     private String catalogForAssignId;
-    private static final String SELLER_ID = VariableManager.getSellerId();
+    private String sellerId;
 
     @BeforeClass
     public void setupAuth() {
@@ -41,6 +41,11 @@ public class AssignToEditorTest extends BaseTest {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
         logger.info("Using BOMB token from VariableManager");
+        
+        // Get seller ID after VariableManager is initialized
+        sellerId = VariableManager.getSellerId();
+        logger.info("Using seller ID: {}", sellerId);
+        
         // Get catalog ID from VariableManager or use fallback
         catalogForAssignId = VariableManager.get("catalog_foassign_id");
         if (catalogForAssignId == null || catalogForAssignId.isEmpty()) {
@@ -213,9 +218,9 @@ public class AssignToEditorTest extends BaseTest {
         if (data != null) {
             // Validate sellerId matches the expected seller ID
             assertThat("Response sellerId should match seller_id",
-                    data.getSellerId(), equalTo(SELLER_ID));
+                    data.getSellerId(), equalTo(sellerId));
 
-            logger.info("Response sellerId validated: {} (Expected: {})", data.getSellerId(), SELLER_ID);
+            logger.info("Response sellerId validated: {} (Expected: {})", data.getSellerId(), sellerId);
         } else {
             logger.warn("Data is null, skipping sellerId validation");
         }

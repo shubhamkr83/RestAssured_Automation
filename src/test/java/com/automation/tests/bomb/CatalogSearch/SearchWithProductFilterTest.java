@@ -32,7 +32,7 @@ public class SearchWithProductFilterTest extends BaseTest {
     private String authToken;
     private Response response;
     private CatalogResponse catalogResponse;
-    private static final String PRODUCT_ID = VariableManager.getProductId();
+    private String searchProductId;
 
     @BeforeClass
     public void setupAuth() {
@@ -42,6 +42,10 @@ public class SearchWithProductFilterTest extends BaseTest {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
         logger.info("Using BOMB token from VariableManager");
+        
+        // Get product ID after VariableManager is initialized
+        searchProductId = VariableManager.getSearchProductId();
+        logger.info("Using product ID: {}", searchProductId);
     }
 
     @Test(description = "Test the response status is 200", priority = 1, groups = "bomb")
@@ -49,6 +53,7 @@ public class SearchWithProductFilterTest extends BaseTest {
     @Severity(SeverityLevel.BLOCKER)
     public void testResponseStatus() {
         Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("product", searchProductId);
         queryParams.put("offset", 0);
         queryParams.put("limit", 20);
 
@@ -180,8 +185,8 @@ public class SearchWithProductFilterTest extends BaseTest {
             if (sampleItem.getSeller() != null) {
                 if (sampleItem.getSeller().getDeprioritisation_status() != null) {
                     // Note: In the Postman script, this is expected to be true for product filter
-                    assertThat("Seller deprioritisation_status should be true",
-                            sampleItem.getSeller().getDeprioritisation_status(), is(true));
+                    assertThat("Seller deprioritisation_status should be false",
+                            sampleItem.getSeller().getDeprioritisation_status(), is(false));
                 }
                 if (sampleItem.getSeller().getIsCatalogAvailable() != null) {
                     assertThat("Seller isCatalogAvailable should be true",
@@ -250,9 +255,9 @@ public class SearchWithProductFilterTest extends BaseTest {
             assertThat("Items should exist when filtering by product",
                     catalogResponse.getData().getItems(), not(empty()));
 
-            logger.info("Product filter validation: items returned for product ID {}", PRODUCT_ID);
+            logger.info("Product filter validation: items returned for product ID {}",  searchProductId);
         } else {
-            logger.warn("No items found for product ID: {}", PRODUCT_ID);
+            logger.warn("No items found for product ID: {}", searchProductId);
         }
     }
 

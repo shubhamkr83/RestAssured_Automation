@@ -49,7 +49,7 @@ public class MarkAsDoneTest extends BaseTest {
                 .header("authorization", "JWT " + authToken)
                 .header("Content-Type", "application/json")
                 .when()
-                .put(BombEndpoints.EDITOR_MARK_AS_DONE + "/" + VariableManager.get("seller_id") + "/" + VariableManager.get("catalog_id", "682584c0240b174c4c1a55f4"));
+                .post(BombEndpoints.EDITOR_MARK_AS_DONE + "/" + VariableManager.get("seller_id") + "/" +  "682584c0240b174c4c1a55f4");
 
         // Parse response for other tests
         markAsDoneResponse = JsonUtils.fromResponse(response, MarkAsDoneResponse.class);

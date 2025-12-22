@@ -31,13 +31,18 @@ public class VideoViewActionTest extends BaseTest {
     
     // Test data
     private static final String ACTION = "view";
-    private static final String VIDEO_ID = VariableManager.getVideoId();
-    private static final String USER_ID = VariableManager.getUserId();
+    private String videoId;
+    private String userId;
 
     @BeforeClass
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
+        
+        // Get video ID and user ID after VariableManager is initialized
+        videoId = VariableManager.getVideoId();
+        userId = VariableManager.getUserId();
+        logger.info("Using video ID: {} and user ID: {}", videoId, userId);
     }
 
     @Test(description = "Response status code is 200", priority = 1, groups = "buyerapp")
@@ -160,7 +165,7 @@ public class VideoViewActionTest extends BaseTest {
         assertThat("videoId should not be empty",
                 videoViewResponseData.getData().getVideoId(), not(emptyOrNullString()));
         assertThat("videoId should equal expected value",
-                videoViewResponseData.getData().getVideoId(), equalTo(VIDEO_ID));
+                videoViewResponseData.getData().getVideoId(), equalTo(videoId));
 
         logger.info("videoId validated: {}", videoViewResponseData.getData().getVideoId());
     }
@@ -177,7 +182,7 @@ public class VideoViewActionTest extends BaseTest {
         assertThat("userId should not be empty",
                 videoViewResponseData.getData().getUserId(), not(emptyOrNullString()));
         assertThat("userId should equal expected value",
-                videoViewResponseData.getData().getUserId(), equalTo(USER_ID));
+                videoViewResponseData.getData().getUserId(), equalTo(userId));
 
         logger.info("userId validated: {}", videoViewResponseData.getData().getUserId());
     }

@@ -35,15 +35,14 @@ public class UploadThumbnailVideoTest extends BaseTest {
 
     // Request data
     private VideoThumbnailUploadRequest requestBody;
-    private static final String SELLER_ID = "64f180feaa90ffbd54b330f5";
-    private static final String SELLER_PHONE = "+916204843730";
-    private static final String SELLER_NAME = "Test Shop";
-    private static final String BUSINESS_NAME = "Test Shop";
-    private static final String MARKET_ID = "6454921e6144f73eceac9de5";
-
-    private static final String VIDEO_LINK = "https://firebasestorage.googleapis.com/v0/b/bizup-3df17.appspot.com/o/editor%2Fvideo%2Fe4408ce0-e095-4671-b58b-91a70418cfc0.mp4?alt=media&token=2e06aff7-661e-4f79-a4b1-c7fd7a607a1c";
-    private static final String THUMBNAIL_LINK = "https://firebasestorage.googleapis.com/v0/b/bizup-3df17.appspot.com/o/editor%2Fvideo%2Fthumbnail%2Fc901f102-ba3f-4214-8249-7c95082b524c.png?alt=media&token=c30ded78-a968-4084-8898-32a543ba19e1";
-    private static final String DESCRIPTION = "test";
+    private String sellerId;
+    private String sellerPhone;
+    private String sellerName;
+    private String businessName;
+    private String marketId;
+    private String videoLink;
+    private String thumbnailLink;
+    private String description;
 
     // Upload ID from previous test
     private String uploadId;
@@ -57,34 +56,49 @@ public class UploadThumbnailVideoTest extends BaseTest {
         }
         logger.info("Using BOMB token from VariableManager");
 
+        // Get seller-related data from VariableManager
+        sellerId = VariableManager.getSellerId();
+        sellerPhone = VariableManager.get("phoneNumber");
+        sellerName = VariableManager.get("seller_name");
+        businessName = VariableManager.get("business_name");
+        marketId = VariableManager.get("market_id");
+        logger.info("Using seller data: sellerId={}, sellerPhone={}, sellerName={}, businessName={}, marketId={}", 
+                    sellerId, sellerPhone, sellerName, businessName, marketId);
+
+        // Get video/thumbnail data from VariableManager
+        videoLink = VariableManager.get("video_link");
+        thumbnailLink = VariableManager.get("thumbnail_link");
+        description = VariableManager.get("video_description");
+        logger.info("Using video data: videoLink={}, thumbnailLink={}, description={}", videoLink, thumbnailLink, description);
+
         // Get upload ID from previous test
-        String prevUploadId = VariableManager.get("uploadId");
+        String prevUploadId = VariableManager.get("upload_id");
         if (prevUploadId != null) {
             uploadId = prevUploadId;
             logger.info("Using upload ID from VariableManager: {}", uploadId);
         } else {
-            // Fallback to a default ID if not available
-            uploadId = "default_upload_id";
-            logger.warn("Upload ID not available from previous test, using default");
+            // Fallback to a default ID if not available (valid MongoDB ObjectId)
+            uploadId = "693a92f840d8d24c390119a0";
+            logger.warn("Upload ID not available from previous test, using default: {}", uploadId);
         }
 
         // Build request body
         requestBody = VideoThumbnailUploadRequest.builder()
                 .seller(VideoThumbnailUploadRequest.Seller.builder()
-                        ._id(SELLER_ID)
-                        .phoneNumber(SELLER_PHONE)
-                        .name(SELLER_NAME)
-                        .businessName(BUSINESS_NAME)
-                        .marketId(MARKET_ID)
+                        ._id(sellerId)
+                        .phoneNumber(sellerPhone)
+                        .name(sellerName)
+                        .businessName(businessName)
+                        .marketId(marketId)
                         .build())
                 .market(null)
-                .videoLink(VIDEO_LINK)
-                .thumbnailLink(THUMBNAIL_LINK)
+                .videoLink(videoLink)
+                .thumbnailLink(thumbnailLink)
                 .introVideo(false)
                 .uploadId(uploadId)
                 .fabricText("")
                 .priceText("")
-                .description(DESCRIPTION)
+                .description(description)
                 .build();
     }
 
@@ -99,7 +113,7 @@ public class UploadThumbnailVideoTest extends BaseTest {
                 .header("source", "bizupChat")
                 .body(requestBody)
                 .when()
-                .post(BombEndpoints.VIDEO_THUMBNAIL_UPLOAD + "/" + SELLER_ID);
+                .post(BombEndpoints.VIDEO_THUMBNAIL_UPLOAD + "/" + sellerId);
 
         // Parse response for other tests
         videoThumbnailUploadResponse = JsonUtils.fromResponse(response, VideoThumbnailUploadResponse.class);
@@ -190,11 +204,11 @@ public class UploadThumbnailVideoTest extends BaseTest {
     public void testSellerIdMatches() {
         VideoThumbnailUploadResponse.VideoThumbnailData data = videoThumbnailUploadResponse.getData();
 
-        // Validate sellerId matches expected seller ID
-        assertThat("SellerId should match expected seller ID",
-                data.getSellerId(), equalTo(SELLER_ID));
+        // Validate seller matches expected seller ID
+        assertThat("Seller should match expected seller ID",
+                data.getSeller(), equalTo(sellerId));
 
-        logger.info("SellerId validated: {} matches expected: {}", data.getSellerId(), SELLER_ID);
+        logger.info("Seller validated: {} matches expected: {}", data.getSeller(), sellerId);
     }
 
     @Test(description = "Video link is valid", priority = 7, dependsOnMethods = "testStatusCode200", groups = "bomb")

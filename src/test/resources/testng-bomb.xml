@@ -10,43 +10,43 @@
 
     <test name="BOMB API Tests" preserve-order="true">
         <classes>
-            <!-- Login must run first to generate auth token -->
+            <!-- 1. Login must run first to generate auth token -->
             <class name="com.automation.tests.bomb.Login.LoginApiTest"/>
             
-            <!-- Catalog Search Tests -->
+            <!-- 2. Catalog Search Tests (in required order) -->
             <class name="com.automation.tests.bomb.CatalogSearch.AllCatalogTest"/>
-            <class name="com.automation.tests.bomb.CatalogSearch.CatalogDeleteTest"/>
-            <class name="com.automation.tests.bomb.CatalogSearch.CatalogEditTest"/>
-            <class name="com.automation.tests.bomb.CatalogSearch.SearchWithCatalogIdFilterTest"/>
-            <class name="com.automation.tests.bomb.CatalogSearch.SearchWithProductFilterTest"/>
             <class name="com.automation.tests.bomb.CatalogSearch.SearchWithSellerFilterTest"/>
+            <class name="com.automation.tests.bomb.CatalogSearch.SearchWithProductFilterTest"/>
+            <class name="com.automation.tests.bomb.CatalogSearch.SearchWithCatalogIdFilterTest"/>
+            <class name="com.automation.tests.bomb.CatalogSearch.CatalogEditTest"/>
+            <class name="com.automation.tests.bomb.CatalogSearch.CatalogDeleteTest"/>
             
-            <!-- Catalog Tag Pipeline - Assign to Editor -->
+            <!-- 3. Catalog Tag Pipeline - Assign to Editor (in required order) -->
             <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogAssignToEditor.AllCatalogUploadedTest"/>
-            <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogAssignToEditor.AssignToEditorTest"/>
             <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogAssignToEditor.CatalogUploadedSearchBySellerFilterTest"/>
+            <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogAssignToEditor.AssignToEditorTest"/>
             
-            <!-- Catalog Tag Pipeline - Editor -->
+            <!-- 4. Catalog Tag Pipeline - Editor (in required order) -->
             <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.AllCatalogsAssignedTest"/>
+            <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.FetchCatalogUploadedTest"/>
+            <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogsGroupTest"/>
+            <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogTagTest"/>
             <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.BotCatalogTitleGenerateTest"/>
+            <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogTaggingTest"/>
             <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogEditorEditTest"/>
             <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogSkipTest"/>
-            <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogTagTest"/>
-            <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogTaggingTest"/>
-            <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.CatalogsGroupTest"/>
-            <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.FetchCatalogUploadedTest"/>
             <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogEditor.MarkAsDoneTest"/>
             
-            <!-- Video Tagging Pipeline - Upload and Assign (Must run in order) -->
+            <!-- 5. Video Tagging Pipeline - Upload and Assign (Must run in order) -->
             <class name="com.automation.tests.bomb.VideoTaggingPipeline.VideoUploadAndAssignToEditor.VideoUploadTest"/>
             <class name="com.automation.tests.bomb.VideoTaggingPipeline.VideoUploadAndAssignToEditor.AllVideoAssignForUploadingThumbnailVideoTest"/>
             <class name="com.automation.tests.bomb.VideoTaggingPipeline.VideoUploadAndAssignToEditor.UploadThumbnailVideoTest"/>
             <class name="com.automation.tests.bomb.VideoTaggingPipeline.VideoUploadAndAssignToEditor.VideoUploadMarkAsDoneTest"/>
             
-            <!-- Video Tagging Pipeline - Tagging -->
+            <!-- 6. Video Tagging Pipeline - Tagging (in required order) -->
             <class name="com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging.VideoTaggingEditButtonTest"/>
-            <class name="com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging.VideoTaggingTest"/>
             <class name="com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging.VideoTitleGenerationTest"/>
+            <class name="com.automation.tests.bomb.VideoTaggingPipeline.VideoTagging.VideoTaggingTest"/>
         </classes>
     </test>
 

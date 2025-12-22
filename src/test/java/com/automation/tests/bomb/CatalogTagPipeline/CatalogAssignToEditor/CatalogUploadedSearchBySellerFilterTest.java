@@ -31,7 +31,7 @@ public class CatalogUploadedSearchBySellerFilterTest extends BaseTest {
     private CatalogUploadedResponse catalogUploadedResponse;
 
     // Seller ID for filtering
-    private static final String SELLER_ID = VariableManager.getSellerId();
+    private String sellerId;
 
     // Store catalog ID for assignment (status = 0)
     public static String catalogForAssignId;
@@ -44,6 +44,10 @@ public class CatalogUploadedSearchBySellerFilterTest extends BaseTest {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
         logger.info("Using BOMB token from VariableManager");
+        
+        // Get seller ID after VariableManager is initialized
+        sellerId = VariableManager.getSellerId();
+        logger.info("Using seller ID: {}", sellerId);
     }
 
     @Test(description = "Response status code should be 200", priority = 1, groups = "bomb")
@@ -56,7 +60,7 @@ public class CatalogUploadedSearchBySellerFilterTest extends BaseTest {
                 .header("authorization", "JWT " + authToken)
                 .header("source", "bizupChat")
                 .queryParam("limit", 600)
-                .queryParam("seller_id", VariableManager.get("seller_id"))
+                .queryParam("seller", VariableManager.get("seller_id"))
                 .when()
                 .get(BombEndpoints.CATALOG);
 
@@ -235,12 +239,12 @@ public class CatalogUploadedSearchBySellerFilterTest extends BaseTest {
 
             // Verify all items belong to the requested seller
             firstGroup.getData().forEach(item -> {
-                assertThat(String.format("Item %s should belong to seller %s", item.get_id(), SELLER_ID),
-                        item.getSellerId(), equalTo(SELLER_ID));
+                assertThat(String.format("Item %s should belong to seller %s", item.get_id(), sellerId),
+                        item.getSellerId(), equalTo(sellerId));
             });
 
             logger.info("All {} catalog items verified to belong to seller: {}",
-                    firstGroup.getData().size(), SELLER_ID);
+                    firstGroup.getData().size(), sellerId);
         } else {
             logger.warn("No data items to validate");
         }
