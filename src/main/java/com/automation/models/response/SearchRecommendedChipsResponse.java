@@ -39,7 +39,7 @@ public class SearchRecommendedChipsResponse {
         private String name;
         private String phoneNumber;
         private BusinessInfo businessInfo;
-        private List<String> tags;
+        private List<Object> tags;  // Changed from List<String> to handle object structures
     }
 
     @Data

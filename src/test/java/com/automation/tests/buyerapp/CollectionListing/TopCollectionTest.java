@@ -32,6 +32,12 @@ public class TopCollectionTest extends BaseTest {
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
+
+        String token = VariableManager.getBuyerAppToken();
+        if (token == null || token.isEmpty()) {
+            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
+        }
+        logger.info("Using Buyer App token from VariableManager");
     }
 
     @Test(description = "Response status code is 200", priority = 1, groups = "buyerapp")
@@ -42,7 +48,7 @@ public class TopCollectionTest extends BaseTest {
         topCollectionResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
+                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
                 .when()
                 .get(BuyerAppEndpoints.COLLECTION_TOP);
 

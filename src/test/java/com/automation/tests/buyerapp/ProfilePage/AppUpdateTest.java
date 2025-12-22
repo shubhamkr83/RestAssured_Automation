@@ -24,96 +24,103 @@ import static org.hamcrest.Matchers.*;
 @Feature("App Update API")
 public class AppUpdateTest extends BaseTest {
 
-    private static Response appUpdateResponse;
-    private static AppUpdateResponse appUpdateResponseData;
-    private String buyerAppBaseUrl;
+        private static Response appUpdateResponse;
+        private static AppUpdateResponse appUpdateResponseData;
+        private String buyerAppBaseUrl;
 
-    @BeforeClass
-    public void setupBuyerApp() {
-        buyerAppBaseUrl = config.buyerAppBaseUrl();
-        logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
-    }
+        @BeforeClass
+        public void setupBuyerApp() {
+                buyerAppBaseUrl = config.buyerAppBaseUrl();
+                logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-    @Test(description = "Response status code is 200", priority = 1, groups = "buyerapp")
-    @Story("App Update")
-    @Severity(SeverityLevel.CRITICAL)
-    public void testResponseStatusCode200() {
-        // Send GET request with authentication
-        appUpdateResponse = RestAssured.given()
-                .baseUri(buyerAppBaseUrl)
-                .contentType("application/json")
-                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
-                .when()
-                .get(BuyerAppEndpoints.APP_UPDATE);
+                String token = VariableManager.getBuyerAppToken();
+                if (token == null || token.isEmpty()) {
+                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
+                }
+                logger.info("Using Buyer App token from VariableManager");
+        }
 
-        // Parse response for other tests
-        appUpdateResponseData = JsonUtils.fromResponse(appUpdateResponse, AppUpdateResponse.class);
+        @Test(description = "Response status code is 200", priority = 1, groups = "buyerapp")
+        @Story("App Update")
+        @Severity(SeverityLevel.CRITICAL)
+        public void testResponseStatusCode200() {
+                // Send GET request with authentication
+                appUpdateResponse = RestAssured.given()
+                                .baseUri(buyerAppBaseUrl)
+                                .contentType("application/json")
+                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                                .when()
+                                .get(BuyerAppEndpoints.APP_UPDATE);
 
-        // Response status code is 200
-        assertThat("Response status code is 200",
-                appUpdateResponse.getStatusCode(), equalTo(HttpStatus.OK));
+                // Parse response for other tests
+                appUpdateResponseData = JsonUtils.fromResponse(appUpdateResponse, AppUpdateResponse.class);
 
-        logger.info("Response status verified: 200 OK");
-    }
+                // Response status code is 200
+                assertThat("Response status code is 200",
+                                appUpdateResponse.getStatusCode(), equalTo(HttpStatus.OK));
 
-    @Test(description = "Response time is less than threshold", priority = 2, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
-    @Story("App Update")
-    @Severity(SeverityLevel.NORMAL)
-    public void testResponseTime() {
-        // Get response time threshold from config (fallback to 20000ms)
-        long responseTimeThreshold = config.responseTimeThreshold();
-        long actualResponseTime = appUpdateResponse.getTime();
+                logger.info("Response status verified: 200 OK");
+        }
 
-        // Validate response time measurement is available
-        assertThat("Response time measurement should be available",
-                actualResponseTime, notNullValue());
+        @Test(description = "Response time is less than threshold", priority = 2, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
+        @Story("App Update")
+        @Severity(SeverityLevel.NORMAL)
+        public void testResponseTime() {
+                // Get response time threshold from config (fallback to 20000ms)
+                long responseTimeThreshold = config.responseTimeThreshold();
+                long actualResponseTime = appUpdateResponse.getTime();
 
-        // Response time is less than threshold
-        assertThat(String.format("Response time is less than %dms", responseTimeThreshold),
-                actualResponseTime, lessThan(responseTimeThreshold));
+                // Validate response time measurement is available
+                assertThat("Response time measurement should be available",
+                                actualResponseTime, notNullValue());
 
-        logger.info("Response time verified: {} ms (Threshold: {} ms)", actualResponseTime,
-                responseTimeThreshold);
-    }
+                // Response time is less than threshold
+                assertThat(String.format("Response time is less than %dms", responseTimeThreshold),
+                                actualResponseTime, lessThan(responseTimeThreshold));
 
-    @Test(description = "Content-Type header is application/json", priority = 3, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
-    @Story("App Update")
-    @Severity(SeverityLevel.MINOR)
-    public void testContentTypeHeader() {
-        // Content-Type header is application/json
-        assertThat("Content-Type should include application/json",
-                appUpdateResponse.getHeader("Content-Type"), containsString("application/json"));
+                logger.info("Response time verified: {} ms (Threshold: {} ms)", actualResponseTime,
+                                responseTimeThreshold);
+        }
 
-        logger.info("Content-Type header verified: {}", appUpdateResponse.getHeader("Content-Type"));
-    }
+        @Test(description = "Content-Type header is application/json", priority = 3, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
+        @Story("App Update")
+        @Severity(SeverityLevel.MINOR)
+        public void testContentTypeHeader() {
+                // Content-Type header is application/json
+                assertThat("Content-Type should include application/json",
+                                appUpdateResponse.getHeader("Content-Type"), containsString("application/json"));
 
-    @Test(description = "Response has the required fields - code, message, and data", priority = 4, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
-    @Story("App Update")
-    @Severity(SeverityLevel.CRITICAL)
-    public void testRequiredFields() {
-        // Response has the required fields
-        assertThat("code should be present", appUpdateResponseData.getCode(), notNullValue());
-        assertThat("message should be present", appUpdateResponseData.getMessage(), notNullValue());
-        assertThat("data should be present", appUpdateResponseData.getData(), notNullValue());
+                logger.info("Content-Type header verified: {}", appUpdateResponse.getHeader("Content-Type"));
+        }
 
-        logger.info("Required fields validated: code, message, data");
-    }
+        @Test(description = "Response has the required fields - code, message, and data", priority = 4, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
+        @Story("App Update")
+        @Severity(SeverityLevel.CRITICAL)
+        public void testRequiredFields() {
+                // Response has the required fields
+                assertThat("code should be present", appUpdateResponseData.getCode(), notNullValue());
+                assertThat("message should be present", appUpdateResponseData.getMessage(), notNullValue());
+                assertThat("data should be present", appUpdateResponseData.getData(), notNullValue());
 
-    @Test(description = "Validate data properties", priority = 5, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
-    @Story("App Update")
-    @Severity(SeverityLevel.CRITICAL)
-    public void testDataProperties() {
-        AppUpdateResponse.AppUpdateData data = appUpdateResponseData.getData();
+                logger.info("Required fields validated: code, message, data");
+        }
 
-        // Validate data properties
-        assertThat("data should be an object", data, notNullValue());
-        assertThat("isForced should be a boolean", data.getIsForced(), instanceOf(Boolean.class));
-        assertThat("minVersion should be a number and at least 0",
-                data.getMinVersion(), allOf(instanceOf(Integer.class), greaterThanOrEqualTo(0)));
-        assertThat("minVersionToUpdate should be a number and at least 0",
-                data.getMinVersionToUpdate(), allOf(instanceOf(Integer.class), greaterThanOrEqualTo(0)));
+        @Test(description = "Validate data properties", priority = 5, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
+        @Story("App Update")
+        @Severity(SeverityLevel.CRITICAL)
+        public void testDataProperties() {
+                AppUpdateResponse.AppUpdateData data = appUpdateResponseData.getData();
 
-        logger.info("Data properties validated: isForced={}, minVersion={}, minVersionToUpdate={}", 
-                data.getIsForced(), data.getMinVersion(), data.getMinVersionToUpdate());
-    }
+                // Validate data properties
+                assertThat("data should be an object", data, notNullValue());
+                assertThat("isForced should be a boolean", data.getIsForced(), instanceOf(Boolean.class));
+                assertThat("minVersion should be a number and at least 0",
+                                data.getMinVersion(), allOf(instanceOf(Integer.class), greaterThanOrEqualTo(0)));
+                assertThat("minVersionToUpdate should be a number and at least 0",
+                                data.getMinVersionToUpdate(),
+                                allOf(instanceOf(Integer.class), greaterThanOrEqualTo(0)));
+
+                logger.info("Data properties validated: isForced={}, minVersion={}, minVersionToUpdate={}",
+                                data.getIsForced(), data.getMinVersion(), data.getMinVersionToUpdate());
+        }
 }

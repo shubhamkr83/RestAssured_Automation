@@ -32,6 +32,12 @@ public class CatalogByIdTest extends BaseTest {
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
+
+        String token = VariableManager.getBuyerAppToken();
+        if (token == null || token.isEmpty()) {
+            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
+        }
+        logger.info("Using Buyer App token from VariableManager");
     }
 
     @Test(description = "Response status code is 200", priority = 1, groups = "buyerapp")
@@ -42,7 +48,7 @@ public class CatalogByIdTest extends BaseTest {
         catalogResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
+                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
                 .when()
                 .pathParam("catalogId", VariableManager.get("live_catalog_id", "67c59d8ff22202c05e7d612e"))
                 .get("/v1/catalog/{catalogId}");
@@ -107,7 +113,7 @@ public class CatalogByIdTest extends BaseTest {
     public void testDataObjectStructure() {
         if (catalogResponseData.getData() != null) {
             CatalogByIdDetailResponse.CatalogDetailData data = catalogResponseData.getData();
-            
+
             assertThat("data should be an object", data, notNullValue());
             assertThat("seller should be an object", data.getSeller(), notNullValue());
             assertThat("taggedBy should be a string", data.getTaggedBy(), instanceOf(String.class));
@@ -135,7 +141,7 @@ public class CatalogByIdTest extends BaseTest {
     public void testSellerObjectFields() {
         if (catalogResponseData.getData() != null && catalogResponseData.getData().getSeller() != null) {
             CatalogByIdDetailResponse.Seller seller = catalogResponseData.getData().getSeller();
-            
+
             assertThat("seller should be an object", seller, notNullValue());
             assertThat("phoneNumber should be a string", seller.getPhoneNumber(), instanceOf(String.class));
             assertThat("address should be a string", seller.getAddress(), instanceOf(String.class));
@@ -146,10 +152,12 @@ public class CatalogByIdTest extends BaseTest {
                 assertThat("isSuper should be a boolean", seller.getIsSuper(), instanceOf(Boolean.class));
             }
             if (seller.getDeprioritisation_status() != null) {
-                assertThat("deprioritisation_status should be a boolean", seller.getDeprioritisation_status(), instanceOf(Boolean.class));
+                assertThat("deprioritisation_status should be a boolean", seller.getDeprioritisation_status(),
+                        instanceOf(Boolean.class));
             }
             if (seller.getIsCatalogAvailable() != null) {
-                assertThat("isCatalogAvailable should be a boolean", seller.getIsCatalogAvailable(), instanceOf(Boolean.class));
+                assertThat("isCatalogAvailable should be a boolean", seller.getIsCatalogAvailable(),
+                        instanceOf(Boolean.class));
             }
             if (seller.getOrdersEnabled() != null) {
                 assertThat("ordersEnabled should be a boolean", seller.getOrdersEnabled(), instanceOf(Boolean.class));
@@ -169,9 +177,9 @@ public class CatalogByIdTest extends BaseTest {
         if (catalogResponseData.getData() != null && catalogResponseData.getData().getProduct() != null) {
             catalogResponseData.getData().getProduct().forEach(product -> {
                 assertThat("product should be an object", product, notNullValue());
-                assertThat("name should be a non-empty string", 
+                assertThat("name should be a non-empty string",
                         product.getName(), allOf(instanceOf(String.class), not(emptyOrNullString())));
-                assertThat("id should be a non-empty string", 
+                assertThat("id should be a non-empty string",
                         product.getId(), allOf(instanceOf(String.class), not(emptyOrNullString())));
             });
 
@@ -185,7 +193,7 @@ public class CatalogByIdTest extends BaseTest {
     public void testThumbnailObjectFields() {
         if (catalogResponseData.getData() != null && catalogResponseData.getData().getThumbnail() != null) {
             CatalogByIdDetailResponse.Thumbnail thumbnail = catalogResponseData.getData().getThumbnail();
-            
+
             assertThat("fileName should be a string", thumbnail.getFileName(), instanceOf(String.class));
             assertThat("mimeType should be a string", thumbnail.getMimeType(), instanceOf(String.class));
             assertThat("_id should be a string", thumbnail.get_id(), instanceOf(String.class));
@@ -201,7 +209,7 @@ public class CatalogByIdTest extends BaseTest {
     public void testMarketObjectFields() {
         if (catalogResponseData.getData() != null && catalogResponseData.getData().getMarket() != null) {
             CatalogByIdDetailResponse.Market market = catalogResponseData.getData().getMarket();
-            
+
             assertThat("country should be present", market.getCountry(), notNullValue());
             assertThat("city should be present", market.getCity(), notNullValue());
             assertThat("state should be present", market.getState(), notNullValue());

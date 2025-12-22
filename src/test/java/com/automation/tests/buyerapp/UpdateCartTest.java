@@ -31,7 +31,7 @@ public class UpdateCartTest extends BaseTest {
     private static Response updateCartResponse;
     private static UpdateCartResponse updateCartResponseData;
     private String buyerAppBaseUrl;
-    
+
     // Test data
     private static final Integer QUANTITY = 1;
 
@@ -39,6 +39,12 @@ public class UpdateCartTest extends BaseTest {
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
+
+        String token = VariableManager.getBuyerAppToken();
+        if (token == null || token.isEmpty()) {
+            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
+        }
+        logger.info("Using Buyer App token from VariableManager");
     }
 
     @Test(description = "Response status code is 200", priority = 1, groups = "buyerapp")
@@ -56,7 +62,7 @@ public class UpdateCartTest extends BaseTest {
         updateCartResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
+                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
                 .body(requestBody)
                 .when()
                 .post(BuyerAppEndpoints.USER_UPDATE_CART);
@@ -121,7 +127,7 @@ public class UpdateCartTest extends BaseTest {
     public void testCartDataFields() {
         if (updateCartResponseData.getData() != null) {
             UpdateCartResponse.CartData cartData = updateCartResponseData.getData();
-            
+
             assertThat("cartData should be an object", cartData, notNullValue());
             assertThat("_id should be present", cartData.get_id(), notNullValue());
             assertThat("catalogs should be present", cartData.getCatalogs(), notNullValue());
@@ -139,10 +145,10 @@ public class UpdateCartTest extends BaseTest {
     public void testCartItemsArrayNotEmpty() {
         if (updateCartResponseData.getData() != null) {
             assertThat("cartItems should be an array and not empty",
-                    updateCartResponseData.getData().getCartItems(), 
+                    updateCartResponseData.getData().getCartItems(),
                     allOf(instanceOf(java.util.List.class), not(empty())));
 
-            logger.info("CartItems array validated: {} items", 
+            logger.info("CartItems array validated: {} items",
                     updateCartResponseData.getData().getCartItems().size());
         }
     }
@@ -154,11 +160,11 @@ public class UpdateCartTest extends BaseTest {
         if (updateCartResponseData.getData() != null && updateCartResponseData.getData().getCartItems() != null) {
             updateCartResponseData.getData().getCartItems().forEach(item -> {
                 assertThat("title should be present", item.getTitle(), notNullValue());
-                assertThat("title should be a non-empty string", 
+                assertThat("title should be a non-empty string",
                         item.getTitle(), allOf(instanceOf(String.class), not(emptyOrNullString())));
                 assertThat("priceText should be a number", item.getPriceText(), instanceOf(Double.class));
                 assertThat("quantity should be a number", item.getQuantity(), instanceOf(Integer.class));
-                assertThat("sellerId should be a non-empty string", 
+                assertThat("sellerId should be a non-empty string",
                         item.getSellerId(), allOf(instanceOf(String.class), not(emptyOrNullString())));
 
                 if (item.getSetQuantity() != null) {
@@ -185,12 +191,13 @@ public class UpdateCartTest extends BaseTest {
     public void testCartDataNumericFields() {
         if (updateCartResponseData.getData() != null) {
             UpdateCartResponse.CartData cartData = updateCartResponseData.getData();
-            
+
             if (cartData.getCartTotal() != null) {
                 assertThat("cartTotal should be a number", cartData.getCartTotal(), instanceOf(Double.class));
             }
             if (cartData.getShippingCharges() != null) {
-                assertThat("shippingCharges should be a number", cartData.getShippingCharges(), instanceOf(Double.class));
+                assertThat("shippingCharges should be a number", cartData.getShippingCharges(),
+                        instanceOf(Double.class));
             }
             if (cartData.getTax() != null) {
                 assertThat("tax should be a number", cartData.getTax(), instanceOf(Double.class));
@@ -209,7 +216,7 @@ public class UpdateCartTest extends BaseTest {
     public void testCartDataDateFields() {
         if (updateCartResponseData.getData() != null) {
             UpdateCartResponse.CartData cartData = updateCartResponseData.getData();
-            
+
             if (cartData.getCreatedAt() != null) {
                 assertThat("createdAt should be a string", cartData.getCreatedAt(), instanceOf(String.class));
                 assertThat("createdAt should be a valid date", isValidDate(cartData.getCreatedAt()), is(true));

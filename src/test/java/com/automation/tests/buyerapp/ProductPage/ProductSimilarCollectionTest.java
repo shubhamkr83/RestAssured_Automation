@@ -16,7 +16,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * Test class for Product Similar Collection (Related Collection) API - Converted from Postman Script.
+ * Test class for Product Similar Collection (Related Collection) API -
+ * Converted from Postman Script.
  * Endpoint: {{navo_base}}/v1/collection/67c59d8ff22202c05e7d612e/related
  * Validates response structure, translations, and catalogs data.
  */
@@ -24,130 +25,141 @@ import static org.hamcrest.Matchers.*;
 @Feature("Product Similar Collection API")
 public class ProductSimilarCollectionTest extends BaseTest {
 
-    private static Response relatedCollectionResponse;
-    private static RelatedCollectionResponse relatedCollectionResponseData;
-    private String buyerAppBaseUrl;
+        private static Response relatedCollectionResponse;
+        private static RelatedCollectionResponse relatedCollectionResponseData;
+        private String buyerAppBaseUrl;
 
-    @BeforeClass
-    public void setupBuyerApp() {
-        buyerAppBaseUrl = config.buyerAppBaseUrl();
-        logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
-    }
+        @BeforeClass
+        public void setupBuyerApp() {
+                buyerAppBaseUrl = config.buyerAppBaseUrl();
+                logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-    @Test(description = "Test the response status 200", priority = 1, groups = "buyerapp")
-    @Story("Product Similar Collection")
-    @Severity(SeverityLevel.CRITICAL)
-    public void testResponseStatus() {
-        // Send GET request with authentication
-        relatedCollectionResponse = RestAssured.given()
-                .baseUri(buyerAppBaseUrl)
-                .contentType("application/json")
-                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
-                .when()
-                .pathParam("collectionId", VariableManager.get("collection_id"))
-                .get("/v1/collection/{collectionId}/related");
+                String token = VariableManager.getBuyerAppToken();
+                if (token == null || token.isEmpty()) {
+                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
+                }
+                logger.info("Using Buyer App token from VariableManager");
+        }
 
-        // Parse response for other tests
-        relatedCollectionResponseData = JsonUtils.fromResponse(relatedCollectionResponse, RelatedCollectionResponse.class);
+        @Test(description = "Test the response status 200", priority = 1, groups = "buyerapp")
+        @Story("Product Similar Collection")
+        @Severity(SeverityLevel.CRITICAL)
+        public void testResponseStatus() {
+                // Send GET request with authentication
+                relatedCollectionResponse = RestAssured.given()
+                                .baseUri(buyerAppBaseUrl)
+                                .contentType("application/json")
+                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                                .when()
+                                .pathParam("collectionId", VariableManager.get("collection_id"))
+                                .get("/v1/collection/{collectionId}/related");
 
-        // Test the response status 200
-        assertThat("Test the response status 200",
-                relatedCollectionResponse.getStatusCode(), equalTo(HttpStatus.OK));
+                // Parse response for other tests
+                relatedCollectionResponseData = JsonUtils.fromResponse(relatedCollectionResponse,
+                                RelatedCollectionResponse.class);
 
-        logger.info("Response status verified: 200 OK");
-    }
+                // Test the response status 200
+                assertThat("Test the response status 200",
+                                relatedCollectionResponse.getStatusCode(), equalTo(HttpStatus.OK));
 
-    @Test(description = "Verify response has Content-Type header as application/json", priority = 2, dependsOnMethods = "testResponseStatus", groups = "buyerapp")
-    @Story("Product Similar Collection")
-    @Severity(SeverityLevel.MINOR)
-    public void testContentTypeHeader() {
-        // Verify response has Content-Type header as application/json
-        assertThat("Content-Type should include application/json",
-                relatedCollectionResponse.getHeader("Content-Type"), containsString("application/json"));
+                logger.info("Response status verified: 200 OK");
+        }
 
-        logger.info("Content-Type header validated: {}", relatedCollectionResponse.getHeader("Content-Type"));
-    }
+        @Test(description = "Verify response has Content-Type header as application/json", priority = 2, dependsOnMethods = "testResponseStatus", groups = "buyerapp")
+        @Story("Product Similar Collection")
+        @Severity(SeverityLevel.MINOR)
+        public void testContentTypeHeader() {
+                // Verify response has Content-Type header as application/json
+                assertThat("Content-Type should include application/json",
+                                relatedCollectionResponse.getHeader("Content-Type"),
+                                containsString("application/json"));
 
-    @Test(description = "Test response time is under the threshold", priority = 3, dependsOnMethods = "testResponseStatus", groups = "buyerapp")
-    @Story("Product Similar Collection")
-    @Severity(SeverityLevel.NORMAL)
-    public void testResponseTime() {
-        // Get response time threshold from config (fallback to 20000ms)
-        long responseTimeThreshold = config.responseTimeThreshold();
-        long actualResponseTime = relatedCollectionResponse.getTime();
+                logger.info("Content-Type header validated: {}", relatedCollectionResponse.getHeader("Content-Type"));
+        }
 
-        // Validate response time measurement is available
-        assertThat("Response time measurement should be available",
-                actualResponseTime, notNullValue());
+        @Test(description = "Test response time is under the threshold", priority = 3, dependsOnMethods = "testResponseStatus", groups = "buyerapp")
+        @Story("Product Similar Collection")
+        @Severity(SeverityLevel.NORMAL)
+        public void testResponseTime() {
+                // Get response time threshold from config (fallback to 20000ms)
+                long responseTimeThreshold = config.responseTimeThreshold();
+                long actualResponseTime = relatedCollectionResponse.getTime();
 
-        // Test response time is under the threshold
-        assertThat("Test response time is under the threshold",
-                actualResponseTime, lessThan(responseTimeThreshold));
+                // Validate response time measurement is available
+                assertThat("Response time measurement should be available",
+                                actualResponseTime, notNullValue());
 
-        logger.info("Response time verified: {} ms (Threshold: {} ms)", actualResponseTime,
-                responseTimeThreshold);
-    }
+                // Test response time is under the threshold
+                assertThat("Test response time is under the threshold",
+                                actualResponseTime, lessThan(responseTimeThreshold));
 
-    @Test(description = "Validate 'result' array structure and element properties", priority = 4, dependsOnMethods = "testResponseStatus", groups = "buyerapp")
-    @Story("Product Similar Collection")
-    @Severity(SeverityLevel.CRITICAL)
-    public void testResultArrayStructure() {
-        RelatedCollectionResponse.RelatedCollectionItem responseData = 
-                relatedCollectionResponseData.getData().getResult().get(0);
+                logger.info("Response time verified: {} ms (Threshold: {} ms)", actualResponseTime,
+                                responseTimeThreshold);
+        }
 
-        // Validate 'result' array structure and element properties
-        assertThat("_id should be a string", responseData.get_id(), instanceOf(String.class));
-        assertThat("name should be a string", responseData.getName(), instanceOf(String.class));
-        assertThat("image should be a string", responseData.getImage(), instanceOf(String.class));
+        @Test(description = "Validate 'result' array structure and element properties", priority = 4, dependsOnMethods = "testResponseStatus", groups = "buyerapp")
+        @Story("Product Similar Collection")
+        @Severity(SeverityLevel.CRITICAL)
+        public void testResultArrayStructure() {
+                RelatedCollectionResponse.RelatedCollectionItem responseData = relatedCollectionResponseData.getData()
+                                .getResult().get(0);
 
-        assertThat("translations.en.title should be a string",
-                responseData.getTranslations().getEn().getTitle(), instanceOf(String.class));
-        assertThat("translations.hi.title should be a string",
-                responseData.getTranslations().getHi().getTitle(), instanceOf(String.class));
+                // Validate 'result' array structure and element properties
+                assertThat("_id should be a string", responseData.get_id(), instanceOf(String.class));
+                assertThat("name should be a string", responseData.getName(), instanceOf(String.class));
+                assertThat("image should be a string", responseData.getImage(), instanceOf(String.class));
 
-        // Validate catalogs array structure
-        responseData.getCatalogs().forEach(catalog -> {
-            assertThat("catalog._id should be a string", catalog.get_id(), instanceOf(String.class));
-            assertThat("catalog.title should be a string", catalog.getTitle(), instanceOf(String.class));
-            assertThat("catalog.priceText should be a number", catalog.getPriceText(), instanceOf(Integer.class));
-            assertThat("catalog.url should be a string", catalog.getUrl(), instanceOf(String.class));
-            assertThat("catalog.product should be a string", catalog.getProduct(), instanceOf(String.class));
-        });
+                assertThat("translations.en.title should be a string",
+                                responseData.getTranslations().getEn().getTitle(), instanceOf(String.class));
+                assertThat("translations.hi.title should be a string",
+                                responseData.getTranslations().getHi().getTitle(), instanceOf(String.class));
 
-        logger.info("Result array structure validated successfully");
-    }
+                // Validate catalogs array structure
+                responseData.getCatalogs().forEach(catalog -> {
+                        assertThat("catalog._id should be a string", catalog.get_id(), instanceOf(String.class));
+                        assertThat("catalog.title should be a string", catalog.getTitle(), instanceOf(String.class));
+                        assertThat("catalog.priceText should be a number", catalog.getPriceText(),
+                                        instanceOf(Integer.class));
+                        assertThat("catalog.url should be a string", catalog.getUrl(), instanceOf(String.class));
+                        assertThat("catalog.product should be a string", catalog.getProduct(),
+                                        instanceOf(String.class));
+                });
 
-    @Test(description = "Verify 'name' and 'description' fields are non-empty strings in each result item", priority = 5, dependsOnMethods = "testResponseStatus", groups = "buyerapp")
-    @Story("Product Similar Collection")
-    @Severity(SeverityLevel.NORMAL)
-    public void testNameAndDescriptionNonEmpty() {
-        java.util.List<RelatedCollectionResponse.RelatedCollectionItem> responseData = 
-                relatedCollectionResponseData.getData().getResult();
+                logger.info("Result array structure validated successfully");
+        }
 
-        // Verify 'name' and 'description' fields are non-empty strings in each result item
-        responseData.forEach(item -> {
-            assertThat("Name should not be empty",
-                    item.getName(), not(emptyOrNullString()));
-            assertThat("Description should not be empty",
-                    item.getDescription(), not(emptyOrNullString()));
-        });
+        @Test(description = "Verify 'name' and 'description' fields are non-empty strings in each result item", priority = 5, dependsOnMethods = "testResponseStatus", groups = "buyerapp")
+        @Story("Product Similar Collection")
+        @Severity(SeverityLevel.NORMAL)
+        public void testNameAndDescriptionNonEmpty() {
+                java.util.List<RelatedCollectionResponse.RelatedCollectionItem> responseData = relatedCollectionResponseData
+                                .getData().getResult();
 
-        logger.info("Name and description fields validated as non-empty");
-    }
+                // Verify 'name' and 'description' fields are non-empty strings in each result
+                // item
+                responseData.forEach(item -> {
+                        assertThat("Name should not be empty",
+                                        item.getName(), not(emptyOrNullString()));
+                        assertThat("Description should not be empty",
+                                        item.getDescription(), not(emptyOrNullString()));
+                });
 
-    @Test(description = "Ensure 'catalogs' array exists and contains items in each result", priority = 6, dependsOnMethods = "testResponseStatus", groups = "buyerapp")
-    @Story("Product Similar Collection")
-    @Severity(SeverityLevel.CRITICAL)
-    public void testCatalogsArrayExists() {
-        java.util.List<RelatedCollectionResponse.RelatedCollectionItem> responseData = 
-                relatedCollectionResponseData.getData().getResult();
+                logger.info("Name and description fields validated as non-empty");
+        }
 
-        // Ensure 'catalogs' array exists and contains items in each result
-        responseData.forEach(item -> {
-            assertThat("catalogs should be an array and have at least 1 item",
-                    item.getCatalogs(), hasSize(greaterThanOrEqualTo(1)));
-        });
+        @Test(description = "Ensure 'catalogs' array exists and contains items in each result", priority = 6, dependsOnMethods = "testResponseStatus", groups = "buyerapp")
+        @Story("Product Similar Collection")
+        @Severity(SeverityLevel.CRITICAL)
+        public void testCatalogsArrayExists() {
+                java.util.List<RelatedCollectionResponse.RelatedCollectionItem> responseData = relatedCollectionResponseData
+                                .getData().getResult();
 
-        logger.info("Catalogs array validated - all items have at least 1 catalog");
-    }
+                // Ensure 'catalogs' array exists and contains items in each result
+                responseData.forEach(item -> {
+                        assertThat("catalogs should be an array and have at least 1 item",
+                                        item.getCatalogs(), hasSize(greaterThanOrEqualTo(1)));
+                });
+
+                logger.info("Catalogs array validated - all items have at least 1 catalog");
+        }
 }

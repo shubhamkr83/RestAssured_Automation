@@ -18,7 +18,8 @@ import static org.hamcrest.Matchers.*;
 
 /**
  * Test class for Trending Feed API - Converted from Postman Script.
- * Endpoint: {{navo_base}}/v1/feed/trending?size=1&page=0&suitable_for={{suitable_for}}
+ * Endpoint:
+ * {{navo_base}}/v1/feed/trending?size=1&page=0&suitable_for={{suitable_for}}
  * Validates response structure, items, thumbnails, and seller data.
  */
 @Epic("Buyer App Home Page")
@@ -33,6 +34,12 @@ public class TrendingTest extends BaseTest {
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
+
+        String token = VariableManager.getBuyerAppToken();
+        if (token == null || token.isEmpty()) {
+            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
+        }
+        logger.info("Using Buyer App token from VariableManager");
     }
 
     @Test(description = "Status code is 200", priority = 1, groups = "buyerapp")
@@ -40,15 +47,15 @@ public class TrendingTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void testStatusCode200() {
         // Get suitable_for parameter (use from previous test or default)
-        String suitableForParam = (suitableFor != null && !suitableFor.isEmpty()) 
-                ? suitableFor 
+        String suitableForParam = (suitableFor != null && !suitableFor.isEmpty())
+                ? suitableFor
                 : "saree"; // Default value
 
         // Send GET request with authentication and query parameters
         trendingFeedResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
+                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
                 .queryParam("size", 1)
                 .queryParam("page", 0)
                 .queryParam("suitable_for", suitableForParam)
@@ -115,12 +122,12 @@ public class TrendingTest extends BaseTest {
     public void testRootResponseStructure() {
         // Root response structure and values are correct
         assertThat("Response should be an object", trendingFeedResponseData, notNullValue());
-        assertThat("statusCode should be '10000'", 
+        assertThat("statusCode should be '10000'",
                 trendingFeedResponseData.getStatusCode(), equalTo("10000"));
-        assertThat("message should be 'success'", 
+        assertThat("message should be 'success'",
                 trendingFeedResponseData.getMessage(), equalTo("success"));
         assertThat("data.result should be an array and not empty",
-                trendingFeedResponseData.getData().getResult(), 
+                trendingFeedResponseData.getData().getResult(),
                 allOf(instanceOf(java.util.List.class), not(empty())));
 
         logger.info("Root response structure validated");
@@ -167,7 +174,7 @@ public class TrendingTest extends BaseTest {
         items.forEach(item -> {
             assertThat("thumbnail_url should be a string", item.getThumbnail_url(), instanceOf(String.class));
             if (item.getThumbnail() != null) {
-                assertThat("thumbnail_url should equal thumbnail.url", 
+                assertThat("thumbnail_url should equal thumbnail.url",
                         item.getThumbnail_url(), equalTo(item.getThumbnail().getUrl()));
             }
         });
@@ -198,7 +205,7 @@ public class TrendingTest extends BaseTest {
 
         // Each item has valid driveLink URL
         items.forEach(item -> {
-            assertThat("driveLink should match URL pattern", 
+            assertThat("driveLink should match URL pattern",
                     item.getDriveLink(), matchesRegex("^https?://.*"));
         });
 

@@ -36,9 +36,9 @@ public class WatchedVideosResponse {
         private String videoId;
         private String _id;
         private String phoneNumber;
-        private List<String> product;
-        private String collection;
-        private String market;
+        private List<Object> product;  // Changed from List<String> to handle object structures
+        private Object collection;  // Changed from String to handle object structures
+        private Object market;  // Changed from String to handle object structures
         private Integer priceText;
         private String driveLink;
         private Boolean isDeleted;
