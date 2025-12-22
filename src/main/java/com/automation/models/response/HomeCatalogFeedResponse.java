@@ -18,7 +18,20 @@ public class HomeCatalogFeedResponse {
 
     private String statusCode;
     private String message;
-    private List<CatalogFeedItem> data;
+    private DataWrapper data;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class DataWrapper {
+        private List<CatalogFeedItem> result;
+        
+        // Convenience method for backward compatibility
+        public List<CatalogFeedItem> getItems() {
+            return result;
+        }
+    }
 
     @Data
     @NoArgsConstructor

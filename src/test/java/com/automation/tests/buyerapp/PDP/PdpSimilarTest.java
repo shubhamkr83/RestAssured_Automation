@@ -32,6 +32,12 @@ public class PdpSimilarTest extends BaseTest {
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
+
+        String token = VariableManager.getBuyerAppToken();
+        if (token == null || token.isEmpty()) {
+            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
+        }
+        logger.info("Using Buyer App token from VariableManager");
     }
 
     @Test(description = "Response status code is 200", priority = 1, groups = "buyerapp")
@@ -42,7 +48,7 @@ public class PdpSimilarTest extends BaseTest {
         pdpSimilarResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
+                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
                 .queryParam("size", 20)
                 .queryParam("page", 0)
                 .when()
@@ -108,7 +114,7 @@ public class PdpSimilarTest extends BaseTest {
             assertThat("seller should have isCatalogAvailable", seller.getIsCatalogAvailable(), notNullValue());
         });
 
-        logger.info("Seller required fields validated for {} products", 
+        logger.info("Seller required fields validated for {} products",
                 pdpSimilarResponseData.getData().getData().size());
     }
 

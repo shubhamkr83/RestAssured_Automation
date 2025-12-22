@@ -405,6 +405,12 @@ public class VariableManager {
             props.setProperty(key, value);
             globalProperties.setProperty(key, value);
             
+            // Also update the current thread's local map if it exists
+            Map<String, String> currentThreadVars = threadLocalVariables.get();
+            if (currentThreadVars != null) {
+                currentThreadVars.put(key, value);
+            }
+
             // Save back to file
             try (java.io.FileOutputStream out = new java.io.FileOutputStream(file)) {
                 props.store(out, "Test Variables Configuration - Updated by VariableManager");

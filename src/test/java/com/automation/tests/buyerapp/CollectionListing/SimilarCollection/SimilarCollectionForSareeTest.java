@@ -38,6 +38,12 @@ public class SimilarCollectionForSareeTest extends BaseTest {
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
+
+        String token = VariableManager.getBuyerAppToken();
+        if (token == null || token.isEmpty()) {
+            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
+        }
+        logger.info("Using Buyer App token from VariableManager");
     }
 
     @Test(description = "Fetch all collections and get similar collections for each", priority = 1, groups = "buyerapp")
@@ -48,12 +54,13 @@ public class SimilarCollectionForSareeTest extends BaseTest {
         Response allCollectionsResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
+                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
                 .queryParam("suitable_for", "saree")
                 .when()
                 .get(BuyerAppEndpoints.COLLECTION_ALL);
 
-        CollectionAllResponse allCollectionsResponseData = JsonUtils.fromResponse(allCollectionsResponse, CollectionAllResponse.class);
+        CollectionAllResponse allCollectionsResponseData = JsonUtils.fromResponse(allCollectionsResponse,
+                CollectionAllResponse.class);
 
         assertThat("Status code should be 200", allCollectionsResponse.getStatusCode(), equalTo(HttpStatus.OK));
         assertThat("Collections should not be empty", allCollectionsResponseData.getData().getResult(), not(empty()));
@@ -62,7 +69,7 @@ public class SimilarCollectionForSareeTest extends BaseTest {
 
         // Step 2: Iterate through each collection and get similar collections
         similarCollectionData = new ArrayList<>();
-        
+
         for (CollectionAllResponse.CollectionItem collection : allCollectionsResponseData.getData().getResult()) {
             try {
                 // Add delay to avoid rate limiting
@@ -71,7 +78,7 @@ public class SimilarCollectionForSareeTest extends BaseTest {
                 Response similarResponse = RestAssured.given()
                         .baseUri(buyerAppBaseUrl)
                         .contentType("application/json")
-                        .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
+                        .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
                         .when()
                         .get("/v1/collection/" + collection.get_id() + "/similar");
 
@@ -81,40 +88,44 @@ public class SimilarCollectionForSareeTest extends BaseTest {
                             collection.get_id(), collection.getName(), -1, 0, "AUTH_ERROR", false, null));
                     break; // Stop processing on auth error
                 } else if (similarResponse.getStatusCode() == 200) {
-                    SimilarCollectionResponse similarData = JsonUtils.fromResponse(similarResponse, SimilarCollectionResponse.class);
-                    
+                    SimilarCollectionResponse similarData = JsonUtils.fromResponse(similarResponse,
+                            SimilarCollectionResponse.class);
+
                     // Validate response structure
-                    if ("10000".equals(similarData.getStatusCode()) && similarData.getData() != null && similarData.getData().getResult() != null) {
-                        List<SimilarCollectionResponse.SimilarCollectionItem> similarCollections = similarData.getData().getResult();
+                    if ("10000".equals(similarData.getStatusCode()) && similarData.getData() != null
+                            && similarData.getData().getResult() != null) {
+                        List<SimilarCollectionResponse.SimilarCollectionItem> similarCollections = similarData.getData()
+                                .getResult();
                         int similarCount = similarCollections.size();
                         boolean hasSimilar = similarCount > 0;
-                        
+
                         // Calculate total catalogs across all similar collections
                         int totalCatalogs = similarCollections.stream()
                                 .mapToInt(s -> s.getCatalogs() != null ? s.getCatalogs().size() : 0)
                                 .sum();
-                        
+
                         // Store similar collection details
                         List<SimilarCollectionDetail> details = similarCollections.stream()
                                 .map(s -> new SimilarCollectionDetail(
                                         s.get_id(),
                                         s.getName(),
                                         s.getDescription() != null ? s.getDescription() : "",
-                                        s.getCatalogs() != null ? s.getCatalogs().size() : 0
-                                ))
+                                        s.getCatalogs() != null ? s.getCatalogs().size() : 0))
                                 .collect(Collectors.toList());
-                        
+
                         similarCollectionData.add(new SimilarCollectionData(
-                                collection.get_id(), collection.getName(), similarCount, totalCatalogs, null, hasSimilar, details));
-                        
-                        logger.info("Collection: {} - Similar: {}, Total Catalogs: {}", 
+                                collection.get_id(), collection.getName(), similarCount, totalCatalogs, null,
+                                hasSimilar, details));
+
+                        logger.info("Collection: {} - Similar: {}, Total Catalogs: {}",
                                 collection.getName(), similarCount, totalCatalogs);
                     } else {
                         similarCollectionData.add(new SimilarCollectionData(
                                 collection.get_id(), collection.getName(), 0, 0, null, false, new ArrayList<>()));
                     }
                 } else {
-                    logger.error("API error for collection: {} - Status: {}", collection.getName(), similarResponse.getStatusCode());
+                    logger.error("API error for collection: {} - Status: {}", collection.getName(),
+                            similarResponse.getStatusCode());
                     similarCollectionData.add(new SimilarCollectionData(
                             collection.get_id(), collection.getName(), -1, 0, "API_ERROR", false, null));
                 }
@@ -139,12 +150,13 @@ public class SimilarCollectionForSareeTest extends BaseTest {
         collectionsWithSimilar.forEach(col -> {
             assertThat("Similar collections should be an array", col.getSimilarCollections(), notNullValue());
             assertThat("Similar collections should be a list", col.getSimilarCollections(), instanceOf(List.class));
-            
+
             if (!col.getSimilarCollections().isEmpty()) {
                 col.getSimilarCollections().forEach(similar -> {
                     assertThat("Similar collection should have id", similar.getId(), notNullValue());
                     assertThat("Similar collection should have name", similar.getName(), notNullValue());
-                    assertThat("Similar collection should have catalogCount", similar.getCatalogCount(), notNullValue());
+                    assertThat("Similar collection should have catalogCount", similar.getCatalogCount(),
+                            notNullValue());
                     assertThat("catalogCount should be a number", similar.getCatalogCount(), instanceOf(Integer.class));
                 });
             }
@@ -164,7 +176,8 @@ public class SimilarCollectionForSareeTest extends BaseTest {
         collectionsWithSimilar.forEach(col -> {
             if (col.getSimilarCollections() != null && !col.getSimilarCollections().isEmpty()) {
                 col.getSimilarCollections().forEach(similar -> {
-                    assertThat("Catalog count should be at least 0", similar.getCatalogCount(), greaterThanOrEqualTo(0));
+                    assertThat("Catalog count should be at least 0", similar.getCatalogCount(),
+                            greaterThanOrEqualTo(0));
                 });
             }
         });
@@ -188,7 +201,7 @@ public class SimilarCollectionForSareeTest extends BaseTest {
                 .count();
 
         if (collectionsWithSimilar > 0) {
-            assertThat("Total catalogs should be greater than 0 when similar collections exist", 
+            assertThat("Total catalogs should be greater than 0 when similar collections exist",
                     totalCatalogs, greaterThan(0));
         }
 

@@ -37,7 +37,7 @@ public class SearchRecommendChipSelectResponse {
         private Seller seller;
         private Thumbnail thumbnail;
         private List<Product> product;
-        private List<String> tags;
+        private List<Object> tags;  // Changed from List<String> to handle object structures
         private Market market;
         private List<Attribute> attributes;
     }

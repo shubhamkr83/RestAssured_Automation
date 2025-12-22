@@ -1,67 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="API Automation Test Suite" parallel="classes" thread-count="3">
-
+<!-- Master Test Suite - References sub-suites for BOMB and Buyer App -->
+<suite name="All API Test Suites" preserve-order="true">
+    
     <listeners>
         <listener class-name="com.automation.listeners.TestListener"/>
     </listeners>
 
     <parameter name="env" value="default"/>
 
-    <!-- BOMB API Tests -->
-    <test name="BOMB Login Tests">
-        <classes>
-            <class name="com.automation.tests.bomb.LoginApiTest"/>
-        </classes>
-    </test>
-
-    <test name="BOMB Catalog Search Tests">
-        <classes>
-            <class name="com.automation.tests.bomb.CatalogSearchApiTest"/>
-        </classes>
-    </test>
-
-    <test name="BOMB Catalog Assign Tests">
-        <classes>
-            <class name="com.automation.tests.bomb.CatalogAssignApiTest"/>
-        </classes>
-    </test>
-
-    <test name="BOMB Video Tests">
-        <classes>
-            <class name="com.automation.tests.bomb.VideoApiTest"/>
-        </classes>
-    </test>
-
-    <!-- Buyer App (Navo) Tests -->
-    <test name="Buyer App Login Tests">
-        <classes>
-            <class name="com.automation.tests.buyerapp.BuyerLoginApiTest"/>
-        </classes>
-    </test>
-
-    <test name="Buyer App Collections Tests">
-        <classes>
-            <class name="com.automation.tests.buyerapp.CollectionsApiTest"/>
-        </classes>
-    </test>
-
-    <test name="Buyer App Home Page Tests">
-        <classes>
-            <class name="com.automation.tests.buyerapp.HomePageApiTest"/>
-        </classes>
-    </test>
-
-    <test name="Buyer App Profile and Config Tests">
-        <classes>
-            <class name="com.automation.tests.buyerapp.ProfileAndConfigApiTest"/>
-        </classes>
-    </test>
-
-    <test name="Buyer App Search Tests">
-        <classes>
-            <class name="com.automation.tests.buyerapp.SearchApiTest"/>
-        </classes>
-    </test>
+    <!-- Include BOMB API Test Suite -->
+    <suite-files>
+        <suite-file path="testng-bomb.xml"/>
+        <suite-file path="testng-buyerapp.xml"/>
+    </suite-files>
 
 </suite>

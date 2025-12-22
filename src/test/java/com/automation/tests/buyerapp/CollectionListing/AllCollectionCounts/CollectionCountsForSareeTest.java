@@ -38,6 +38,12 @@ public class CollectionCountsForSareeTest extends BaseTest {
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
+
+        String token = VariableManager.getBuyerAppToken();
+        if (token == null || token.isEmpty()) {
+            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
+        }
+        logger.info("Using Buyer App token from VariableManager");
     }
 
     @Test(description = "Fetch all collections and get item counts", priority = 1, groups = "buyerapp")
@@ -48,12 +54,13 @@ public class CollectionCountsForSareeTest extends BaseTest {
         Response allCollectionsResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
+                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
                 .queryParam("suitable_for", "saree")
                 .when()
                 .get(BuyerAppEndpoints.COLLECTION_ALL);
 
-        CollectionAllResponse allCollectionsData = JsonUtils.fromResponse(allCollectionsResponse, CollectionAllResponse.class);
+        CollectionAllResponse allCollectionsData = JsonUtils.fromResponse(allCollectionsResponse,
+                CollectionAllResponse.class);
 
         assertThat("Status code should be 200", allCollectionsResponse.getStatusCode(), equalTo(HttpStatus.OK));
         assertThat("Collections should not be empty", allCollectionsData.getData().getResult(), not(empty()));
@@ -62,7 +69,7 @@ public class CollectionCountsForSareeTest extends BaseTest {
 
         // Step 2: Iterate through each collection and get item counts
         collectionCounts = new ArrayList<>();
-        
+
         for (CollectionAllResponse.CollectionItem collection : allCollectionsData.getData().getResult()) {
             try {
                 // Add delay to avoid rate limiting
@@ -71,7 +78,7 @@ public class CollectionCountsForSareeTest extends BaseTest {
                 Response collectionByIdResponse = RestAssured.given()
                         .baseUri(buyerAppBaseUrl)
                         .contentType("application/json")
-                        .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
+                        .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
                         .queryParam("limit", 35)
                         .queryParam("offset", 0)
                         .when()
@@ -79,16 +86,21 @@ public class CollectionCountsForSareeTest extends BaseTest {
 
                 if (collectionByIdResponse.getStatusCode() == 401 || collectionByIdResponse.getStatusCode() == 10003) {
                     logger.error("Authentication failed for collection: {}", collection.getName());
-                    collectionCounts.add(new CollectionItemCount(collection.get_id(), collection.getName(), -1, "AUTH_ERROR"));
+                    collectionCounts
+                            .add(new CollectionItemCount(collection.get_id(), collection.getName(), -1, "AUTH_ERROR"));
                     break; // Stop processing on auth error
                 } else if (collectionByIdResponse.getStatusCode() == 200) {
-                    CollectionByIdResponse collectionData = JsonUtils.fromResponse(collectionByIdResponse, CollectionByIdResponse.class);
+                    CollectionByIdResponse collectionData = JsonUtils.fromResponse(collectionByIdResponse,
+                            CollectionByIdResponse.class);
                     int totalItems = collectionData.getData().getTotal().getValue();
-                    collectionCounts.add(new CollectionItemCount(collection.get_id(), collection.getName(), totalItems, null));
+                    collectionCounts
+                            .add(new CollectionItemCount(collection.get_id(), collection.getName(), totalItems, null));
                     logger.info("Collection: {} - Items: {}", collection.getName(), totalItems);
                 } else {
-                    logger.error("API error for collection: {} - Status: {}", collection.getName(), collectionByIdResponse.getStatusCode());
-                    collectionCounts.add(new CollectionItemCount(collection.get_id(), collection.getName(), -1, "API_ERROR"));
+                    logger.error("API error for collection: {} - Status: {}", collection.getName(),
+                            collectionByIdResponse.getStatusCode());
+                    collectionCounts
+                            .add(new CollectionItemCount(collection.get_id(), collection.getName(), -1, "API_ERROR"));
                 }
             } catch (Exception e) {
                 logger.error("Error processing collection: {} - {}", collection.getName(), e.getMessage());

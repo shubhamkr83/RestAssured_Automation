@@ -42,7 +42,7 @@ public class TrendingFeedResponse {
         private Integer popular;
         private String contentType;
         private String driveLink;
-        private List<String> tags;
+        private List<Object> tags;  // Changed from List<String> to handle object structures
         private List<Product> product;
         private Boolean isDeleted;
         private Boolean available;

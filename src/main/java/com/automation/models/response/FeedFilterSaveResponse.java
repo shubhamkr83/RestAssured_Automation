@@ -25,9 +25,9 @@ public class FeedFilterSaveResponse {
     @AllArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class FilterSaveData {
-        private List<String> suitable_for;
-        private List<String> productTags;
-        private List<String> city;
+        private List<Object> suitable_for;  // Changed from List<String> to handle object structures
+        private List<Object> productTags;  // Changed from List<String> to handle object structures
+        private List<Object> city;  // Changed from List<String> to handle object structures
         private Integer price_min;
         private Integer price_max;
         private String lastSelectedFilter;

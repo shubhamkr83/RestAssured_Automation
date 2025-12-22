@@ -24,101 +24,107 @@ import static org.hamcrest.Matchers.*;
 @Feature("Suitable For Config API")
 public class SuitableForConfigTest extends BaseTest {
 
-    private static Response configResponse;
-    private static SuitableForConfigResponse configResponseData;
-    private String buyerAppBaseUrl;
+        private static Response configResponse;
+        private static SuitableForConfigResponse configResponseData;
+        private String buyerAppBaseUrl;
 
-    @BeforeClass
-    public void setupBuyerApp() {
-        buyerAppBaseUrl = config.buyerAppBaseUrl();
-        logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
-    }
+        @BeforeClass
+        public void setupBuyerApp() {
+                buyerAppBaseUrl = config.buyerAppBaseUrl();
+                logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-    @Test(description = "Response status code is 200", priority = 1, groups = "buyerapp")
-    @Story("Suitable For Config")
-    @Severity(SeverityLevel.CRITICAL)
-    public void testResponseStatusCode200() {
-        // Send GET request with authentication
-        configResponse = RestAssured.given()
-                .baseUri(buyerAppBaseUrl)
-                .contentType("application/json")
-                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
-                .when()
-                .get(BuyerAppEndpoints.FEED_HOME_CONFIG);
+                String token = VariableManager.getBuyerAppToken();
+                if (token == null || token.isEmpty()) {
+                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
+                }
+                logger.info("Using Buyer App token from VariableManager");
+        }
 
-        // Parse response for other tests
-        configResponseData = JsonUtils.fromResponse(configResponse, SuitableForConfigResponse.class);
+        @Test(description = "Response status code is 200", priority = 1, groups = "buyerapp")
+        @Story("Suitable For Config")
+        @Severity(SeverityLevel.CRITICAL)
+        public void testResponseStatusCode200() {
+                // Send GET request with authentication
+                configResponse = RestAssured.given()
+                                .baseUri(buyerAppBaseUrl)
+                                .contentType("application/json")
+                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                                .when()
+                                .get(BuyerAppEndpoints.FEED_HOME_CONFIG);
 
-        // Response status code is 200
-        assertThat("Response status code is 200",
-                configResponse.getStatusCode(), equalTo(HttpStatus.OK));
+                // Parse response for other tests
+                configResponseData = JsonUtils.fromResponse(configResponse, SuitableForConfigResponse.class);
 
-        logger.info("Response status verified: 200 OK");
-    }
+                // Response status code is 200
+                assertThat("Response status code is 200",
+                                configResponse.getStatusCode(), equalTo(HttpStatus.OK));
 
-    @Test(description = "Content-Type header is present", priority = 2, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
-    @Story("Suitable For Config")
-    @Severity(SeverityLevel.MINOR)
-    public void testContentTypeHeaderPresent() {
-        // Content-Type header is present
-        assertThat("Content-Type header should be present",
-                configResponse.getHeader("Content-Type"), notNullValue());
+                logger.info("Response status verified: 200 OK");
+        }
 
-        logger.info("Content-Type header verified: {}", configResponse.getHeader("Content-Type"));
-    }
+        @Test(description = "Content-Type header is present", priority = 2, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
+        @Story("Suitable For Config")
+        @Severity(SeverityLevel.MINOR)
+        public void testContentTypeHeaderPresent() {
+                // Content-Type header is present
+                assertThat("Content-Type header should be present",
+                                configResponse.getHeader("Content-Type"), notNullValue());
 
-    @Test(description = "Response time is less than threshold", priority = 3, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
-    @Story("Suitable For Config")
-    @Severity(SeverityLevel.NORMAL)
-    public void testResponseTime() {
-        // Get response time threshold from config (fallback to 20000ms)
-        long responseTimeThreshold = config.responseTimeThreshold();
-        long actualResponseTime = configResponse.getTime();
+                logger.info("Content-Type header verified: {}", configResponse.getHeader("Content-Type"));
+        }
 
-        // Validate response time measurement is available
-        assertThat("Response time measurement should be available",
-                actualResponseTime, notNullValue());
+        @Test(description = "Response time is less than threshold", priority = 3, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
+        @Story("Suitable For Config")
+        @Severity(SeverityLevel.NORMAL)
+        public void testResponseTime() {
+                // Get response time threshold from config (fallback to 20000ms)
+                long responseTimeThreshold = config.responseTimeThreshold();
+                long actualResponseTime = configResponse.getTime();
 
-        // Response time is less than threshold
-        assertThat(String.format("Response time is less than %dms", responseTimeThreshold),
-                actualResponseTime, lessThan(responseTimeThreshold));
+                // Validate response time measurement is available
+                assertThat("Response time measurement should be available",
+                                actualResponseTime, notNullValue());
 
-        logger.info("Response time verified: {} ms (Threshold: {} ms)", actualResponseTime,
-                responseTimeThreshold);
-    }
+                // Response time is less than threshold
+                assertThat(String.format("Response time is less than %dms", responseTimeThreshold),
+                                actualResponseTime, lessThan(responseTimeThreshold));
 
-    @Test(description = "Response has required 'data' object with non-empty 'result' array", priority = 4, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
-    @Story("Suitable For Config")
-    @Severity(SeverityLevel.CRITICAL)
-    public void testResponseStructure() {
-        // Response has required 'data' object with non-empty 'result' array
-        assertThat("Response should be an object", configResponseData, notNullValue());
-        assertThat("data should exist and be an object", configResponseData.getData(), notNullValue());
-        assertThat("data.result should exist and be an array with at least 1 element",
-                configResponseData.getData().getResult(), 
-                allOf(instanceOf(java.util.List.class), hasSize(greaterThanOrEqualTo(1))));
+                logger.info("Response time verified: {} ms (Threshold: {} ms)", actualResponseTime,
+                                responseTimeThreshold);
+        }
 
-        logger.info("Response structure validated: {} config items found", 
-                configResponseData.getData().getResult().size());
-    }
+        @Test(description = "Response has required 'data' object with non-empty 'result' array", priority = 4, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
+        @Story("Suitable For Config")
+        @Severity(SeverityLevel.CRITICAL)
+        public void testResponseStructure() {
+                // Response has required 'data' object with non-empty 'result' array
+                assertThat("Response should be an object", configResponseData, notNullValue());
+                assertThat("data should exist and be an object", configResponseData.getData(), notNullValue());
+                assertThat("data.result should exist and be an array with at least 1 element",
+                                configResponseData.getData().getResult(),
+                                allOf(instanceOf(java.util.List.class), hasSize(greaterThanOrEqualTo(1))));
 
-    @Test(description = "Each result item contains required fields with correct types", priority = 5, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
-    @Story("Suitable For Config")
-    @Severity(SeverityLevel.CRITICAL)
-    public void testResultItemsFields() {
-        // Each result item contains required fields with correct types
-        configResponseData.getData().getResult().forEach(item -> {
-            assertThat("item should be an object", item, notNullValue());
-            assertThat("type should be a string with at least 1 character",
-                    item.getType(), allOf(instanceOf(String.class), not(emptyOrNullString())));
-            assertThat("data should be an array", item.getData(), instanceOf(java.util.List.class));
-            assertThat("api should be a string", item.getApi(), instanceOf(String.class));
-            assertThat("title should be a string", item.getTitle(), instanceOf(String.class));
-            assertThat("description should be a string", item.getDescription(), instanceOf(String.class));
-            assertThat("imageUrl should be a string", item.getImageUrl(), instanceOf(String.class));
-        });
+                logger.info("Response structure validated: {} config items found",
+                                configResponseData.getData().getResult().size());
+        }
 
-        logger.info("Result items fields validated for all {} items", 
-                configResponseData.getData().getResult().size());
-    }
+        @Test(description = "Each result item contains required fields with correct types", priority = 5, dependsOnMethods = "testResponseStatusCode200", groups = "buyerapp")
+        @Story("Suitable For Config")
+        @Severity(SeverityLevel.CRITICAL)
+        public void testResultItemsFields() {
+                // Each result item contains required fields with correct types
+                configResponseData.getData().getResult().forEach(item -> {
+                        assertThat("item should be an object", item, notNullValue());
+                        assertThat("type should be a string with at least 1 character",
+                                        item.getType(), allOf(instanceOf(String.class), not(emptyOrNullString())));
+                        assertThat("data should be an array", item.getData(), instanceOf(java.util.List.class));
+                        assertThat("api should be a string", item.getApi(), instanceOf(String.class));
+                        assertThat("title should be a string", item.getTitle(), instanceOf(String.class));
+                        assertThat("description should be a string", item.getDescription(), instanceOf(String.class));
+                        assertThat("imageUrl should be a string", item.getImageUrl(), instanceOf(String.class));
+                });
+
+                logger.info("Result items fields validated for all {} items",
+                                configResponseData.getData().getResult().size());
+        }
 }

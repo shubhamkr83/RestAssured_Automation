@@ -8,33 +8,52 @@
 
     <parameter name="env" value="default"/>
 
-    <test name="Buyer App Login Tests" preserve-order="true">
+    <!-- All Buyer App Tests - Single test block to ensure ThreadLocal token sharing -->
+    <test name="Buyer App All Tests" preserve-order="true">
         <classes>
-            <class name="com.automation.tests.buyerapp.BuyerLoginApiTest"/>
-        </classes>
-    </test>
-
-    <test name="Buyer App HomePage Tests" preserve-order="true">
-        <classes>
-            <class name="com.automation.tests.buyerapp.HomePageApiTest"/>
-        </classes>
-    </test>
-
-    <test name="Buyer App Collections Tests" preserve-order="true">
-        <classes>
-            <class name="com.automation.tests.buyerapp.CollectionsApiTest"/>
-        </classes>
-    </test>
-
-    <test name="Buyer App Profile &amp; Config Tests" preserve-order="true">
-        <classes>
-            <class name="com.automation.tests.buyerapp.ProfileAndConfigApiTest"/>
-        </classes>
-    </test>
-
-    <test name="Buyer App Search Tests" preserve-order="true">
-        <classes>
-            <class name="com.automation.tests.buyerapp.SearchApiTest"/>
+            <!-- Login Tests - MUST run first -->
+            <class name="com.automation.tests.buyerapp.Login.LoginTest"/>
+            
+            <!-- HomePage Tests -->
+            <class name="com.automation.tests.buyerapp.HomePage.BannersTest"/>
+            <class name="com.automation.tests.buyerapp.HomePage.CatalogFeedTest"/>
+            <class name="com.automation.tests.buyerapp.HomePage.ContinueYourJourneyTest"/>
+            <class name="com.automation.tests.buyerapp.HomePage.FeaturedCollectionTest"/>
+            <class name="com.automation.tests.buyerapp.HomePage.FeedFilterSaveTest"/>
+            <class name="com.automation.tests.buyerapp.HomePage.FeedFilterTest"/>
+            <class name="com.automation.tests.buyerapp.HomePage.NewThisWeekTest"/>
+            <class name="com.automation.tests.buyerapp.HomePage.TrendingTest"/>
+            
+            <!-- Collection Listing Tests -->
+            <class name="com.automation.tests.buyerapp.CollectionListing.TopCollectionTest"/>
+            <class name="com.automation.tests.buyerapp.CollectionListing.AllCollection.CollectionAllForReadymadeTest"/>
+            <class name="com.automation.tests.buyerapp.CollectionListing.AllCollection.CollectionAllForSareeTest"/>
+            <class name="com.automation.tests.buyerapp.CollectionListing.AllCollectionCounts.CollectionCountsForReadymadeTest"/>
+            <class name="com.automation.tests.buyerapp.CollectionListing.AllCollectionCounts.CollectionCountsForSareeTest"/>
+            <class name="com.automation.tests.buyerapp.CollectionListing.SimilarCollection.SimilarCollectionForReadymadeTest"/>
+            <class name="com.automation.tests.buyerapp.CollectionListing.SimilarCollection.SimilarCollectionForSareeTest"/>
+            
+            <!-- Search Tests -->
+            <class name="com.automation.tests.buyerapp.SearchPage.SearchProductTest"/>
+            <class name="com.automation.tests.buyerapp.SearchPage.SearchRecommendedChipsTest"/>
+            <class name="com.automation.tests.buyerapp.SearchPage.SearchRecommendChipSelectTest"/>
+            
+            <!-- Profile & Config Tests -->
+            <class name="com.automation.tests.buyerapp.ProfilePage.AppUpdateTest"/>
+            <class name="com.automation.tests.buyerapp.ProfilePage.AuthValidateTest"/>
+            <class name="com.automation.tests.buyerapp.ProfilePage.UserProfileTest"/>
+            <class name="com.automation.tests.buyerapp.ProfilePage.VideoViewActionTest"/>
+            <class name="com.automation.tests.buyerapp.ProfilePage.WatchedVideosTest"/>
+            
+            <!-- Product Detail Page Tests -->
+            <class name="com.automation.tests.buyerapp.PDP.PdpSimilarTest"/>
+            <class name="com.automation.tests.buyerapp.ProductPage.ProductSimilarCollectionTest"/>
+            
+            <!-- Catalog & Cart Tests -->
+            <class name="com.automation.tests.buyerapp.CatalogByIdTest"/>
+            <class name="com.automation.tests.buyerapp.SuitableForConfigTest"/>
+            <class name="com.automation.tests.buyerapp.UpdateCartTest"/>
+            <class name="com.automation.tests.buyerapp.VideoFeedTvTest"/>
         </classes>
     </test>
 

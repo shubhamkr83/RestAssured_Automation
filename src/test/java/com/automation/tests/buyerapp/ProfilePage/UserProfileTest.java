@@ -32,6 +32,12 @@ public class UserProfileTest extends BaseTest {
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
+
+        String token = VariableManager.getBuyerAppToken();
+        if (token == null || token.isEmpty()) {
+            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
+        }
+        logger.info("Using Buyer App token from VariableManager");
     }
 
     @Test(description = "Response status code is 200", priority = 1, groups = "buyerapp")
@@ -42,7 +48,7 @@ public class UserProfileTest extends BaseTest {
         userProfileResponse = RestAssured.given()
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + VariableManager.getBuyerAppToken())
+                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
                 .when()
                 .get(BuyerAppEndpoints.USER_PROFILE);
 
@@ -87,15 +93,15 @@ public class UserProfileTest extends BaseTest {
 
         // Optional fields validation
         if (userProfileResponseData.getLocation() != null) {
-            assertThat("location should be a string", 
+            assertThat("location should be a string",
                     userProfileResponseData.getLocation(), instanceOf(String.class));
         }
         if (userProfileResponseData.getAddress() != null) {
-            assertThat("address should be a string", 
+            assertThat("address should be a string",
                     userProfileResponseData.getAddress(), instanceOf(String.class));
         }
         if (userProfileResponseData.getSellOnBizup() != null) {
-            assertThat("sellOnBizup should be a boolean", 
+            assertThat("sellOnBizup should be a boolean",
                     userProfileResponseData.getSellOnBizup(), instanceOf(Boolean.class));
         }
 
