@@ -3,6 +3,8 @@ package com.automation.utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -336,6 +338,88 @@ public class VariableManager {
     }
 
     /**
+     * Save the current token to the properties file for persistence across test runs.
+     * This allows tokens to be shared between independent test executions.
+     */
+    public static synchronized void saveTokenToFile() {
+        String token = getToken();
+        if (token == null || token.isEmpty()) {
+            logger.warn("Cannot save null or empty token to file");
+            return;
+        }
+        
+        savePropertyToFile("bomb_token", token);
+    }
+
+    /**
+     * Save the buyer app token to the properties file.
+     */
+    public static synchronized void saveBuyerAppTokenToFile() {
+        String token = getBuyerAppToken();
+        if (token == null || token.isEmpty()) {
+            logger.warn("Cannot save null or empty buyer app token to file");
+            return;
+        }
+        
+        savePropertyToFile("buyer_app_token", token);
+    }
+
+    /**
+     * Save a specific property to the properties file.
+     * This updates both the global properties and the file.
+     * 
+     * @param key Property key
+     * @param value Property value
+     */
+    private static synchronized void savePropertyToFile(String key, String value) {
+        try {
+            // Get the properties file path from classpath (points to target/test-classes)
+            String classpathPath = VariableManager.class.getClassLoader()
+                    .getResource(PROPERTIES_FILE).getPath();
+            
+            // Handle Windows paths (remove leading slash if present)
+            if (classpathPath.startsWith("/") && classpathPath.contains(":")) {
+                classpathPath = classpathPath.substring(1);
+            }
+            
+            // Convert target path to source path
+            // Example: c:/project/target/test-classes/file -> c:/project/src/test/resources/file
+            String propertiesPath = classpathPath.replace("target\\test-classes", "src\\test\\resources")
+                                                  .replace("target/test-classes", "src/test/resources");
+            
+            java.io.File file = new java.io.File(propertiesPath);
+            
+            // If source file doesn't exist, fall back to target file (shouldn't happen in normal cases)
+            if (!file.exists()) {
+                logger.warn("Source properties file not found at {}, using classpath location", propertiesPath);
+                file = new java.io.File(classpathPath);
+            }
+            
+            // Load current properties
+            Properties props = new Properties();
+            try (java.io.FileInputStream in = new java.io.FileInputStream(file)) {
+                props.load(in);
+            }
+            
+            // Update the property
+            props.setProperty(key, value);
+            globalProperties.setProperty(key, value);
+            
+            // Save back to file
+            try (java.io.FileOutputStream out = new java.io.FileOutputStream(file)) {
+                props.store(out, "Test Variables Configuration - Updated by VariableManager");
+            }
+            
+            logger.info("Successfully saved {} to {}", key, file.getAbsolutePath());
+            
+        } catch (Exception e) {
+            logger.error("Failed to save property {} to file: {}", key, e.getMessage());
+            // Don't throw exception - just log the error
+        }
+    }
+
+
+    /**
      * Get the Bizup base URL.
      * 
      * @return Bizup base URL
@@ -381,12 +465,30 @@ public class VariableManager {
     }
 
     /**
+     * Get the search seller ID.
+     * 
+     * @return Search seller ID
+     */
+    public static String getSearchSellerId() {
+        return get("search_seller_id");
+    }
+
+    /**
      * Get the product ID.
      * 
      * @return Product ID
      */
     public static String getProductId() {
         return get("product_id");
+    }
+
+    /**
+     * Get the search product ID.
+     * 
+     * @return Search product ID
+     */
+    public static String getSearchProductId() {
+        return get("search_product_id");
     }
 
     /**

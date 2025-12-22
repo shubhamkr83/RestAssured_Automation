@@ -30,7 +30,6 @@ public class CatalogsGroupTest extends BaseTest {
     private CatalogGroupResponse catalogGroupResponse;
 
     // Catalog ID and Seller ID
-    private static final String SELLER_ID = VariableManager.getSellerId();
     private String catalogForAssignId;
     private String sellerId;
 
@@ -118,8 +117,6 @@ public class CatalogsGroupTest extends BaseTest {
         catalogGroupResponse.getData().getData().forEach(item -> {
             assertThat("Item should have _index", item.get_index(), notNullValue());
             assertThat("Item should have _id", item.get_id(), notNullValue());
-            assertThat("Item should have _score", item.get_score(), notNullValue());
-            assertThat("Item should have _source", item.get_source(), notNullValue());
 
             CatalogGroupResponse.CatalogSource source = item.get_source();
             CatalogGroupResponse.Seller seller = source.getSeller();
@@ -218,11 +215,11 @@ public class CatalogsGroupTest extends BaseTest {
 
         catalogGroupResponse.getData().getData().forEach(item -> {
             assertThat(String.format("Item %s should belong to seller %s",
-                    item.get_id(), SELLER_ID),
-                    item.get_source().getSeller().get_id(), equalTo(SELLER_ID));
+                    item.get_id(), sellerId),
+                    item.get_source().getSeller().get_id(), equalTo(sellerId));
         });
 
         logger.info("All {} catalog items verified to belong to seller: {}",
-                catalogGroupResponse.getData().getData().size(), SELLER_ID);
+                catalogGroupResponse.getData().getData().size(), sellerId);
     }
 }

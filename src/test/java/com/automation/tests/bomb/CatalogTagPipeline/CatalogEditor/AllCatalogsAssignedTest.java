@@ -59,7 +59,7 @@ public class AllCatalogsAssignedTest extends BaseTest {
                 .queryParam("editor", VariableManager.get("editor_id"))
                 .queryParam("sort", "status")
                 .when()
-                .get(BombEndpoints.CATALOG_EDITOR_ALL + VariableManager.get("editor_id"));
+                .get(BombEndpoints.CATALOG);
 
         // Parse response for other tests
         catalogEditorResponse = JsonUtils.fromResponse(response, CatalogEditorResponse.class);

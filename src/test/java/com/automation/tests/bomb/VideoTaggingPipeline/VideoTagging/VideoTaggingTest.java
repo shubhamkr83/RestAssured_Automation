@@ -35,10 +35,10 @@ public class VideoTaggingTest extends BaseTest {
 
     // Request data
     private VideoTaggingRequest requestBody;
-    private static final String SELLER_ID = "63ee780c9689be92acce8f35";
+    private String sellerId;
     private String videoId;
     private String videoTitle;
-    private static final String PRICE = "500";
+    private String price;
 
     // Product and tag IDs
     private static final String PRODUCT_ID = "67c59d8ef22202c05e7d612b";
@@ -51,6 +51,14 @@ public class VideoTaggingTest extends BaseTest {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
         logger.info("Using BOMB token from VariableManager");
+
+        // Get seller ID from VariableManager
+        sellerId = VariableManager.getSellerId();
+        logger.info("Using seller ID: {}", sellerId);
+        
+        // Get price from VariableManager
+        price = VariableManager.get("price", "500");
+        logger.info("Using price: {}", price);
 
         // Get video ID from previous test
         // Use VariableManager to get video ID either from properties or set by previous test
@@ -92,7 +100,7 @@ public class VideoTaggingTest extends BaseTest {
                         "67c5a9ba9c74685b50b19dd5"))
                 .suggested(Collections.emptyList())
                 .title(videoTitle)
-                .price(PRICE)
+                .price(price)
                 .build();
     }
 
@@ -107,7 +115,7 @@ public class VideoTaggingTest extends BaseTest {
                 .header("source", "bizupChat")
                 .body(requestBody)
                 .when()
-                .put(BombEndpoints.VIDEO_TAGGING + "/" + SELLER_ID + "/" + videoId);
+                .post(BombEndpoints.VIDEO_TAGGING + "/" + sellerId + "/" + videoId);
 
         // Parse response for other tests
         videoTaggingResponse = JsonUtils.fromResponse(response, VideoTaggingResponse.class);
@@ -195,9 +203,9 @@ public class VideoTaggingTest extends BaseTest {
 
         // Validate seller matches expected seller ID
         assertThat("Seller ID should match expected value",
-                data.getSeller(), equalTo(SELLER_ID));
+                data.getSeller(), equalTo(sellerId));
 
-        logger.info("Seller ID validated: {} matches expected: {}", data.getSeller(), SELLER_ID);
+        logger.info("Seller ID validated: {} matches expected: {}", data.getSeller(), sellerId);
     }
 
     @Test(description = "Verify Title matches the expected value", priority = 8, dependsOnMethods = "testStatusCode200", groups = "bomb")
@@ -227,9 +235,9 @@ public class VideoTaggingTest extends BaseTest {
 
         // Validate priceText matches expected price
         assertThat("PriceText should match expected value",
-                data.getPriceText(), equalTo(PRICE));
+                data.getPriceText(), equalTo(price));
 
-        logger.info("Price validated: {} matches expected: {}", data.getPriceText(), PRICE);
+        logger.info("Price validated: {} matches expected: {}", data.getPriceText(), price);
     }
 
     @Test(description = "Ensure no error is present in the response data", priority = 10, dependsOnMethods = "testStatusCode200", groups = "bomb")

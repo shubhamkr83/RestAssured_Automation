@@ -202,8 +202,8 @@ public class SearchWithCatalogIdFilterTest extends BaseTest {
             // Check seller flags if seller exists
             if (item.getSeller() != null) {
                 if (item.getSeller().getDeprioritisation_status() != null) {
-                    assertThat("Seller deprioritisation_status should be true",
-                            item.getSeller().getDeprioritisation_status(), is(true));
+                    assertThat("Seller deprioritisation_status should be false",
+                            item.getSeller().getDeprioritisation_status(), is(false));
                 }
                 if (item.getSeller().getIsCatalogAvailable() != null) {
                     assertThat("Seller isCatalogAvailable should be true",

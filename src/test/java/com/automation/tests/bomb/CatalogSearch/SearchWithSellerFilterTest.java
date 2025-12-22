@@ -33,7 +33,7 @@ public class SearchWithSellerFilterTest extends BaseTest {
     private Response response;
     private CatalogResponse catalogResponse;
     public static String liveCatalogId; // Store catalog ID for other tests
-    private static final String SELLER_ID = VariableManager.getSellerId();
+    private String searchSellerId;
 
     @BeforeClass
     public void setupAuth() {
@@ -43,6 +43,10 @@ public class SearchWithSellerFilterTest extends BaseTest {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
         logger.info("Using BOMB token from VariableManager");
+        
+        // Get seller ID after VariableManager is initialized
+        searchSellerId = VariableManager.getSearchSellerId();
+        logger.info("Using seller ID: {}", searchSellerId);
     }
 
     @Test(description = "Verify response status is 200 OK", priority = 1, groups = "bomb")
@@ -50,7 +54,7 @@ public class SearchWithSellerFilterTest extends BaseTest {
     @Severity(SeverityLevel.BLOCKER)
     public void testResponseStatus() {
         Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("seller_id", VariableManager.get("seller_id"));
+        queryParams.put("seller", VariableManager.get("search_seller_id"));
         queryParams.put("offset", 0);
         queryParams.put("limit", 20);
 
@@ -137,10 +141,10 @@ public class SearchWithSellerFilterTest extends BaseTest {
         if (catalogResponse.getData().getItems() != null && catalogResponse.getData().getItems().size() > 0) {
             catalogResponse.getData().getItems().forEach(item -> {
                 assertThat("Seller ID should match request parameter",
-                        item.getSeller().get_id(), equalTo(SELLER_ID));
+                        item.getSeller().get_id(), equalTo(searchSellerId));
             });
 
-            logger.info("All seller IDs match request parameter: {}", SELLER_ID);
+            logger.info("All seller IDs match request parameter: {}", searchSellerId);
         } else {
             logger.info("No items to validate seller IDs");
         }

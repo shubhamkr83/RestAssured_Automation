@@ -30,7 +30,7 @@ public class CatalogSkipTest extends BaseTest {
     private CatalogSkipResponse catalogSkipResponse;
 
     // IDs from previous tests
-    private static final String SELLER_ID = VariableManager.getSellerId();
+    private String sellerId;
     private String catalogForAssignId;
 
     @BeforeClass
@@ -41,6 +41,11 @@ public class CatalogSkipTest extends BaseTest {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
         logger.info("Using BOMB token from VariableManager");
+        
+        // Get seller ID after VariableManager is initialized
+        sellerId = VariableManager.getSellerId();
+        logger.info("Using seller ID: {}", sellerId);
+        
         // Get catalog ID from VariableManager or use fallback
         catalogForAssignId = VariableManager.get("catalog_foassign_id");
         if (catalogForAssignId == null || catalogForAssignId.isEmpty()) {
@@ -60,9 +65,8 @@ public class CatalogSkipTest extends BaseTest {
                 .spec(requestSpec)
                 .header("authorization", "JWT " + authToken)
                 .header("source", "bizupChat")
-                .queryParam("seller_id", VariableManager.get("seller_id"))
                 .when()
-                .put(BombEndpoints.EDITOR_SKIP_CATALOG + "/" + VariableManager.get("seller_id") + "/" + catalogForAssignId);
+                .post(BombEndpoints.EDITOR_SKIP_CATALOG + "/" + VariableManager.get("seller_id") + "/" + catalogForAssignId);
 
         // Parse response for other tests
         catalogSkipResponse = JsonUtils.fromResponse(response, CatalogSkipResponse.class);
@@ -160,10 +164,10 @@ public class CatalogSkipTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void testSellerIdMatches() {
         // Validate sellerId matches requested seller ID
-        assertThat(String.format("SellerId should match requested seller ID: %s", SELLER_ID),
-                catalogSkipResponse.getData().getSellerId(), equalTo(SELLER_ID));
+        assertThat(String.format("SellerId should match requested seller ID: %s", sellerId),
+                catalogSkipResponse.getData().getSellerId(), equalTo(sellerId));
 
         logger.info("SellerId validated: {} matches expected: {}",
-                catalogSkipResponse.getData().getSellerId(), SELLER_ID);
+                catalogSkipResponse.getData().getSellerId(), sellerId);
     }
 }

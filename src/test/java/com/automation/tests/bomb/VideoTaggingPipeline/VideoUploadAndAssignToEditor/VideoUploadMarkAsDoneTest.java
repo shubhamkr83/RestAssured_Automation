@@ -31,7 +31,7 @@ public class VideoUploadMarkAsDoneTest extends BaseTest {
     private VideoUploadMarkAsDoneResponse videoUploadMarkAsDoneResponse;
 
     // IDs
-    private static final String SELLER_ID = "64f180feaa90ffbd54b330f5";
+    private String sellerId;
     private String uploadId;
 
     @BeforeClass
@@ -42,15 +42,20 @@ public class VideoUploadMarkAsDoneTest extends BaseTest {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
         logger.info("Using BOMB token from VariableManager");
+        
+        // Get seller ID from VariableManager
+        sellerId = VariableManager.getSellerId();
+        logger.info("Using seller ID: {}", sellerId);
+        
         // Get upload ID from previous test
-        String prevUploadId = VariableManager.get("uploadId");
+        String prevUploadId = VariableManager.get("upload_id");
         if (prevUploadId != null) {
             uploadId = prevUploadId;
             logger.info("Using upload ID from previous test: {}", uploadId);
         } else {
-            // Fallback to a default ID if not available
-            uploadId = "default_upload_id";
-            logger.warn("Upload ID not available from previous test, using default");
+            // Fallback to a default ID if not available (valid MongoDB ObjectId)
+            uploadId = "693a92f840d8d24c390119a0";
+            logger.warn("Upload ID not available from previous test, using default: {}", uploadId);
         }
     }
 
@@ -64,7 +69,7 @@ public class VideoUploadMarkAsDoneTest extends BaseTest {
                 .header("authorization", "JWT " + authToken)
                 .header("source", "bizupChat")
                 .when()
-                .put(BombEndpoints.VIDEO_UPLOAD_DONE + "/" + SELLER_ID + "/" + uploadId);
+                .post(BombEndpoints.VIDEO_UPLOAD_DONE + "/" + sellerId + "/" + uploadId);
 
         // Parse response for other tests
         videoUploadMarkAsDoneResponse = JsonUtils.fromResponse(response, VideoUploadMarkAsDoneResponse.class);
@@ -184,9 +189,9 @@ public class VideoUploadMarkAsDoneTest extends BaseTest {
 
         // Validate sellerId matches expected seller ID
         assertThat("SellerId should match expected seller ID",
-                data.getSellerId(), equalTo(SELLER_ID));
+                data.getSellerId(), equalTo(sellerId));
 
-        logger.info("SellerId validated: {} matches expected: {}", data.getSellerId(), SELLER_ID);
+        logger.info("SellerId validated: {} matches expected: {}", data.getSellerId(), sellerId);
     }
 
     @Test(description = "Uploaded ID matches expected value", priority = 9, dependsOnMethods = "testStatusCode200", groups = "bomb")
@@ -226,12 +231,12 @@ public class VideoUploadMarkAsDoneTest extends BaseTest {
 
         // Validate sellerId from URL matches response
         assertThat("SellerId from URL should match response data",
-                data.getSellerId(), equalTo(SELLER_ID));
+                data.getSellerId(), equalTo(sellerId));
 
         // Validate upload ID from URL matches response
         assertThat("Upload ID from URL should match response data",
                 data.get_id(), equalTo(uploadId));
 
-        logger.info("URL parameters validated: sellerId={}, uploadId={}", SELLER_ID, uploadId);
+        logger.info("URL parameters validated: sellerId={}, uploadId={}", sellerId, uploadId);
     }
 }

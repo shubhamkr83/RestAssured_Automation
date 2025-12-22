@@ -30,7 +30,7 @@ public class CatalogTagTest extends BaseTest {
     private CatalogTagResponse catalogTagResponse;
 
     // Catalog ID and Seller ID
-    private static final String SELLER_ID = VariableManager.getSellerId();
+    private String sellerId;
     private String catalogForAssignId;
 
     @BeforeClass
@@ -41,6 +41,10 @@ public class CatalogTagTest extends BaseTest {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
         logger.info("Using BOMB token from VariableManager");
+
+        // Get seller ID after VariableManager is initialized
+        sellerId = VariableManager.getSellerId();
+        logger.info("Using seller ID: {}", sellerId);
 
         // Get catalog ID from VariableManager or use fallback
         catalogForAssignId = VariableManager.get("catalog_foassign_id");
@@ -254,12 +258,12 @@ public class CatalogTagTest extends BaseTest {
 
         catalogTagResponse.getData().getData().forEach(item -> {
             assertThat(String.format("Item %s should belong to seller %s",
-                    item.get_id(), SELLER_ID),
-                    item.get_source().getSeller().get_id(), equalTo(SELLER_ID));
+                    item.get_id(), sellerId),
+                    item.get_source().getSeller().get_id(), equalTo(sellerId));
         });
 
         logger.info("All {} catalog items verified to belong to seller: {}",
-                catalogTagResponse.getData().getData().size(), SELLER_ID);
+                catalogTagResponse.getData().getData().size(), sellerId);
     }
 
     @Test(description = "Set Catalog Id to Collection Variables", priority = 13, dependsOnMethods = "testStatusCode200", groups = "bomb")

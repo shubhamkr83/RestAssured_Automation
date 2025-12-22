@@ -66,7 +66,7 @@ public class CatalogGroupResponse {
         private Boolean isNew;
         private List<String> setType;
         private String url;
-        private List<String> tags;
+        private List<Object> tags;
         private Boolean processed;
         private String phoneNumber;
         private String uploadDate;

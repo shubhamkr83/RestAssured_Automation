@@ -31,8 +31,9 @@ public class CatalogEditTest extends BaseTest {
 
     // Generated test data (equivalent to collection variables in Postman)
     private String generatedTitle;
-    private Double generatedPrice;
+    private Integer generatedPrice;
     private String catalogId;
+    private String productId;
 
     @BeforeClass
     public void setupAuth() {
@@ -42,14 +43,19 @@ public class CatalogEditTest extends BaseTest {
             throw new RuntimeException("Login token not available. Please run LoginApiTest first.");
         }
         logger.info("Using BOMB token from VariableManager");
-        // Get catalog ID from VariableManager or use fallback
+        // Get catalog ID from VariableManager
         catalogId = VariableManager.get("catalog_id");
         if (catalogId == null || catalogId.isEmpty()) {
-            catalogId = VariableManager.get("catalog_foassign_id", "6822f5dac17c6dcd589ba173");
-            logger.warn("Catalog ID not available, using fallback: {}", catalogId);
-        } else {
-            logger.info("Using catalog ID from VariableManager: {}", catalogId);
+            throw new RuntimeException("Catalog ID not available. Please run a catalog creation test first.");
         }
+        logger.info("Using catalog ID from VariableManager: {}", catalogId);
+        
+        // Get product ID from VariableManager
+        productId = VariableManager.get("product_id");
+        if (productId == null || productId.isEmpty()) {
+            throw new RuntimeException("Product ID not available. Please ensure product_id is set.");
+        }
+        logger.info("Using product ID from VariableManager: {}", productId);
     }
 
     @Test(description = "Status code is 200", priority = 1, groups = "bomb")
@@ -63,20 +69,51 @@ public class CatalogEditTest extends BaseTest {
         logger.info("Generated test title: {}", generatedTitle);
         logger.info("Generated test price: {}", generatedPrice);
 
-        // Create request body
-        CatalogEditRequest editRequest = CatalogEditRequest.builder()
-                .title(generatedTitle)
-                .priceText(generatedPrice)
+        // Create image object (from the provided example)
+        CatalogEditRequest.Image image = CatalogEditRequest.Image.builder()
+                .description("")
+                .id("6800ec14daf4e3153f26ef11")
+                .image("https://ik.imagekit.io/bizup/converted/catalog/67ffd965cd59fffb60837e67/f5b90f09-d15c-4470-9bf8-6c90befd6184.png")
+                .order(0)
+                .isDeleted(false)
+                .createdAt("2025-04-17T11:55:00.313Z")
+                .updatedAt("2025-04-17T11:55:00.313Z")
+                .version(0)
+                .original("https://ik.imagekit.io/bizup/converted/catalog/67ffd965cd59fffb60837e67/f5b90f09-d15c-4470-9bf8-6c90befd6184.png")
+                .thumbnail("https://ik.imagekit.io/bizup/converted/catalog/67ffd965cd59fffb60837e67/f5b90f09-d15c-4470-9bf8-6c90befd6184.png")
+                .thumbnailHeight(100)
+                .originalHeight(400)
                 .build();
 
-        // Send PUT request to edit catalog
+        // Create request body with all required fields
+        CatalogEditRequest editRequest = CatalogEditRequest.builder()
+                .productId(productId)
+                .tags(java.util.Arrays.asList(
+                        "677d26135725977833481898",
+                        "677d26125725977833481897",
+                        "677d26125725977833481896",
+                        "67d7d8293a35944c3232364d",
+                        "645cc307af2a39420d520cd2",
+                        "645cc306af2a39420d51df55",
+                        "677d261357259778334818a3",
+                        "645cc308af2a39420d528300"
+                ))
+                .suggested(java.util.Collections.emptyList())
+                .images(java.util.Collections.singletonList(image))
+                .title(generatedTitle)
+                .price(generatedPrice)
+                .isQc(true)
+                .isSet(false)
+                .build();
+
+        // Send POST request to edit catalog
         response = RestAssured.given()
                 .spec(requestSpec)
                 .header("authorization", "JWT " + authToken)
                 .header("source", "bizupChat")
                 .body(editRequest)
                 .when()
-                .put(BombEndpoints.CATALOG + "/" + catalogId);
+                .post(BombEndpoints.CATALOG + "/" + catalogId);
 
         // Log actual response for debugging
         logger.info("Actual API Response Body: {}", response.asString());
@@ -138,7 +175,7 @@ public class CatalogEditTest extends BaseTest {
         assertThat("ContentType should be a string", data.getContentType(), instanceOf(String.class));
         assertThat("IsDeleted should be a boolean", data.getIsDeleted(), instanceOf(Boolean.class));
         assertThat("_id should be a string", data.get_id(), instanceOf(String.class));
-        assertThat("PriceText should be a number", data.getPriceText(), instanceOf(Double.class));
+        assertThat("PriceText should be a number", data.getPriceText(), instanceOf(Number.class));
         assertThat("Title should be a string", data.getTitle(), instanceOf(String.class));
         assertThat("ProductTags should be an array", data.getProductTags(), notNullValue());
 
@@ -184,7 +221,7 @@ public class CatalogEditTest extends BaseTest {
     public void testPriceMatchesExpected() {
         // Validate price matches the generated value from the edit request
         assertThat("Price should match expected value",
-                catalogEditResponse.getData().getPriceText(), equalTo(generatedPrice));
+                catalogEditResponse.getData().getPriceText().intValue(), equalTo(generatedPrice));
 
         logger.info("Price validated: {} (Expected: {})", catalogEditResponse.getData().getPriceText(), generatedPrice);
     }
@@ -204,20 +241,14 @@ public class CatalogEditTest extends BaseTest {
     @Story("Catalog Edit")
     @Severity(SeverityLevel.NORMAL)
     public void testProductIdMatchesExpected() {
-        // Note: This test validates that productTags array exists and is not empty
-        // In a real scenario, you would compare against the actual expected product ID
-        // from a previous edit operation
-        if (catalogEditResponse.getData().getProductTags() != null
-                && !catalogEditResponse.getData().getProductTags().isEmpty()) {
-            assertThat("Product tags should not be empty",
-                    catalogEditResponse.getData().getProductTags(), not(empty()));
-            assertThat("First product tag should be a valid string",
-                    catalogEditResponse.getData().getProductTags().get(0), not(emptyOrNullString()));
+        // Validate that the product ID sent in request matches the first element in productTags
+        assertThat("Product tags should not be empty",
+                catalogEditResponse.getData().getProductTags(), not(empty()));
+        assertThat("First product tag should match the product_id from request",
+                catalogEditResponse.getData().getProductTags().get(0), equalTo(productId));
 
-            logger.info("Product ID validated: {}", catalogEditResponse.getData().getProductTags().get(0));
-        } else {
-            logger.info("No product tags to validate");
-        }
+        logger.info("Product ID validated: {} (Expected: {})", 
+                catalogEditResponse.getData().getProductTags().get(0), productId);
     }
 
     @Test(description = "Catalog ID matches expected value", priority = 11, dependsOnMethods = "testStatusCode200", groups = "bomb")
@@ -278,7 +309,7 @@ public class CatalogEditTest extends BaseTest {
      * Generate random price between 100-999 as round number (similar to Postman
      * pre-request script)
      */
-    private Double generateTestPrice() {
-        return (double) ((int) (Math.random() * 900) + 100);
+    private Integer generateTestPrice() {
+        return (int) (Math.random() * 900) + 100;
     }
 }
