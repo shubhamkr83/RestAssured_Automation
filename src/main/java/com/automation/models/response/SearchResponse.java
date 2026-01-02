@@ -32,7 +32,7 @@ public class SearchResponse {
         private String _id;
         private String name;
         private String phoneNumber;
-        private List<String> tags;
+        private List<Object> tags;  // Changed from List<String> to handle object structures
         private BusinessInfo businessInfo;
         private Seller seller;
     }

@@ -53,16 +53,58 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(json, clazz);
         } catch (JsonProcessingException e) {
-            logger.error("Error deserializing JSON to object: {}", e.getMessage());
-            throw new RuntimeException("Failed to deserialize JSON to object", e);
+            logger.error("========== JSON DESERIALIZATION ERROR ==========");
+            logger.error("Target Class: {}", clazz.getName());
+            logger.error("Error Message: {}", e.getMessage());
+            logger.error("Error Location: {}", e.getLocation());
+            logger.error("Problematic JSON (first 500 chars): {}", 
+                json != null && json.length() > 500 ? json.substring(0, 500) + "..." : json);
+            logger.error("Full Error Details: ", e);
+            logger.error("================================================");
+            throw new RuntimeException("Failed to deserialize JSON to " + clazz.getSimpleName() + ": " + e.getMessage(), e);
         }
     }
 
     /**
      * Deserialize Response body to object
+     * Validates HTTP status code before attempting deserialization
      */
     public static <T> T fromResponse(Response response, Class<T> clazz) {
-        return fromJson(response.getBody().asString(), clazz);
+        int statusCode = response.getStatusCode();
+        String responseBody = response.getBody().asString();
+        
+        // Check if response is successful (2xx status codes)
+        if (statusCode < 200 || statusCode >= 300) {
+            logger.error("========== HTTP ERROR RESPONSE ==========");
+            logger.error("HTTP Status Code: {}", statusCode);
+            logger.error("Status Line: {}", response.getStatusLine());
+            logger.error("Target Class: {}", clazz.getName());
+            logger.error("Response Body (first 1000 chars): {}", 
+                responseBody != null && responseBody.length() > 1000 
+                    ? responseBody.substring(0, 1000) + "..." 
+                    : responseBody);
+            logger.error("Content-Type: {}", response.getContentType());
+            logger.error("=========================================");
+            
+            throw new RuntimeException(String.format(
+                "Cannot deserialize to %s: HTTP %d - %s. Response body: %s",
+                clazz.getSimpleName(),
+                statusCode,
+                response.getStatusLine(),
+                responseBody != null && responseBody.length() > 200 
+                    ? responseBody.substring(0, 200) + "..." 
+                    : responseBody
+            ));
+        }
+        
+        // Check if response is actually JSON
+        String contentType = response.getContentType();
+        if (contentType != null && !contentType.toLowerCase().contains("json")) {
+            logger.warn("Response Content-Type is not JSON: {}", contentType);
+            logger.warn("Attempting to parse anyway, but this might fail");
+        }
+        
+        return fromJson(responseBody, clazz);
     }
 
     /**

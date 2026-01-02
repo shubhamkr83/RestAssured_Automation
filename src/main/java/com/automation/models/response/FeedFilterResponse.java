@@ -26,8 +26,8 @@ public class FeedFilterResponse {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class FilterData {
         private List<ProductTag> productTags;
-        private List<String> suitable_for;
-        private List<String> city;
+        private List<Object> suitable_for;  // Changed from List<String> to handle object structures
+        private List<Object> city;  // Changed from List<String> to handle object structures
         private List<PriceFilter> priceFilters;
     }
 

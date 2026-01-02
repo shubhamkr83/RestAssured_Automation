@@ -81,3 +81,5 @@ logs/
 # Temp files
 *.tmp
 *.temp
+
+.qodo

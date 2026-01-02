@@ -31,13 +31,13 @@ public class BuyerLoginResponse {
         private List<String> category;
         private Boolean businessVerified;
         private String segment;
-        private String deviceId;
+        private Object deviceId;
         private Boolean activated;
         private Boolean isDeleted;
         private String introVideo;
         private String tagLine;
         private String businessType;
-        private String dealsIn;
+        private Object dealsIn;
         private Boolean bizupProtected;
         private Boolean isSeller;
         private String introVideoThumbnail;
@@ -48,7 +48,7 @@ public class BuyerLoginResponse {
         private String persona;
         private Location location;
         private String address;
-        private String installReferrer;
+        private Object installReferrer;
         private Boolean isWhatsappOptIn;
         private Boolean sellOnBizup;
         private String createdAt;

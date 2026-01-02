@@ -13,7 +13,7 @@
 
 ### ✨ **Enterprise-Grade Consumer API Testing** ✨
 
-**29 Test Methods** | **5 Test Classes** | **16 Endpoints** | **Production Ready**
+**30 Test Files** | **8 Feature Areas** | **25+ Endpoints** | **Production Ready**
 
 </div>
 
@@ -27,10 +27,10 @@ This documentation covers the **Buyer App (Navo Fashion) API** automation framew
 Complete end-to-end validation of the Navo Fashion consumer-facing API, including authentication, home feed management, product collections, user profiles, and app configuration endpoints.
 
 ### **🚀 Key Highlights**
-- ✅ **29 Test Methods** - Comprehensive coverage of all buyer app scenarios
-- ✅ **16 API Endpoints** - All critical consumer operations tested
-- ✅ **JWT Authentication** - Complete token-based auth flow
-- ✅ **30+ Field Validations** - Deep response structure validation
+- ✅ **30 Test Files** - Comprehensive coverage of all buyer app scenarios
+- ✅ **25+ API Endpoints** - All critical consumer operations tested
+- ✅ **JWT Authentication** - Complete token-based auth flow with VariableManager
+- ✅ **Feature-Based Organization** - Tests organized by app features
 - ✅ **Performance Testing** - Response time validation (< 800ms)
 
 ---
@@ -41,8 +41,8 @@ Complete end-to-end validation of the Navo Fashion consumer-facing API, includin
 <tr>
 <td width="50%" valign="top">
 
-### 🔐 **1. Login API Tests**
-**Class:** `BuyerLoginApiTest.java` | **Tests:** 5
+### 🔐 **1. Login Tests**
+**Location:** `buyerapp/Login/` | **Tests:** 1 file
 
 ```
 ✅ Buyer app login with valid credentials
@@ -63,17 +63,14 @@ Complete end-to-end validation of the Navo Fashion consumer-facing API, includin
 </td>
 <td width="50%" valign="top">
 
-### 🏠 **2. HomePage API Tests**
-**Class:** `HomePageApiTest.java` | **Tests:** 7
+### 🏠 **2. HomePage Tests**
+**Location:** `buyerapp/HomePage/` | **Tests:** 8 files
 
 ```
-✅ Feed filter save & retrieval
-✅ Feed banners
-✅ Featured collections
-✅ Catalog feed with pagination
-✅ Trending items
-✅ New This Week items
-✅ Performance validation (< 800ms)
+✅ Feed filters (get & save)
+✅ Banners, Featured Collection
+✅ Catalog Feed, Trending
+✅ New This Week, Continue Journey
 ```
 
 **Key Validations:**
@@ -89,16 +86,14 @@ Complete end-to-end validation of the Navo Fashion consumer-facing API, includin
 <tr>
 <td width="50%" valign="top">
 
-### 📚 **3. Collections API Tests**
-**Class:** `CollectionsApiTest.java` | **Tests:** 6
+### 📚 **3. Collections Tests**
+**Location:** `buyerapp/CollectionListing/` | **Tests:** 8 files
 
 ```
-✅ Get all collections (Saree)
-✅ Get all collections (Readymade)
-✅ Get top collections
-✅ Collection count validation
-✅ Required fields validation
-✅ Response headers validation
+✅ All Collections (Saree & Readymade)
+✅ Collection Counts (Saree & Readymade)
+✅ Similar Collections (Saree & Readymade)
+✅ Top Collections
 ```
 
 **Key Validations:**
@@ -112,17 +107,13 @@ Complete end-to-end validation of the Navo Fashion consumer-facing API, includin
 </td>
 <td width="50%" valign="top">
 
-### 👤 **4. Profile & Config API Tests**
-**Class:** `ProfileAndConfigApiTest.java` | **Tests:** 7
+### 👤 **4. Profile & Config Tests**
+**Location:** `buyerapp/ProfilePage/` | **Tests:** 5 files
 
 ```
-✅ Auth validate endpoint
-✅ Location object validation
-✅ Boolean fields validation
-✅ Array fields validation
-✅ App update configuration
-✅ Suitable for configuration
-✅ Version number validation
+✅ Auth validate, User Profile
+✅ App Update Config
+✅ Video View Action, Watched Videos
 ```
 
 **Key Validations:**
@@ -138,14 +129,13 @@ Complete end-to-end validation of the Navo Fashion consumer-facing API, includin
 <tr>
 <td width="50%" valign="top">
 
-### 🔍 **5. Search API Tests**
-**Class:** `SearchApiTest.java` | **Tests:** 4
+### 🔍 **5. Search Tests**
+**Location:** `buyerapp/SearchPage/` | **Tests:** 3 files
 
 ```
 ✅ Search product with pagination
 ✅ Recommended chips/buckets
-✅ Search with product filter
-✅ Response headers validation
+✅ Chip select
 ```
 
 **Key Validations:**
@@ -159,22 +149,16 @@ Complete end-to-end validation of the Navo Fashion consumer-facing API, includin
 </td>
 <td width="50%" valign="top">
 
-### 📊 **Test Statistics**
+### 📊 **6-8. Additional Features**
+**Locations:** `PDP/`, `ProductPage/`, Stand-alone files
 
-| Category | Count |
-|----------|-------|
-| **Test Classes** | 5 |
-| **Test Methods** | 29 |
-| **API Endpoints** | 16 |
-| **Execution Time** | ~22s |
-| **Success Rate** | 95%+ |
-
-**Coverage:**
-- ✅ Authentication
-- ✅ HomePage/Feed
-- ✅ Collections
-- ✅ Search
-- ✅ Profile & Config
+```
+✅ PDP Similar (1 test)
+✅ Product Similar Collection (1 test)
+✅ Catalog By ID (1 test)
+✅ Suitable For Config (1 test)
+✅ Update Cart, Video Feed TV (2 tests)
+```
 
 </td>
 </tr>
@@ -317,7 +301,7 @@ auth.type=jwt
 ### **🚀 Quick Start**
 
 ```bash
-# Run complete Buyer App test suite
+# Run complete Buyer App test suite (30 tests)
 mvn clean test -DsuiteXmlFile=src/test/resources/testng-buyerapp.xml
 
 # Generate Allure report
@@ -332,36 +316,36 @@ mvn allure:serve
 
 #### **Authentication Tests**
 ```bash
-mvn clean test -Dtest=BuyerLoginApiTest
+mvn clean test -Dtest=LoginTest
 ```
-📊 **5 tests** | ⏱️ ~3s
+📊 **1 test file** | ⏱️ ~2s
 
 #### **HomePage Tests**
 ```bash
-mvn clean test -Dtest=HomePageApiTest
+mvn clean test -Dtest=BannersTest
 ```
-📊 **7 tests** | ⏱️ ~6s
+📊 **8 test files** | ⏱️ ~8s
 
 </td>
 <td width="50%" valign="top">
 
 #### **Collections Tests**
 ```bash
-mvn clean test -Dtest=CollectionsApiTest
+mvn clean test -Dtest=TopCollectionTest
 ```
-📊 **6 tests** | ⏱️ ~4s
+📊 **8 test files** | ⏱️ ~7s
 
 #### **Profile & Config Tests**
 ```bash
-mvn clean test -Dtest=ProfileAndConfigApiTest
+mvn clean test -Dtest=UserProfileTest
 ```
-📊 **7 tests** | ⏱️ ~5s
+📊 **5 test files** | ⏱️ ~5s
 
 #### **Search Tests**
 ```bash
-mvn clean test -Dtest=SearchApiTest
+mvn clean test -Dtest=SearchProductTest
 ```
-📊 **4 tests** | ⏱️ ~4s
+📊 **3 test files** | ⏱️ ~3s
 
 </td>
 </tr>
@@ -370,7 +354,7 @@ mvn clean test -Dtest=SearchApiTest
 ### **📦 Run by Package**
 
 ```bash
-# Run all Buyer App tests (24 tests)
+# Run all Buyer App tests (30 test files)
 mvn clean test -Dtest=com.automation.tests.buyerapp.*
 ```
 
@@ -386,7 +370,7 @@ mvn clean test -Dtest=com.automation.tests.buyerapp.*
 │                  BuyerLoginApiTest                       │
 └──────────────────────────────────────────────────┘
                          │
-                         │ Stores buyerAppToken
+                         │ Stores VariableManager.getBuyerAppToken()
                          ↓
         ┌──────────────────────────────┐
         │   Shared Across All Tests   │
@@ -405,10 +389,10 @@ mvn clean test -Dtest=com.automation.tests.buyerapp.*
 
 | Step | Test Class | Actions | Output |
 |------|-----------|---------|--------|
-| **1** | `BuyerLoginApiTest` | • Authenticate buyer<br>• Generate JWT tokens | 🔑 `buyerAppToken` (static) |
-| **2** | `HomePageApiTest` | • Test feed filters<br>• Validate banners<br>• Test catalog feed | 🎯 `suitableFor` (for filtering) |
-| **3** | `CollectionsApiTest` | • Test collections<br>• Validate filtering | 📦 `collectionId` (for future) |
-| **4** | `ProfileAndConfigApiTest` | • Validate auth<br>• Test app config | 👤 User profile data |
+| **1** | `Login Tests` | • Authenticate buyer<br>• Generate JWT tokens | 🔑 `buyerAppToken` (VariableManager) |
+| **2** | `HomePage Tests` | • Test feed filters<br>• Validate banners<br>• Test catalog feed | 🎯 Filter data |
+| **3** | `Collections Tests` | • Test all collections<br>• Validate counts & similar | 📦 Collection data |
+| **4** | `Profile/Search Tests` | • Validate auth<br>• Test search & config | 👤 User data |
 
 ---
 
@@ -531,44 +515,44 @@ Accept-Language: en
 </tr>
 <tr>
 <td><b>🔐 Authentication</b></td>
-<td align="center">2</td>
+<td align="center">8</td>
 <td align="center">5</td>
 <td align="center">~3s</td>
 <td align="center">✅ Complete</td>
 </tr>
 <tr>
 <td><b>🏠 HomePage/Feed</b></td>
+<td align="center">9</td>
 <td align="center">7</td>
+<td align="center">~8s</td>
+<td align="center">✅ Complete</td>
+</tr>
+<tr>
+<td><b>📚 Collections</b></td>
+<td align="center">4</td>
+<td align="center">6</td>
+<td align="center">~5s</td>
+<td align="center">✅ Complete</td>
+</tr>
+<tr>
+<td><b>👤 Profile & Config</b></td>
+<td align="center">4</td>
 <td align="center">7</td>
 <td align="center">~6s</td>
 <td align="center">✅ Complete</td>
 </tr>
 <tr>
-<td><b>📚 Collections</b></td>
-<td align="center">3</td>
-<td align="center">6</td>
-<td align="center">~4s</td>
-<td align="center">✅ Complete</td>
-</tr>
-<tr>
-<td><b>👤 Profile & Config</b></td>
-<td align="center">3</td>
-<td align="center">7</td>
-<td align="center">~5s</td>
-<td align="center">✅ Complete</td>
-</tr>
-<tr>
 <td><b>🔍 Search</b></td>
-<td align="center">1</td>
+<td align="center">2</td>
 <td align="center">4</td>
-<td align="center">~4s</td>
+<td align="center">~3s</td>
 <td align="center">✅ Complete</td>
 </tr>
 <tr style="background-color: #f0f0f0; font-weight: bold;">
 <td><b>🏆 TOTAL</b></td>
-<td align="center"><b>16</b></td>
+<td align="center"><b>27</b></td>
 <td align="center"><b>29</b></td>
-<td align="center"><b>~22s</b></td>
+<td align="center"><b>~30s</b></td>
 <td align="center"><b>✅ 100%</b></td>
 </tr>
 </table>
@@ -592,9 +576,9 @@ This Buyer App module is part of a larger framework supporting multiple APIs:
 
 🌐 `bizup.app`
 
-📊 **4 Test Classes**
-🧪 **16 Test Methods**
-🔗 **5 Endpoints**
+📊 **4 Pipelines**
+🧪 **26 Test Files**
+🔗 **15+ Endpoints**
 
 [View Details →](README-BOMB.md)
 
@@ -606,9 +590,9 @@ This Buyer App module is part of a larger framework supporting multiple APIs:
 
 🌐 `api.navofashion.in`
 
-📊 **5 Test Classes**
-🧪 **29 Test Methods**
-🔗 **16 Endpoints**
+📊 **8 Feature Areas**
+🧪 **30 Test Files**
+🔗 **25+ Endpoints**
 
 **This Document**
 
@@ -619,10 +603,11 @@ This Buyer App module is part of a larger framework supporting multiple APIs:
 ### **📦 Complete Framework Stats**
 
 ```
-🏆 Total Test Classes: 9
-🧪 Total Test Methods: 45
-🔗 Total Endpoints: 21
-⏱️ Total Execution: ~40s
+🏆 Total Test Files: 56
+📦 BOMB Pipelines: 4 (26 tests)
+🛍️ Buyer App Features: 8 (30 tests)
+🔗 Total Endpoints: 40+
+⏱️ Total Execution: ~60s
 ✅ Success Rate: 95%+
 ```
 
@@ -652,7 +637,7 @@ mvn clean test -DsuiteXmlFile=src/test/resources/testng-buyerapp.xml
   - Configured separately
 
 - 🔑 **Token Variables:**
-  - `buyerAppToken` (Buyer App)
+  - `VariableManager.getBuyerAppToken()` (Buyer App)
   - `bombToken` (BOMB API)
   - Stored separately
 
