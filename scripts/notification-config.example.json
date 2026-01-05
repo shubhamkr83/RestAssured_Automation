@@ -1,0 +1,19 @@
+{
+  "project_name": "API Automation Framework",
+  
+  "enable_email": true,
+  "email_from": "jenkins@example.com",
+  "email_to": ["team@example.com", "qa@example.com"],
+  "smtp_host": "smtp.gmail.com",
+  "smtp_port": 587,
+  "smtp_use_tls": true,
+  "smtp_username": "your-email@gmail.com",
+  "smtp_password": "your-app-password",
+  
+  "enable_google_chat": true,
+  "google_chat_webhook": "https://chat.googleapis.com/v1/spaces/XXXXX/messages?key=XXXXX&token=XXXXX",
+  
+  "build_url": "${BUILD_URL}",
+  "report_url": "https://your-bucket.s3.amazonaws.com/reports/${BUILD_NUMBER}/index.html",
+  "logs_url": "https://your-bucket.s3.amazonaws.com/logs/${BUILD_NUMBER}/automation.log"
+}
