@@ -81,99 +81,135 @@ def send_email(summary_data, config):
         print(f"❌ Failed to send email: {e}", file=sys.stderr)
 
 def send_google_chat(summary_data, config):
-    """Send Google Chat notification via webhook"""
+    """Send Google Chat notification via webhook with enhanced UI"""
     
-    # Status emoji
-    status_emoji = "✅" if summary_data['failed'] == 0 else "❌"
-    status_text = "PASSED" if summary_data['failed'] == 0 else "FAILED"
+    # Determine status and styling
+    failed_count = summary_data['failed']
+    pass_rate = float(summary_data['pass_rate'])
     
-    # Create Google Chat card message
+    if failed_count == 0:
+        status_emoji = "🎉"
+        status_text = "ALL TESTS PASSED"
+        status_color = "#34A853"  # Green
+        header_image = "https://img.icons8.com/color/96/000000/ok--v1.png"
+    elif pass_rate >= 90:
+        status_emoji = "⚠️"
+        status_text = "MOSTLY PASSED"
+        status_color = "#FBBC04"  # Yellow
+        header_image = "https://img.icons8.com/color/96/000000/medium-risk.png"
+    else:
+        status_emoji = "❌"
+        status_text = "TESTS FAILED"
+        status_color = "#EA4335"  # Red
+        header_image = "https://img.icons8.com/color/96/000000/high-risk.png"
+    
+    # Calculate execution time if available
+    execution_time = summary_data.get('execution_time', 'N/A')
+    
+    # Create enhanced Google Chat card message
     message = {
-        "cards": [{
-            "header": {
-                "title": f"{status_emoji} Test Report: {config['project_name']}",
-                "subtitle": f"Status: {status_text}",
-                "imageUrl": "https://img.icons8.com/color/96/000000/test-tube.png"
-            },
-            "sections": [
-                {
-                    "widgets": [
-                        {
-                            "keyValue": {
-                                "topLabel": "Total Tests",
-                                "content": str(summary_data['total']),
-                                "contentMultiline": False
-                            }
-                        },
-                        {
-                            "keyValue": {
-                                "topLabel": "Passed",
-                                "content": f"✅ {summary_data['passed']}",
-                                "contentMultiline": False
-                            }
-                        },
-                        {
-                            "keyValue": {
-                                "topLabel": "Failed",
-                                "content": f"❌ {summary_data['failed']}",
-                                "contentMultiline": False
-                            }
-                        },
-                        {
-                            "keyValue": {
-                                "topLabel": "Skipped",
-                                "content": f"⏭️ {summary_data['skipped']}",
-                                "contentMultiline": False
-                            }
-                        },
-                        {
-                            "keyValue": {
-                                "topLabel": "Pass Rate",
-                                "content": f"{summary_data['pass_rate']}%",
-                                "contentMultiline": False
-                            }
-                        }
-                    ]
+        "cardsV2": [{
+            "cardId": "test-report-card",
+            "card": {
+                "header": {
+                    "title": f"{status_emoji} {config['project_name']}",
+                    "subtitle": f"Status: {status_text}",
+                    "imageUrl": header_image,
+                    "imageType": "CIRCLE"
                 },
-                {
-                    "widgets": [
-                        {
-                            "buttons": [
-                                {
-                                    "textButton": {
-                                        "text": "📊 View Report",
-                                        "onClick": {
-                                            "openLink": {
-                                                "url": config['report_url']
-                                            }
-                                        }
-                                    }
-                                },
-                                {
-                                    "textButton": {
-                                        "text": "🔧 Jenkins Build",
-                                        "onClick": {
-                                            "openLink": {
-                                                "url": config['build_url']
-                                            }
-                                        }
-                                    }
-                                },
-                                {
-                                    "textButton": {
-                                        "text": "📋 View Logs",
-                                        "onClick": {
-                                            "openLink": {
-                                                "url": config['logs_url']
-                                            }
-                                        }
+                "sections": [
+                    {
+                        "header": "📊 Test Results Summary",
+                        "collapsible": False,
+                        "widgets": [
+                            {
+                                "decoratedText": {
+                                    "topLabel": "Total Tests Executed",
+                                    "text": f"<b>{summary_data['total']}</b>",
+                                    "startIcon": {
+                                        "knownIcon": "BOOKMARK"
                                     }
                                 }
-                            ]
-                        }
-                    ]
-                }
-            ]
+                            },
+                            {
+                                "decoratedText": {
+                                    "topLabel": "Passed",
+                                    "text": f"<font color='#34A853'><b>✅ {summary_data['passed']}</b></font>",
+                                    "startIcon": {
+                                        "knownIcon": "STAR"
+                                    }
+                                }
+                            },
+                            {
+                                "decoratedText": {
+                                    "topLabel": "Failed",
+                                    "text": f"<font color='#EA4335'><b>❌ {summary_data['failed']}</b></font>",
+                                    "startIcon": {
+                                        "knownIcon": "DESCRIPTION"
+                                    }
+                                }
+                            },
+                            {
+                                "decoratedText": {
+                                    "topLabel": "Skipped",
+                                    "text": f"<font color='#FBBC04'><b>⏭️ {summary_data['skipped']}</b></font>",
+                                    "startIcon": {
+                                        "knownIcon": "CLOCK"
+                                    }
+                                }
+                            },
+                            {
+                                "divider": {}
+                            },
+                            {
+                                "decoratedText": {
+                                    "topLabel": "Pass Rate",
+                                    "text": f"<font color='{status_color}'><b>{summary_data['pass_rate']}%</b></font>",
+                                    "startIcon": {
+                                        "knownIcon": "MULTIPLE_PEOPLE"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "header": "🔗 Quick Actions",
+                        "collapsible": False,
+                        "widgets": [
+                            {
+                                "buttonList": {
+                                    "buttons": [
+                                        {
+                                            "text": "📊 View Report",
+                                            "onClick": {
+                                                "openLink": {
+                                                    "url": config['report_url']
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "text": "🔧 Jenkins Build",
+                                            "onClick": {
+                                                "openLink": {
+                                                    "url": config['build_url']
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "text": "📋 View Logs",
+                                            "onClick": {
+                                                "openLink": {
+                                                    "url": config['logs_url']
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
         }]
     }
     

@@ -1,6 +1,10 @@
 pipeline {
     agent any
     
+    tools {
+        maven 'Maven 3.9.9'
+    }
+    
     environment {
         // Project Configuration
         PROJECT_NAME = 'RestAssured API Automation'
@@ -23,7 +27,6 @@ pipeline {
         S3_RESULTS_PATH = "${S3_BASE_FOLDER}/results/testng-results-${env.BUILD_NUMBER}.xml"
         
         // Notification Configuration
-        GOOGLE_CHAT_WEBHOOK = credentials('google-chat-webhook-dev')
         NOTIFICATION_CONFIG = 'scripts/notification-config.json'
     }
     
@@ -31,7 +34,7 @@ pipeline {
         choice(
             name: 'TEST_PROFILE',
             choices: ['all', 'bomb', 'buyerapp'],
-            description: 'Which test profile to run'
+            description: 'Select test profile to run (Default: all - runs both BOMB and Buyer App tests)'
         )
     }
     
@@ -47,10 +50,13 @@ pipeline {
                 script {
                     def mavenProfile = params.TEST_PROFILE == 'all' ? '' : "-P${params.TEST_PROFILE}"
                     
-                    sh """
-                        mvn clean test ${mavenProfile} \
-                        -Dallure.results.directory=target/allure-results
-                    """
+                    // Use catchError to continue pipeline even if tests fail
+                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                        sh """
+                            mvn clean test ${mavenProfile} \
+                            -Dallure.results.directory=target/allure-results
+                        """
+                    }
                 }
             }
         }
@@ -69,7 +75,7 @@ pipeline {
                     // Upload Allure report with timestamped folder name
                     sh """
                         aws s3 sync target/site/allure-maven-plugin/ \
-                        s3://${S3_BUCKET}/${S3_ALLURE_PATH}/ \
+                        "s3://${S3_BUCKET}/${S3_ALLURE_PATH}/" \
                         --region ${S3_REGION} \
                         --delete
                     """
@@ -77,14 +83,14 @@ pipeline {
                     // Upload logs with timestamped folder name
                     sh """
                         aws s3 sync target/logs/ \
-                        s3://${S3_BUCKET}/${S3_LOGS_PATH}/ \
+                        "s3://${S3_BUCKET}/${S3_LOGS_PATH}/" \
                         --region ${S3_REGION}
                     """
                     
                     // Upload TestNG results
                     sh """
                         aws s3 cp target/surefire-reports/testng-results.xml \
-                        s3://${S3_BUCKET}/${S3_RESULTS_PATH} \
+                        "s3://${S3_BUCKET}/${S3_RESULTS_PATH}" \
                         --region ${S3_REGION}
                     """
                     
@@ -118,29 +124,76 @@ pipeline {
                     def reportUrl = "https://${S3_BUCKET}.s3.${S3_REGION}.amazonaws.com/${S3_ALLURE_PATH}/index.html"
                     def logsUrl = "https://${S3_BUCKET}.s3.${S3_REGION}.amazonaws.com/${S3_LOGS_PATH}/automation.log"
                     
-                    // Create notification config with actual URLs
-                    sh """
-                        cat > ${NOTIFICATION_CONFIG}.tmp << EOF
-{
+                    // Securely handle webhook credential
+                    withCredentials([string(credentialsId: 'google-chat-webhook-dev', variable: 'WEBHOOK_URL')]) {
+                        // Create notification config with actual webhook
+                        def configContent = """{
   "project_name": "${PROJECT_NAME}",
   "enable_email": false,
   "enable_google_chat": true,
-  "google_chat_webhook": "${GOOGLE_CHAT_WEBHOOK}",
+  "google_chat_webhook": "${WEBHOOK_URL}",
   "build_url": "${BUILD_URL}",
   "report_url": "${reportUrl}",
   "logs_url": "${logsUrl}"
-}
-EOF
-                    """
-                    
-                    // Send notifications
-                    sh """
-                        python3 scripts/send-notification.py \
-                        test-summary.json \
-                        ${NOTIFICATION_CONFIG}.tmp
-                    """
+}"""
+                        writeFile file: "${NOTIFICATION_CONFIG}.tmp", text: configContent
+                        
+                        // Send notifications
+                        sh """
+                            python3 scripts/send-notification.py \\
+                            test-summary.json \\
+                            ${NOTIFICATION_CONFIG}.tmp
+                        """
+                    }
                     
                     echo "✅ Notification sent to Google Chat"
+                }
+            }
+        }
+        
+        stage('Archive S3 Links') {
+            steps {
+                script {
+                    // Generate S3 URLs with timestamps
+                    def reportUrl = "https://${S3_BUCKET}.s3.${S3_REGION}.amazonaws.com/${S3_ALLURE_PATH}/index.html"
+                    def logsUrl = "https://${S3_BUCKET}.s3.${S3_REGION}.amazonaws.com/${S3_LOGS_PATH}/automation.log"
+                    def resultsUrl = "https://${S3_BUCKET}.s3.${S3_REGION}.amazonaws.com/${S3_RESULTS_PATH}"
+                    
+                    // Create S3 links file
+                    writeFile file: 's3-links.txt', text: """
+==============================================
+  S3 REPORT LINKS - Build #${env.BUILD_NUMBER}
+==============================================
+
+[ALLURE REPORT]
+${reportUrl}
+
+[AUTOMATION LOGS]
+${logsUrl}
+
+[TESTNG RESULTS XML]
+${resultsUrl}
+
+>> Tip: Click the links above to view reports in S3
+==============================================
+"""
+                    
+                    // Print S3 links to console
+                    echo "=============================================="
+                    echo "  📊 S3 REPORT LINKS - Build #${env.BUILD_NUMBER}"
+                    echo "=============================================="
+                    echo ""
+                    echo "📊 Allure Report:"
+                    echo "   ${reportUrl}"
+                    echo ""
+                    echo "📋 Automation Logs:"
+                    echo "   ${logsUrl}"
+                    echo ""
+                    echo "📄 TestNG Results XML:"
+                    echo "   ${resultsUrl}"
+                    echo ""
+                    echo "✅ S3 links saved to s3-links.txt artifact"
+                    echo "=============================================="
                 }
             }
         }
@@ -148,8 +201,8 @@ EOF
     
     post {
         always {
-            // Archive artifacts
-            archiveArtifacts artifacts: 'target/surefire-reports/**, target/logs/**, test-summary.json', 
+            // Archive artifacts (only summary and S3 links)
+            archiveArtifacts artifacts: 'test-summary.json, s3-links.txt', 
                              allowEmptyArchive: true
             
             // Publish Allure report in Jenkins (optional)
