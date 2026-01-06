@@ -8,6 +8,28 @@ import json
 import sys
 import os
 
+def convert_class_name_to_feature(class_name):
+    """Convert a Java class name to a human-readable feature name
+    
+    Examples:
+        FeaturedCollectionTest -> Featured Collection
+        ContinueYourJourneyTest -> Continue Your Journey
+        LoginApiTest -> Login Api
+    """
+    # Extract simple class name (remove package)
+    simple_name = class_name.split('.')[-1]
+    
+    # Remove 'Test' suffix if present
+    if simple_name.endswith('Test'):
+        simple_name = simple_name[:-4]
+    
+    # Split camelCase/PascalCase into words
+    import re
+    # Insert space before uppercase letters (but not at the start)
+    words = re.sub('([A-Z])', r' \1', simple_name).strip()
+    
+    return words
+
 def extract_summary(testng_results_path):
     """Extract test statistics and detailed test case info from testng-results.xml"""
     
@@ -36,6 +58,10 @@ def extract_summary(testng_results_path):
         for suite in root.findall('.//suite'):
             for test in suite.findall('.//test'):
                 for class_elem in test.findall('.//class'):
+                    # Get class name for feature extraction
+                    class_name = class_elem.get('name', 'Unknown')
+                    feature_name = convert_class_name_to_feature(class_name)
+                    
                     for test_method in class_elem.findall('.//test-method'):
                         # Skip configuration methods (like @BeforeMethod, @AfterMethod)
                         if test_method.get('is-config') == 'true':
@@ -59,6 +85,7 @@ def extract_summary(testng_results_path):
                         test_cases.append({
                             'serial_no': serial_no,
                             'name': test_name,
+                            'feature_name': feature_name,
                             'description': description,
                             'status': status_emoji,
                             'raw_status': status
