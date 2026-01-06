@@ -34,7 +34,7 @@ def send_email(summary_data, config):
         test_case_rows += f"""
             <tr style="border-bottom: 1px solid #e5e7eb;">
                 <td style="padding: 12px; text-align: center; font-weight: 500;">{test_case['serial_no']}</td>
-                <td style="padding: 12px; font-weight: 500; color: #1f2937;">{test_case['name']}</td>
+                <td style="padding: 12px; font-weight: 500; color: #1f2937;">{test_case['feature_name']}</td>
                 <td style="padding: 12px; color: #4b5563;">{test_case['description']}</td>
                 <td style="padding: 12px; text-align: center; font-weight: 600;">{test_case['status']}</td>
             </tr>"""
@@ -110,19 +110,21 @@ def send_email(summary_data, config):
                 <h3 style="color: #1f2937; margin: 35px 0 15px 0; font-size: 18px; border-bottom: 3px solid #667eea; padding-bottom: 8px;">
                     📋 Detailed Test Case Report 📋
                 </h3>
-                <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; border: 2px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
-                    <thead>
-                        <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                            <th style="padding: 15px; text-align: center; color: white; font-size: 13px; width: 60px;">🔢 S No.</th>
-                            <th style="padding: 15px; text-align: left; color: white; font-size: 13px; width: 200px;">📝 Test Case Name</th>
-                            <th style="padding: 15px; text-align: left; color: white; font-size: 13px;">📄 Description</th>
-                            <th style="padding: 15px; text-align: center; color: white; font-size: 13px; width: 120px;">📌 Status</th>
-                        </tr>
-                    </thead>
-                    <tbody style="background-color: white;">
-                        {test_case_rows}
-                    </tbody>
-                </table>
+                <div style="max-height: 250px; overflow-y: auto; border: 2px solid #e5e7eb; border-radius: 8px; margin-bottom: 30px;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="position: sticky; top: 0; z-index: 10;">
+                            <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <th style="padding: 15px; text-align: center; color: white; font-size: 13px; width: 60px;">🔢 S No.</th>
+                                <th style="padding: 15px; text-align: left; color: white; font-size: 13px; width: 200px;">📝 Test Feature Name</th>
+                                <th style="padding: 15px; text-align: left; color: white; font-size: 13px;">📄 Description</th>
+                                <th style="padding: 15px; text-align: center; color: white; font-size: 13px; width: 120px;">📌 Status</th>
+                            </tr>
+                        </thead>
+                        <tbody style="background-color: white;">
+                            {test_case_rows}
+                        </tbody>
+                    </table>
+                </div>
                 
                 <!-- Final Status Message -->
                 <div style="background-color: {final_bg}; border-left: 5px solid {status_color}; padding: 20px; border-radius: 8px; margin: 30px 0; text-align: center;">
