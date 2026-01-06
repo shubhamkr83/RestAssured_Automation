@@ -302,11 +302,21 @@ auth.type=jwt
 
 ```bash
 # Run complete Buyer App test suite (30 tests)
+mvn clean test -Pbuyerapp
+
+# Alternative: Using TestNG XML
 mvn clean test -DsuiteXmlFile=src/test/resources/testng-buyerapp.xml
 
 # Generate Allure report
 mvn allure:serve
 ```
+
+**Jenkins Pipeline**:
+- Go to Jenkins job → Build with Parameters
+- Select profile: `buyerapp`
+- Reports auto-upload to S3 with notifications
+
+See [CICD-SETUP.md](CICD-SETUP.md) for CI/CD details.
 
 ### **🎯 Run Specific Test Classes**
 
@@ -617,10 +627,16 @@ This Buyer App module is part of a larger framework supporting multiple APIs:
 # Run ALL tests (BOMB + Buyer App)
 mvn clean test
 
-# Run specific API
+# Run specific API using profiles
+mvn clean test -Pbomb
+mvn clean test -Pbuyerapp
+
+# Alternative: Using TestNG XML
 mvn clean test -DsuiteXmlFile=src/test/resources/testng-bomb.xml
 mvn clean test -DsuiteXmlFile=src/test/resources/testng-buyerapp.xml
 ```
+
+**In Jenkins**: Select profile when running pipeline!
 
 ---
 
@@ -718,6 +734,40 @@ mvn clean test -DsuiteXmlFile=src/test/resources/testng-buyerapp.xml
 
 ---
 
+## ✅ **Completed Features**
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 🎉 **Feature Implementations**
+
+- ✅ Data-driven test capabilities
+- ✅ JSON schema validation
+- ✅ Negative test scenarios
+- ✅ Search API tests
+- ✅ Cart API tests
+- ✅ Collection by ID tests
+
+</td>
+<td width="50%" valign="top">
+
+### 🚀 **DevOps & Integration**
+
+- ✅ **CI/CD pipeline integration**
+- ✅ **Jenkins automation**
+- ✅ **AWS S3 reporting**
+- ✅ **Email notifications**
+- ✅ **Google Chat alerts**
+- ✅ **Scheduled test runs**
+- ✅ **Test profile selection**
+
+</td>
+</tr>
+</table>
+
+---
+
 ## 🔮 **Future Enhancements**
 
 <table>
@@ -726,24 +776,20 @@ mvn clean test -DsuiteXmlFile=src/test/resources/testng-buyerapp.xml
 
 ### 🎉 **Planned Features**
 
-- 🔲 Data-driven tests (DataProvider)
-- 📝 JSON schema validation
-- ❌ Negative test scenarios
-- 🔍 Search API tests
-- 🛍️ Cart API tests
-- 🔢 Collection by ID tests
+- 🔲 Enhanced data-driven tests
+- 🔲 More negative scenarios
+- 🔲 API contract testing
+- 🔲 Performance benchmarks
 
 </td>
 <td width="50%" valign="top">
 
-### 🚀 **Integration & DevOps**
+### 🚀 **Integration Ideas**
 
-- ⚙️ CI/CD pipeline integration
-- 🐳 Docker containerization
-- 📊 Performance benchmarking
-- 📊 Advanced metrics
-- 🔔 Slack/Email notifications
-- 🔄 Scheduled test runs
+- 🔲 Docker containerization
+- 🔲 Kubernetes deployment
+- 🔲 Advanced metrics dashboard
+- 🔲 Real-time monitoring
 
 </td>
 </tr>

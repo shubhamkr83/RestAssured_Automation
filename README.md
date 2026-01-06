@@ -339,35 +339,37 @@ mvn allure:serve
 ### **📦 Run Complete Suites**
 
 ```bash
-# 🎯 BOMB API Tests (16 tests)
+# 🚀 All Tests (56 tests)
+mvn clean test
+
+# 🎯 BOMB API Tests Only (26 tests)
+mvn clean test -Pbomb
+
+# 🛍️ Buyer App Tests Only (30 tests)
+mvn clean test -Pbuyerapp
+```
+
+**Alternative using TestNG XML files**:
+```bash
+# BOMB API
 mvn clean test -DsuiteXmlFile=src/test/resources/testng-bomb.xml
 
-# 🛍️ Buyer App Tests (30 tests)
+# Buyer App
 mvn clean test -DsuiteXmlFile=src/test/resources/testng-buyerapp.xml
-
-# 📝 Sample Tests
-mvn clean test -DsuiteXmlFile=src/test/resources/testng.xml
-
-# 🚀 All Tests
-mvn clean test
 ```
 
 ### **🎯 Run Specific Test Classes**
 
 ```bash
-# BOMB API Tests - Run by test class
+# BOMB API Tests
 mvn clean test -Dtest=LoginApiTest
 mvn clean test -Dtest=AllCatalogTest
 mvn clean test -Dtest=CatalogTaggingTest
 
-# Buyer App Tests - Run by test class
+# Buyer App Tests
 mvn clean test -Dtest=LoginTest
 mvn clean test -Dtest=BannersTest
 mvn clean test -Dtest=TopCollectionTest
-
-# Sample Tests
-mvn clean test -Dtest=UserApiTest
-mvn clean test -Dtest=PostApiTest
 ```
 
 ### **📂 Run by Package**
@@ -380,21 +382,22 @@ mvn clean test -Dtest=com.automation.tests.bomb.*
 mvn clean test -Dtest=com.automation.tests.buyerapp.*
 ```
 
-### **🌍 Environment-Specific Execution**
-
-```bash
-# Run with different environments
-mvn clean test -Denv=dev
-mvn clean test -Denv=staging
-mvn clean test -Denv=production
-```
-
 ### **⚡ Parallel Execution**
 
 ```bash
 # Run tests in parallel (configured in testng.xml)
-mvn clean test -DsuiteXmlFile=src/test/resources/testng.xml -Dparallel=methods -DthreadCount=5
+mvn clean test -Dparallel=methods -DthreadCount=5
 ```
+
+### **🏗️ Jenkins Pipeline**
+
+Run tests in Jenkins with profile selection:
+- Go to Jenkins job
+- Click "Build with Parameters"
+- Select profile: `all`, `bomb`, or `buyerapp`
+- View results in Allure report (uploaded to S3)
+
+See [CICD-SETUP.md](CICD-SETUP.md) for details.
 
 ## 📊 **Generating Reports**
 
@@ -532,6 +535,127 @@ After test execution:
 1. **Allure Report**: `target/allure-report/index.html`
 2. **TestNG Report**: `target/surefire-reports/index.html`
 3. **Console Logs**: `logs/application.log`
+
+---
+
+## 🚀 **CI/CD Integration**
+
+### **Automated Testing with Jenkins**
+
+This project is fully integrated with Jenkins for automated testing and reporting!
+
+<div align="center">
+
+```
+┌─────────────────────────────────────────────┐
+│         Jenkins Pipeline Flow               │
+├─────────────────────────────────────────────┤
+│                                             │
+│  1. Checkout Code from Git                  │
+│          ↓                                  │
+│  2. Run Tests (with profile selection)      │
+│          ↓                                  │
+│  3. Generate Allure Report                  │
+│          ↓                                  │
+│  4. Upload to AWS S3 (timestamped)          │
+│          ↓                                  │
+│  5. Send Notifications (Email + Chat)       │
+│                                             │
+└─────────────────────────────────────────────┘
+```
+
+</div>
+
+### **✨ Features**
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+#### **🎯 Test Profiles**
+Run specific test suites:
+- `all` - Both BOMB + Buyer App
+- `bomb` - BOMB API only
+- `buyerapp` - Buyer App only
+
+```bash
+# Maven profiles
+mvn clean test -Pbomb
+mvn clean test -Pbuyerapp
+mvn clean test -Pall
+```
+
+</td>
+<td width="50%" valign="top">
+
+#### **📊 Automatic Reporting**
+- ✅ Allure HTML reports
+- ✅ Uploaded to AWS S3
+- ✅ Timestamped folders
+- ✅ Permanent links
+
+**Example**:
+`allure_2026-01-06_17_30`
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+#### **📧 Email Notifications**
+- ✅ Sent on build completion
+- ✅ Success/Failure/Unstable
+- ✅ Beautiful HTML format
+- ✅ Quick links to reports
+
+</td>
+<td width="50%" valign="top">
+
+#### **💬 Google Chat Alerts**
+- ✅ Test summary
+- ✅ Individual test results
+- ✅ Build status
+- ✅ Direct report links
+
+</td>
+</tr>
+</table>
+
+### **🏃 Running in Jenkins**
+
+1. **Open Jenkins Job**
+2. **Click "Build with Parameters"**
+3. **Select Test Profile**:
+   - `all` - Run all 56 tests
+   - `bomb` - Run 26 BOMB tests
+   - `buyerapp` - Run 30 Buyer App tests
+4. **Click "Build"**
+
+### **📦 What You Get**
+
+After each build:
+- 📊 **Allure Report** in S3 (timestamped)
+- 📋 **Test Logs** in S3 (timestamped)
+- 📄 **TestNG Results** XML file
+- 📧 **Email** with results and links
+- 💬 **Google Chat** notification
+
+### **🔗 Quick Setup**
+
+For complete setup instructions, see [CICD-SETUP.md](CICD-SETUP.md)
+
+**Quick Start**:
+```bash
+# 1. Create notification config
+cp scripts/notification-config.example.json scripts/notification-config.json
+
+# 2. Edit with your details
+nano scripts/notification-config.json
+
+# 3. Setup Jenkins job pointing to this repo
+# 4. Add credentials (Google Chat webhook, SMTP, AWS)
+# 5. Run the pipeline!
+```
 
 ---
 
@@ -675,6 +799,7 @@ public void testUserSchema() {
 |----------|-------------|
 | [README-BOMB.md](README-BOMB.md) | BOMB API specific documentation |
 | [README-BUYER-APP.md](README-BUYER-APP.md) | Buyer App API documentation |
+| [CICD-SETUP.md](CICD-SETUP.md) | Jenkins CI/CD integration guide |
 
 
 ---
