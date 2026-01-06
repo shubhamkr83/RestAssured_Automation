@@ -286,10 +286,30 @@ pipeline {
   "logs_url": "''' + logsUrl + '''"
 }
 EOF_CONFIG
-                            # Replace placeholders with actual credentials using sed
-                            sed -i "s|SMTP_USERNAME_PLACEHOLDER|${SMTP_USERNAME}|g" scripts/notification-config.json.tmp
-                            sed -i "s|SMTP_PASSWORD_PLACEHOLDER|${SMTP_PASSWORD}|g" scripts/notification-config.json.tmp
-                            sed -i "s|WEBHOOK_URL_PLACEHOLDER|${WEBHOOK_URL}|g" scripts/notification-config.json.tmp
+                            # Use Python to replace placeholders (handles special characters better than sed)
+                            python3 << 'PYTHON_SCRIPT'
+import json
+
+# Read the template
+with open('scripts/notification-config.json.tmp', 'r') as f:
+    content = f.read()
+
+# Replace placeholders with environment variables
+import os
+content = content.replace('SMTP_USERNAME_PLACEHOLDER', os.environ.get('SMTP_USERNAME', ''))
+content = content.replace('SMTP_PASSWORD_PLACEHOLDER', os.environ.get('SMTP_PASSWORD', ''))
+content = content.replace('WEBHOOK_URL_PLACEHOLDER', os.environ.get('WEBHOOK_URL', ''))
+
+# Write back
+with open('scripts/notification-config.json.tmp', 'w') as f:
+    f.write(content)
+
+# Verify it's valid JSON
+with open('scripts/notification-config.json.tmp', 'r') as f:
+    config = json.load(f)
+    print(f"✅ Config generated successfully")
+    print(f"   Google Chat webhook (first 60 chars): {config['google_chat_webhook'][:60]}...")
+PYTHON_SCRIPT
                         '''
                         
                         // Send notifications
