@@ -321,15 +321,29 @@ def send_google_chat(summary_data, config):
     
     # Send to Google Chat webhook
     try:
+        print(f"📤 Sending Google Chat notification to webhook...", file=sys.stderr)
+        print(f"   Webhook URL (first 50 chars): {config['google_chat_webhook'][:50]}...", file=sys.stderr)
+        
         response = requests.post(
             config['google_chat_webhook'],
             json=message,
-            headers={'Content-Type': 'application/json; charset=UTF-8'}
+            headers={'Content-Type': 'application/json; charset=UTF-8'},
+            timeout=10
         )
+        
+        print(f"   Response Status Code: {response.status_code}", file=sys.stderr)
+        print(f"   Response Body: {response.text[:200]}", file=sys.stderr)
+        
         response.raise_for_status()
         print("✅ Google Chat notification sent successfully")
+    except requests.exceptions.Timeout:
+        print(f"❌ Failed to send Google Chat notification: Request timed out after 10 seconds", file=sys.stderr)
+    except requests.exceptions.ConnectionError as e:
+        print(f"❌ Failed to send Google Chat notification: Connection error - {e}", file=sys.stderr)
+    except requests.exceptions.HTTPError as e:
+        print(f"❌ Failed to send Google Chat notification: HTTP {response.status_code} - {response.text}", file=sys.stderr)
     except Exception as e:
-        print(f"❌ Failed to send Google Chat notification: {e}", file=sys.stderr)
+        print(f"❌ Failed to send Google Chat notification: {type(e).__name__}: {e}", file=sys.stderr)
 
 def main():
     if len(sys.argv) < 3:
@@ -339,20 +353,32 @@ def main():
     summary_file = sys.argv[1]
     config_file = sys.argv[2]
     
+    print(f"📥 Loading test summary from: {summary_file}", file=sys.stderr)
     # Load summary data
     with open(summary_file, 'r') as f:
         summary_data = json.load(f)
+    print(f"   Tests: {summary_data['total']}, Passed: {summary_data['passed']}, Failed: {summary_data['failed']}", file=sys.stderr)
     
+    print(f"📥 Loading notification config from: {config_file}", file=sys.stderr)
     # Load config
     with open(config_file, 'r') as f:
         config = json.load(f)
     
+    print(f"   Email enabled: {config.get('enable_email', False)}", file=sys.stderr)
+    print(f"   Google Chat enabled: {config.get('enable_google_chat', False)}", file=sys.stderr)
+    
     # Send notifications
     if config.get('enable_email', False):
+        print(f"\n📧 Sending email notification...", file=sys.stderr)
         send_email(summary_data, config)
+    else:
+        print(f"\n📧 Email notification is disabled", file=sys.stderr)
     
     if config.get('enable_google_chat', False):
+        print(f"\n💬 Sending Google Chat notification...", file=sys.stderr)
         send_google_chat(summary_data, config)
+    else:
+        print(f"\n💬 Google Chat notification is disabled", file=sys.stderr)
 
 if __name__ == '__main__':
     main()
