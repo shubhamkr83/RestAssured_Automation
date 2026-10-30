@@ -31,6 +31,14 @@ import static org.hamcrest.Matchers.*;
 @Feature("Collection Counts for Saree API")
 public class CollectionCountsForSareeTest extends BaseTest {
 
+    // Headers the Navo app sends (zone drives the feed's delivery-zone filter).
+    private static final java.util.Map<String, String> APP_HEADERS = java.util.Map.of(
+            "Accept-Language", "en",
+            "AppVersion", "4.1.3-debug",
+            "AppVersionCode", "420",
+            "User-Segment", "2",
+            "zone", "india");
+
     private static List<CollectionItemCount> collectionCounts;
     private String buyerAppBaseUrl;
 
@@ -55,6 +63,7 @@ public class CollectionCountsForSareeTest extends BaseTest {
                 .baseUri(buyerAppBaseUrl)
                 .contentType("application/json")
                 .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                .headers(APP_HEADERS)
                 .queryParam("suitable_for", "saree")
                 .when()
                 .get(BuyerAppEndpoints.COLLECTION_ALL);
@@ -79,6 +88,7 @@ public class CollectionCountsForSareeTest extends BaseTest {
                         .baseUri(buyerAppBaseUrl)
                         .contentType("application/json")
                         .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                        .headers(APP_HEADERS)
                         .queryParam("limit", 35)
                         .queryParam("offset", 0)
                         .when()

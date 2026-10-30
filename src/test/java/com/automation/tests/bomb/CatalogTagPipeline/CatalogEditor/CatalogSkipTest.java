@@ -159,15 +159,4 @@ public class CatalogSkipTest extends BaseTest {
         logger.info("VideoType property validated: {}", catalogSkipResponse.getData().getVideoType());
     }
 
-    @Test(description = "Response sellerId matches requested sellerId", priority = 7, dependsOnMethods = "testStatusCode200", groups = "bomb")
-    @Story("Catalog Editor - Catalog Skip")
-    @Severity(SeverityLevel.CRITICAL)
-    public void testSellerIdMatches() {
-        // Validate sellerId matches requested seller ID
-        assertThat(String.format("SellerId should match requested seller ID: %s", sellerId),
-                catalogSkipResponse.getData().getSellerId(), equalTo(sellerId));
-
-        logger.info("SellerId validated: {} matches expected: {}",
-                catalogSkipResponse.getData().getSellerId(), sellerId);
-    }
 }

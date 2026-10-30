@@ -54,6 +54,17 @@
             <class name="com.automation.tests.buyerapp.SuitableForConfigTest"/>
             <class name="com.automation.tests.buyerapp.UpdateCartTest"/>
             <class name="com.automation.tests.buyerapp.VideoFeedTvTest"/>
+
+            <!-- New backend-api APIs (QA sync 2026-10-30). PRODUCTION-safe: GETs and
+                 requests rejected before any write / Kafka publish / LLM call only. -->
+            <class name="com.automation.tests.buyerapp.newapis.BannerPlacementTest"/>
+            <class name="com.automation.tests.buyerapp.newapis.MlpPublicReadTest"/>
+            <class name="com.automation.tests.buyerapp.newapis.NavoLiveTest"/>
+            <class name="com.automation.tests.buyerapp.newapis.EventsIngestionNegativeTest"/>
+            <class name="com.automation.tests.buyerapp.newapis.SubSellerAuthTest"/>
+            <class name="com.automation.tests.buyerapp.newapis.PrismAccessTest"/>
+            <class name="com.automation.tests.buyerapp.newapis.ReferralValidationTest"/>
+            <class name="com.automation.tests.buyerapp.newapis.ChatbotV2ValidationTest"/>
         </classes>
     </test>
 

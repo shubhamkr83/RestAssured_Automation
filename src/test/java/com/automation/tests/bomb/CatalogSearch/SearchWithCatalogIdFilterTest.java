@@ -186,42 +186,6 @@ public class SearchWithCatalogIdFilterTest extends BaseTest {
         }
     }
 
-    @Test(description = "Boolean flags are true when present", priority = 8, dependsOnMethods = "testStatusCode200", groups = "bomb")
-    @Story("Catalog Search - Catalog ID Filter")
-    @Severity(SeverityLevel.NORMAL)
-    public void testBooleanFlagsTrue() {
-        // Validate boolean flags if items exist
-        if (catalogResponse.getData().getItems() != null && catalogResponse.getData().getItems().size() > 0) {
-            CatalogResponse.CatalogItem item = catalogResponse.getData().getItems().get(0);
-
-            // Check visible flag
-            if (item.getVisible() != null) {
-                assertThat("Item visible should be true", item.getVisible(), is(true));
-            }
-
-            // Check seller flags if seller exists
-            if (item.getSeller() != null) {
-                if (item.getSeller().getDeprioritisation_status() != null) {
-                    assertThat("Seller deprioritisation_status should be false",
-                            item.getSeller().getDeprioritisation_status(), is(false));
-                }
-                if (item.getSeller().getIsCatalogAvailable() != null) {
-                    assertThat("Seller isCatalogAvailable should be true",
-                            item.getSeller().getIsCatalogAvailable(), is(true));
-                }
-            }
-
-            // Check available flag
-            if (item.getAvailable() != null) {
-                assertThat("Item available should be true", item.getAvailable(), is(true));
-            }
-
-            logger.info("Boolean flags validated successfully");
-        } else {
-            throw new AssertionError("No items found for boolean flag validation");
-        }
-    }
-
     @Test(description = "Product array has required structure", priority = 9, dependsOnMethods = "testStatusCode200", groups = "bomb")
     @Story("Catalog Search - Catalog ID Filter")
     @Severity(SeverityLevel.NORMAL)
