@@ -21,6 +21,8 @@ import static org.hamcrest.Matchers.*;
  * Endpoint: POST {{bizup_base}}/v1/admin/pipeline/video
  * Implements comprehensive Postman test scripts for video upload validation.
  */
+@TmsLink("TC-ADMIN-005")
+@TmsLink("TC-ADMIN-006")
 @Epic("BOMB Video Tagging Pipeline")
 @Feature("Video Upload and Assign to Editor")
 public class VideoUploadTest extends BaseTest {

@@ -31,7 +31,7 @@ public class LoginTest extends BaseTest {
         private static BuyerLoginResponse loginResponseData;
         private String buyerAppBaseUrl;
 
-        @BeforeClass
+        @BeforeClass(alwaysRun = true)
         public void setupBuyerApp() {
                 buyerAppBaseUrl = config.buyerAppBaseUrl();
                 logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
@@ -49,9 +49,7 @@ public class LoginTest extends BaseTest {
                                 .build();
 
                 // Send POST request
-                loginResponse = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
+                loginResponse = buyerAppGuestSpec()
                                 .body(loginRequest)
                                 .when()
                                 .post(BuyerAppEndpoints.LOGIN);

@@ -30,17 +30,17 @@ public class ChatbotV2ValidationTest extends BaseTest {
     private String baseUrl;
     private String buyerToken;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setup() {
         baseUrl = config.buyerAppBaseUrl();
-        buyerToken = VariableManager.getBuyerAppToken();
+        buyerToken = buyerAppTokenOrNull();
     }
 
     private Response send(String body) {
         if (buyerToken == null || buyerToken.isEmpty()) {
             throw new SkipException("Buyer App token not available. Run LoginTest first.");
         }
-        return RestAssured.given().baseUri(baseUrl).contentType("application/json")
+        return buyerAppGuestSpec()
                 .header("Authorization", "JWT " + buyerToken).body(body)
                 .when().post(BuyerAppEndpoints.CHATBOT_V2_MESSAGE);
     }
@@ -53,7 +53,7 @@ public class ChatbotV2ValidationTest extends BaseTest {
     @Test(description = "TC-CHATV2-004 — no token", groups = "buyerapp")
     @TmsLink("TC-CHATV2-004") @Story("Auth") @Severity(SeverityLevel.CRITICAL)
     public void noToken() {
-        Response resp = RestAssured.given().baseUri(baseUrl).contentType("application/json")
+        Response resp = buyerAppGuestSpec()
                 .body("{\"message\":\"hi\"}").when().post(BuyerAppEndpoints.CHATBOT_V2_MESSAGE);
         assertApiError(resp, HttpStatus.UNAUTHORIZED);
     }

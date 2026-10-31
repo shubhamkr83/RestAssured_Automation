@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "statusCode",
+    "message",
+    "data"
+  ],
+  "properties": {
+    "statusCode": {
+      "const": "10000"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "required": [
+        "_id",
+        "title",
+        "images",
+        "isDeleted"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{24}$"
+        },
+        "title": {
+          "type": "string"
+        },
+        "price": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "images": {
+          "type": "array"
+        },
+        "isDeleted": {
+          "type": "boolean"
+        },
+        "seller": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "market": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "navoAvailable": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

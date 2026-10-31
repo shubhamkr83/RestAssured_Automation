@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Buyer App API Automation Test Suite" preserve-order="true">
+<suite name="Buyer App API Automation Test Suite">
 
     <listeners>
         <listener class-name="com.automation.listeners.TestListener"/>
@@ -8,64 +8,22 @@
 
     <parameter name="env" value="default"/>
 
-    <!-- All Buyer App Tests - Single test block to ensure ThreadLocal token sharing -->
-    <test name="Buyer App All Tests" preserve-order="true">
-        <classes>
-            <!-- Login Tests - MUST run first -->
-            <class name="com.automation.tests.buyerapp.Login.LoginTest"/>
-            
-            <!-- HomePage Tests -->
-            <class name="com.automation.tests.buyerapp.HomePage.BannersTest"/>
-            <class name="com.automation.tests.buyerapp.HomePage.CatalogFeedTest"/>
-            <class name="com.automation.tests.buyerapp.HomePage.ContinueYourJourneyTest"/>
-            <class name="com.automation.tests.buyerapp.HomePage.FeaturedCollectionTest"/>
-            <class name="com.automation.tests.buyerapp.HomePage.FeedFilterSaveTest"/>
-            <class name="com.automation.tests.buyerapp.HomePage.FeedFilterTest"/>
-            <class name="com.automation.tests.buyerapp.HomePage.NewThisWeekTest"/>
-            <class name="com.automation.tests.buyerapp.HomePage.TrendingTest"/>
-            
-            <!-- Collection Listing Tests -->
-            <class name="com.automation.tests.buyerapp.CollectionListing.TopCollectionTest"/>
-            <class name="com.automation.tests.buyerapp.CollectionListing.AllCollection.CollectionAllForReadymadeTest"/>
-            <class name="com.automation.tests.buyerapp.CollectionListing.AllCollection.CollectionAllForSareeTest"/>
-            <class name="com.automation.tests.buyerapp.CollectionListing.AllCollectionCounts.CollectionCountsForReadymadeTest"/>
-            <class name="com.automation.tests.buyerapp.CollectionListing.AllCollectionCounts.CollectionCountsForSareeTest"/>
-            <class name="com.automation.tests.buyerapp.CollectionListing.SimilarCollection.SimilarCollectionForReadymadeTest"/>
-            <class name="com.automation.tests.buyerapp.CollectionListing.SimilarCollection.SimilarCollectionForSareeTest"/>
-            
-            <!-- Search Tests -->
-            <class name="com.automation.tests.buyerapp.SearchPage.SearchProductTest"/>
-            <class name="com.automation.tests.buyerapp.SearchPage.SearchRecommendedChipsTest"/>
-            <class name="com.automation.tests.buyerapp.SearchPage.SearchRecommendChipSelectTest"/>
-            
-            <!-- Profile & Config Tests -->
-            <class name="com.automation.tests.buyerapp.ProfilePage.AppUpdateTest"/>
-            <class name="com.automation.tests.buyerapp.ProfilePage.AuthValidateTest"/>
-            <class name="com.automation.tests.buyerapp.ProfilePage.UserProfileTest"/>
-            <class name="com.automation.tests.buyerapp.ProfilePage.VideoViewActionTest"/>
-            <class name="com.automation.tests.buyerapp.ProfilePage.WatchedVideosTest"/>
-            
-            <!-- Product Detail Page Tests -->
-            <class name="com.automation.tests.buyerapp.PDP.PdpSimilarTest"/>
-            <class name="com.automation.tests.buyerapp.ProductPage.ProductSimilarCollectionTest"/>
-            
-            <!-- Catalog & Cart Tests -->
-            <class name="com.automation.tests.buyerapp.CatalogByIdTest"/>
-            <class name="com.automation.tests.buyerapp.SuitableForConfigTest"/>
-            <class name="com.automation.tests.buyerapp.UpdateCartTest"/>
-            <class name="com.automation.tests.buyerapp.VideoFeedTvTest"/>
-
-            <!-- New backend-api APIs (QA sync 2026-10-30). PRODUCTION-safe: GETs and
-                 requests rejected before any write / Kafka publish / LLM call only. -->
-            <class name="com.automation.tests.buyerapp.newapis.BannerPlacementTest"/>
-            <class name="com.automation.tests.buyerapp.newapis.MlpPublicReadTest"/>
-            <class name="com.automation.tests.buyerapp.newapis.NavoLiveTest"/>
-            <class name="com.automation.tests.buyerapp.newapis.EventsIngestionNegativeTest"/>
-            <class name="com.automation.tests.buyerapp.newapis.SubSellerAuthTest"/>
-            <class name="com.automation.tests.buyerapp.newapis.PrismAccessTest"/>
-            <class name="com.automation.tests.buyerapp.newapis.ReferralValidationTest"/>
-            <class name="com.automation.tests.buyerapp.newapis.ChatbotV2ValidationTest"/>
-        </classes>
+    <!-- Every test class under com.automation.tests.buyerapp (including sub-packages)
+         whose tests are in the "buyerapp" group. A new class runs automatically once
+         it is in that package and group; no class list to maintain.
+         Order does not matter: BaseTest.buyerAppSpec() logs in on demand if
+         LoginTest has not run yet.
+         newapis/ tests are PRODUCTION-safe: GETs and requests rejected before any
+         write / Kafka publish / LLM call only (see README-BUYER-APP.md). -->
+    <test name="Buyer App All Tests">
+        <groups>
+            <run>
+                <include name="buyerapp"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="com.automation.tests.buyerapp.*"/>
+        </packages>
     </test>
 
 </suite>

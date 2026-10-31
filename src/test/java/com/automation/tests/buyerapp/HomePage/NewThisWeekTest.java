@@ -24,21 +24,19 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Home Page")
 @Feature("New This Week API")
+@TmsLink("TC-FEED-002")
+@TmsLink("TC-FEED-001")
 public class NewThisWeekTest extends BaseTest {
 
         private static Response newThisWeekResponse;
         private static NewThisWeekResponse newThisWeekResponseData;
         private String buyerAppBaseUrl;
 
-        @BeforeClass
+        @BeforeClass(alwaysRun = true)
         public void setupBuyerApp() {
                 buyerAppBaseUrl = config.buyerAppBaseUrl();
                 logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-                String token = VariableManager.getBuyerAppToken();
-                if (token == null || token.isEmpty()) {
-                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-                }
                 logger.info("Using Buyer App token from VariableManager");
         }
 
@@ -52,10 +50,7 @@ public class NewThisWeekTest extends BaseTest {
                                 : "saree"; // Default value
 
                 // Send GET request with authentication and query parameters
-                newThisWeekResponse = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                newThisWeekResponse = buyerAppSpec()
                                 .queryParam("size", 1)
                                 .queryParam("page", 0)
                                 .queryParam("suitable_for", suitableForParam)

@@ -23,6 +23,8 @@ import static org.hamcrest.Matchers.*;
  * {{bizup_base}}/v1/admin/editor/assign/catalog/{{seller_id}}?limit=20&mode=all
  * Implements comprehensive Postman test scripts for fetching uploaded catalogs.
  */
+@TmsLink("TC-ADMIN-001")
+@TmsLink("TC-ADMIN-002")
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
 public class FetchCatalogUploadedTest extends BaseTest {

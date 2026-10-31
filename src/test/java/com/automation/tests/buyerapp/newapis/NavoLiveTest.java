@@ -29,10 +29,10 @@ public class NavoLiveTest extends BaseTest {
     private String token;
     private String eventId;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setup() {
         baseUrl = config.buyerAppBaseUrl();
-        token = VariableManager.getBuyerAppToken();
+        token = buyerAppTokenOrNull();
         Response r = spec().when().get(BuyerAppEndpoints.NAVO_LIVE);
         if (r.getStatusCode() == HttpStatus.OK) {
             List<String> ids = r.jsonPath().getList("data.events._id");
@@ -43,7 +43,7 @@ public class NavoLiveTest extends BaseTest {
     }
 
     private RequestSpecification spec() {
-        return RestAssured.given().baseUri(baseUrl);
+        return buyerAppGuestSpec();
     }
 
     private String requireEvent() {

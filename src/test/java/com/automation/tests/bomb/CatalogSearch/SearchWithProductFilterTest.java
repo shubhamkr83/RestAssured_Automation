@@ -25,6 +25,8 @@ import static org.hamcrest.Matchers.*;
  * Implements comprehensive Postman test scripts for catalog search with product
  * filter validation.
  */
+@TmsLink("TC-ADMIN-001")
+@TmsLink("TC-ADMIN-002")
 @Epic("BOMB Catalog Management")
 @Feature("Catalog Search - Product Filter")
 public class SearchWithProductFilterTest extends BaseTest {

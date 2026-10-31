@@ -22,6 +22,8 @@ import static org.hamcrest.Matchers.*;
  * Implements comprehensive Postman test scripts for seller-filtered catalog
  * validation.
  */
+@TmsLink("TC-ADMIN-012")
+@TmsLink("TC-ADMIN-016")
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Assign to Editor")
 public class CatalogUploadedSearchBySellerFilterTest extends BaseTest {

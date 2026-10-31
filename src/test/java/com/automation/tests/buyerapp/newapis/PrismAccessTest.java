@@ -34,10 +34,10 @@ public class PrismAccessTest extends BaseTest {
     private String baseUrl;
     private String buyerToken;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setup() {
         baseUrl = config.buyerAppBaseUrl();
-        buyerToken = VariableManager.getBuyerAppToken();
+        buyerToken = buyerAppTokenOrNull();
     }
 
     private void requireBuyerToken() {
@@ -47,13 +47,13 @@ public class PrismAccessTest extends BaseTest {
     }
 
     private Response asBuyer(String body, String path) {
-        return RestAssured.given().baseUri(baseUrl).contentType("application/json")
+        return buyerAppGuestSpec()
                 .header("Authorization", "JWT " + buyerToken).body(body).when().post(path);
     }
 
     /** Read-only probe through the same assertStaff; skip unless the buyer is refused. */
     private void requireBuyerIsNotStaff(String probePath) {
-        Response probe = RestAssured.given().baseUri(baseUrl)
+        Response probe = buyerAppGuestSpec()
                 .header("Authorization", "JWT " + buyerToken).when().get(probePath);
         if (probe.getStatusCode() != HttpStatus.FORBIDDEN) {
             throw new SkipException("Test buyer is not refused by the staff gate (probe "
@@ -65,14 +65,14 @@ public class PrismAccessTest extends BaseTest {
     @Test(description = "TC-PRISM-001 — /v1/prism route with no token", groups = "buyerapp")
     @TmsLink("TC-PRISM-001") @Story("Auth") @Severity(SeverityLevel.CRITICAL)
     public void noToken() {
-        Response resp = RestAssured.given().baseUri(baseUrl).when().get(BuyerAppEndpoints.PRISM_CART_BOT_SESSIONS);
+        Response resp = buyerAppGuestSpec().when().get(BuyerAppEndpoints.PRISM_CART_BOT_SESSIONS);
         assertApiError(resp, HttpStatus.UNAUTHORIZED);
     }
 
     @Test(description = "TC-PRISM-002 — /v1/prism route with an invalid JWT", groups = "buyerapp")
     @TmsLink("TC-PRISM-002") @Story("Auth") @Severity(SeverityLevel.CRITICAL)
     public void invalidToken() {
-        Response resp = RestAssured.given().baseUri(baseUrl)
+        Response resp = buyerAppGuestSpec()
                 .header("Authorization", "JWT not-a-real-token")
                 .when().get(BuyerAppEndpoints.PRISM_CART_BOT_SESSIONS);
         assertApiError(resp, HttpStatus.UNAUTHORIZED);
@@ -82,7 +82,7 @@ public class PrismAccessTest extends BaseTest {
     @TmsLink("TC-PRISM-007") @Story("Chatbot feedback") @Severity(SeverityLevel.CRITICAL)
     public void feedbackRunsAsBuyer() {
         requireBuyerToken();
-        Response resp = RestAssured.given().baseUri(baseUrl)
+        Response resp = buyerAppGuestSpec()
                 .header("Authorization", "JWT " + buyerToken)
                 .when().get(BuyerAppEndpoints.PRISM_CHATBOT_FEEDBACK_RUNS);
         assertApiError(resp, HttpStatus.FORBIDDEN);
@@ -92,7 +92,7 @@ public class PrismAccessTest extends BaseTest {
     @TmsLink("TC-PRISM-010") @Story("Chatbot feedback") @Severity(SeverityLevel.CRITICAL)
     public void feedbackConversationAsBuyer() {
         requireBuyerToken();
-        Response resp = RestAssured.given().baseUri(baseUrl)
+        Response resp = buyerAppGuestSpec()
                 .header("Authorization", "JWT " + buyerToken)
                 .pathParam("evaluationId", "000000000000000000000000")
                 .when().get(BuyerAppEndpoints.PRISM_CHATBOT_FEEDBACK_CONVERSATION);

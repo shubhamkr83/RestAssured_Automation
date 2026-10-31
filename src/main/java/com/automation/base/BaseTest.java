@@ -1,7 +1,6 @@
 package com.automation.base;
 
 import com.automation.config.ConfigManager;
-import com.automation.utils.RestClient;
 import com.automation.utils.VariableManager;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
@@ -29,7 +28,6 @@ public abstract class BaseTest {
     protected static ConfigManager config;
     protected static RequestSpecification requestSpec;
     protected static ResponseSpecification responseSpec;
-    protected RestClient restClient;
 
     @BeforeSuite(alwaysRun = true)
     @Parameters({ "env" })
@@ -54,7 +52,6 @@ public abstract class BaseTest {
     public void setUp() {
         logger.info("Setting up test class: {}", this.getClass().getSimpleName());
         initializeRestAssured();
-        restClient = new RestClient();
     }
 
     /**
@@ -123,5 +120,69 @@ public abstract class BaseTest {
      */
     protected RequestSpecification getRequestSpec() {
         return RestAssured.given().spec(requestSpec);
+    }
+
+    /**
+     * Buyer App (Navo) request as a guest: base URL plus the headers the real app
+     * sends. No Authorization header.
+     */
+    protected static RequestSpecification buyerAppGuestSpec() {
+        return RestAssured.given()
+                // A test that sets one of these headers itself replaces the default
+                // instead of sending both values.
+                .config(RestAssured.config().headerConfig(io.restassured.config.HeaderConfig.headerConfig()
+                        .overwriteHeadersWithName("Accept", "Content-Type", "Accept-Language", "AppVersion",
+                                "AppVersionCode", "User-Segment", "zone", "Authorization")))
+                .baseUri(config.buyerAppBaseUrl())
+                .contentType(ContentType.JSON)
+                .header("Accept-Language", config.buyerAppLanguage())
+                .header("AppVersion", config.buyerAppVersion())
+                .header("AppVersionCode", config.buyerAppVersionCode())
+                .header("User-Segment", config.buyerAppUserSegment())
+                .header("zone", config.buyerAppZone());
+    }
+
+    /**
+     * Buyer App (Navo) request as the logged-in test buyer. Tokens are no longer
+     * persisted between runs, so if LoginTest has not run yet (e.g. an ad-hoc
+     * -Dtest run) this logs in once with the configured credentials.
+     */
+    protected static RequestSpecification buyerAppSpec() {
+        String token = VariableManager.getBuyerAppToken();
+        if (token == null || token.isEmpty()) {
+            token = loginBuyer();
+        }
+        return buyerAppGuestSpec().header("Authorization", "JWT " + token);
+    }
+
+    /** The test buyer's token, logging in on demand; null if login is not possible. */
+    protected static String buyerAppTokenOrNull() {
+        try {
+            String token = VariableManager.getBuyerAppToken();
+            return (token == null || token.isEmpty()) ? loginBuyer() : token;
+        } catch (org.testng.SkipException e) {
+            logger.warn(e.getMessage());
+            return null;
+        }
+    }
+
+    private static synchronized String loginBuyer() {
+        String existing = VariableManager.getBuyerAppToken();
+        if (existing != null && !existing.isEmpty()) return existing;
+        if (config.buyerAppPhoneNumber() == null || config.buyerAppToken() == null) {
+            throw new org.testng.SkipException("Buyer login credentials missing: set BUYER_LOGIN_PHONE / "
+                    + "BUYER_LOGIN_OTP or create src/test/resources/secrets.properties.");
+        }
+        String token = buyerAppGuestSpec()
+                .body(java.util.Map.of("phoneNumber", config.buyerAppPhoneNumber(), "token", config.buyerAppToken()))
+                .post("/api/auth/login")
+                .jsonPath().getString("data.accessToken");
+        if (token == null || token.isEmpty()) {
+            throw new org.testng.SkipException("Buyer App login failed; cannot run authenticated tests.");
+        }
+        VariableManager.setBuyerAppToken(token);
+        VariableManager.saveBuyerAppTokenToFile(); // in-memory only: shares the token with other threads
+        logger.info("Logged in as the test buyer on demand");
+        return token;
     }
 }

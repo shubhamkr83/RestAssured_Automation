@@ -22,6 +22,8 @@ import static org.hamcrest.Matchers.*;
  * Implements comprehensive Postman test scripts for marking catalog as done
  * validation.
  */
+@TmsLink("TC-ADMIN-003")
+@TmsLink("TC-ADMIN-004")
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
 public class MarkAsDoneTest extends BaseTest {

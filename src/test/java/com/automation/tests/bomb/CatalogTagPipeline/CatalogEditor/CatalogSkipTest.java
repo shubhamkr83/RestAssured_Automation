@@ -21,6 +21,8 @@ import static org.hamcrest.Matchers.*;
  * {{bizup_base}}/v1/admin/editor/assign/videos/skip/{{seller_id}}/{{catalog_foassign_id}}
  * Implements comprehensive Postman test scripts for catalog skip validation.
  */
+@TmsLink("TC-ADMIN-007")
+@TmsLink("TC-ADMIN-008")
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
 public class CatalogSkipTest extends BaseTest {

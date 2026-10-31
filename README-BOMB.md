@@ -259,7 +259,7 @@ POST /v2/ai/tags-to-text
 ### **🚀 Quick Start**
 
 ```bash
-# Run complete BOMB API test suite (26 tests)
+# Run complete BOMB API test suite
 mvn clean test -Pbomb
 
 # Alternative: Using TestNG XML
@@ -607,8 +607,8 @@ This BOMB API module is part of a larger framework supporting multiple APIs:
 ### **📦 Complete Framework Stats**
 
 ```
-🏆 Total Test Files: 56
-📦 BOMB Pipelines: 4 (26 tests)
+🏆 Test counts: see README.md (generated)
+📦 BOMB Pipelines: 4
 🛍️ Buyer App Features: 8 (30 tests)
 🔗 Total Endpoints: 40+
 ⏱️ Total Execution: ~60s

@@ -22,6 +22,8 @@ import static org.hamcrest.Matchers.*;
  * Implements comprehensive Postman test scripts for marking video upload as
  * done validation.
  */
+@TmsLink("TC-ADMIN-003")
+@TmsLink("TC-ADMIN-004")
 @Epic("BOMB Video Tagging Pipeline")
 @Feature("Video Upload and Assign to Editor")
 public class VideoUploadMarkAsDoneTest extends BaseTest {

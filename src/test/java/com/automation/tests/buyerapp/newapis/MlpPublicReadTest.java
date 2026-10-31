@@ -29,16 +29,16 @@ public class MlpPublicReadTest extends BaseTest {
     /** An occasion that returned 200 on /v1/mlp/{occasion}; null if none has active structures. */
     private String liveOccasion;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setup() {
         baseUrl = config.buyerAppBaseUrl();
-        token = VariableManager.getBuyerAppToken();
-        Response r = RestAssured.given().baseUri(baseUrl).when().get(BuyerAppEndpoints.MLP_OCCASIONS);
+        token = buyerAppTokenOrNull();
+        Response r = buyerAppGuestSpec().when().get(BuyerAppEndpoints.MLP_OCCASIONS);
         if (r.getStatusCode() == HttpStatus.OK) {
             List<String> occasions = r.jsonPath().getList("data.occasions");
             if (occasions != null) {
                 for (String o : occasions) {
-                    Response p = RestAssured.given().baseUri(baseUrl).pathParam("occasion", o)
+                    Response p = buyerAppGuestSpec().pathParam("occasion", o)
                             .when().get(BuyerAppEndpoints.MLP_BY_OCCASION);
                     if (p.getStatusCode() == HttpStatus.OK) {
                         liveOccasion = o;
@@ -50,7 +50,7 @@ public class MlpPublicReadTest extends BaseTest {
     }
 
     private RequestSpecification spec() {
-        return RestAssured.given().baseUri(baseUrl);
+        return buyerAppGuestSpec();
     }
 
     private String requireLive() {
@@ -120,7 +120,7 @@ public class MlpPublicReadTest extends BaseTest {
     @TmsLink("TC-MLP-009") @Story("MLP validation") @Severity(SeverityLevel.NORMAL)
     public void invalidOccasionChars() {
         // Pre-encoded so RestAssured does not double-encode the path.
-        Response r = RestAssured.given().baseUri(baseUrl).urlEncodingEnabled(false)
+        Response r = buyerAppGuestSpec().urlEncodingEnabled(false)
                 .when().get("/v1/mlp/BAD%20OCC!");
         ApiErrorAssertions.assertApiError(r, HttpStatus.BAD_REQUEST);
     }

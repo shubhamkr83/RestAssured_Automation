@@ -24,6 +24,8 @@ import static org.hamcrest.Matchers.*;
  * Implements comprehensive Postman test scripts for editor-assigned catalogs
  * validation.
  */
+@TmsLink("TC-ADMIN-012")
+@TmsLink("TC-ADMIN-016")
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
 public class AllCatalogsAssignedTest extends BaseTest {

@@ -55,10 +55,19 @@ pipeline {
                     
                     // Use catchError to continue pipeline even if tests fail
                     catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                        sh """
-                            mvn clean test ${mavenProfile} \
-                            -Dallure.results.directory=target/allure-results
-                        """
+                        // Login credentials come from Jenkins "Secret text" credentials
+                        // (see CICD-SETUP.md); ConfigManager reads these env vars.
+                        withCredentials([
+                            string(credentialsId: 'restassured-bomb-login-phone', variable: 'BOMB_LOGIN_PHONE'),
+                            string(credentialsId: 'restassured-bomb-login-otp', variable: 'BOMB_LOGIN_OTP'),
+                            string(credentialsId: 'restassured-buyer-login-phone', variable: 'BUYER_LOGIN_PHONE'),
+                            string(credentialsId: 'restassured-buyer-login-otp', variable: 'BUYER_LOGIN_OTP')
+                        ]) {
+                            sh """
+                                mvn clean test ${mavenProfile} \
+                                -Dallure.results.directory=target/allure-results
+                            """
+                        }
                     }
                 }
             }

@@ -22,13 +22,13 @@ public class EventsIngestionNegativeTest extends BaseTest {
 
     private String baseUrl;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setup() {
         baseUrl = config.buyerAppBaseUrl();
     }
 
     private Response post(String path, String body) {
-        return RestAssured.given().baseUri(baseUrl).contentType("application/json").body(body).when().post(path);
+        return buyerAppGuestSpec().body(body).when().post(path);
     }
 
     private void assertGoEnvelope(Response r, int status, String message, String error) {

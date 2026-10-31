@@ -22,21 +22,18 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Profile Page")
 @Feature("App Update API")
+@TmsLink("TC-ORDER-002")
 public class AppUpdateTest extends BaseTest {
 
         private static Response appUpdateResponse;
         private static AppUpdateResponse appUpdateResponseData;
         private String buyerAppBaseUrl;
 
-        @BeforeClass
+        @BeforeClass(alwaysRun = true)
         public void setupBuyerApp() {
                 buyerAppBaseUrl = config.buyerAppBaseUrl();
                 logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-                String token = VariableManager.getBuyerAppToken();
-                if (token == null || token.isEmpty()) {
-                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-                }
                 logger.info("Using Buyer App token from VariableManager");
         }
 
@@ -45,10 +42,7 @@ public class AppUpdateTest extends BaseTest {
         @Severity(SeverityLevel.CRITICAL)
         public void testResponseStatusCode200() {
                 // Send GET request with authentication
-                appUpdateResponse = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                appUpdateResponse = buyerAppSpec()
                                 .when()
                                 .get(BuyerAppEndpoints.APP_UPDATE);
 

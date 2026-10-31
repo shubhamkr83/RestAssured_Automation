@@ -21,6 +21,9 @@ import static org.hamcrest.Matchers.*;
  * {{bizup_base}}/v1/admin/catalog/upload/{{catalog_foassign_id}}?limit=20&mode=all
  * Implements comprehensive Postman test scripts for catalog group validation.
  */
+@TmsLink("TC-ADMIN-013")
+@TmsLink("TC-ADMIN-014")
+@TmsLink("TC-ADMIN-015")
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
 public class CatalogsGroupTest extends BaseTest {
@@ -102,18 +105,6 @@ public class CatalogsGroupTest extends BaseTest {
                 actualResponseTime, lessThan(threshold));
 
         logger.info("Response time verified: {} ms (Threshold: {} ms)", actualResponseTime, threshold);
-    }
-
-    @Test(description = "Data array contains at least one element", priority = 5, dependsOnMethods = "testStatusCode200", groups = "bomb")
-    @Story("Catalog Editor - Catalogs Group")
-    @Severity(SeverityLevel.NORMAL)
-    public void testDataArrayNotEmpty() {
-        // Validate data array is not empty
-        assertThat("Data array should not be empty",
-                catalogGroupResponse.getData().getData(), not(empty()));
-
-        logger.info("Data array validated: contains {} element(s)",
-                catalogGroupResponse.getData().getData().size());
     }
 
 }

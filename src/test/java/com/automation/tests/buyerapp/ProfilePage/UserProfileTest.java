@@ -28,15 +28,11 @@ public class UserProfileTest extends BaseTest {
     private static UserProfileResponse userProfileResponseData;
     private String buyerAppBaseUrl;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-        String token = VariableManager.getBuyerAppToken();
-        if (token == null || token.isEmpty()) {
-            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-        }
         logger.info("Using Buyer App token from VariableManager");
     }
 
@@ -45,10 +41,7 @@ public class UserProfileTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void testResponseStatusCode200() {
         // Send GET request with authentication
-        userProfileResponse = RestAssured.given()
-                .baseUri(buyerAppBaseUrl)
-                .contentType("application/json")
-                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+        userProfileResponse = buyerAppSpec()
                 .when()
                 .get(BuyerAppEndpoints.USER_PROFILE);
 

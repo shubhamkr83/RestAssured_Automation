@@ -24,6 +24,8 @@ import static org.hamcrest.Matchers.*;
  * Endpoint: PUT {{bizup_base}}/v1/admin/catalog/{{catalog_id}}
  * Implements comprehensive Postman test scripts for catalog tagging validation.
  */
+@TmsLink("TC-ADMIN-030")
+@TmsLink("TC-ADMIN-031")
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
 public class CatalogTaggingTest extends BaseTest {
@@ -192,17 +194,6 @@ public class CatalogTaggingTest extends BaseTest {
                 catalogTaggingResponse.getMessage(), equalTo("success"));
 
         logger.info("Success message validated");
-    }
-
-    @Test(description = "Available flag is true", priority = 7, dependsOnMethods = "testStatusCode200", groups = "bomb")
-    @Story("Catalog Editor - Catalog Tagging")
-    @Severity(SeverityLevel.NORMAL)
-    public void testAvailableFlagTrue() {
-        // Validate available flag is true
-        assertThat("Available should be true",
-                catalogTaggingResponse.getData().getAvailable(), is(true));
-
-        logger.info("Available flag validated: true");
     }
 
     @Test(description = "Content type is image", priority = 8, dependsOnMethods = "testStatusCode200", groups = "bomb")

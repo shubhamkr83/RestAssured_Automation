@@ -60,6 +60,16 @@ echo "scripts/notification-config.json" >> .gitignore
    - Google Chat Webhook: ID = `google-chat-webhook-dev`
    - SMTP Credentials: ID = `smtp-credentials`
    - AWS Credentials (for S3 upload)
+   - Test-account logins, each as **Secret text** (the Jenkinsfile maps them to env vars):
+
+     | Credential ID | Env var | Value |
+     |---|---|---|
+     | `restassured-bomb-login-phone` | `BOMB_LOGIN_PHONE` | BOMB test account phone, `+91…` |
+     | `restassured-bomb-login-otp` | `BOMB_LOGIN_OTP` | its fixed OTP |
+     | `restassured-buyer-login-phone` | `BUYER_LOGIN_PHONE` | Buyer App test account phone |
+     | `restassured-buyer-login-otp` | `BUYER_LOGIN_OTP` | its fixed OTP |
+
+     These are no longer in `config.properties`. Without them the login steps fail.
 
 3. **Choose test profile when running**:
    - `all` - Runs both BOMB and Buyer App tests

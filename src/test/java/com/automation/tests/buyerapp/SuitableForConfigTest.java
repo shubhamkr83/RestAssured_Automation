@@ -22,21 +22,19 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Configuration")
 @Feature("Suitable For Config API")
+@TmsLink("TC-FEED-004")
+@TmsLink("TC-FEED-003")
 public class SuitableForConfigTest extends BaseTest {
 
         private static Response configResponse;
         private static SuitableForConfigResponse configResponseData;
         private String buyerAppBaseUrl;
 
-        @BeforeClass
+        @BeforeClass(alwaysRun = true)
         public void setupBuyerApp() {
                 buyerAppBaseUrl = config.buyerAppBaseUrl();
                 logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-                String token = VariableManager.getBuyerAppToken();
-                if (token == null || token.isEmpty()) {
-                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-                }
                 logger.info("Using Buyer App token from VariableManager");
         }
 
@@ -45,10 +43,7 @@ public class SuitableForConfigTest extends BaseTest {
         @Severity(SeverityLevel.CRITICAL)
         public void testResponseStatusCode200() {
                 // Send GET request with authentication
-                configResponse = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                configResponse = buyerAppSpec()
                                 .when()
                                 .get(BuyerAppEndpoints.FEED_HOME_CONFIG);
 

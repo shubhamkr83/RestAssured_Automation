@@ -2,12 +2,19 @@ package com.automation.config;
 
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.ConfigCache;
+import org.aeonbits.owner.Config.LoadPolicy;
+import org.aeonbits.owner.Config.LoadType;
 
 /**
  * Configuration interface using Owner library.
- * Automatically loads properties from config.properties file.
+ * Precedence: -D system properties (CI env vars are copied into these by
+ * getInstance), then the gitignored secrets.properties, then config.properties.
+ * MERGE: every source is read; the first one that defines a key wins.
  */
+@LoadPolicy(LoadType.MERGE)
 @Config.Sources({
+        "system:properties",
+        "classpath:secrets.properties",
         "classpath:config.properties",
         "classpath:config-${env}.properties"
 })
@@ -17,7 +24,28 @@ public interface ConfigManager extends Config {
      * Get the singleton instance of ConfigManager
      */
     static ConfigManager getInstance() {
+        applySecretEnvVars();
         return ConfigCache.getOrCreate(ConfigManager.class);
+    }
+
+    /**
+     * CI supplies the login credentials as env vars. Copy each one into its
+     * property key unless a -D system property already set it, so the
+     * "system:properties" source picks it up. Runs before the config is cached.
+     */
+    static void applySecretEnvVars() {
+        String[][] envToKey = {
+                {"BOMB_LOGIN_PHONE", "login.phone.number"},
+                {"BOMB_LOGIN_OTP", "login.token"},
+                {"BUYER_LOGIN_PHONE", "buyer.app.phone.number"},
+                {"BUYER_LOGIN_OTP", "buyer.app.token"},
+        };
+        for (String[] pair : envToKey) {
+            String value = System.getenv(pair[0]);
+            if (value != null && !value.isBlank() && System.getProperty(pair[1]) == null) {
+                System.setProperty(pair[1], value);
+            }
+        }
     }
 
     @Key("base.url")
@@ -75,6 +103,26 @@ public interface ConfigManager extends Config {
     String buyerAppPhoneNumber();
 
     @Key("buyer.app.token")
-    @DefaultValue("000000")
     String buyerAppToken();
+
+    // Headers the Navo app sends on every request
+    @Key("buyer.app.version")
+    @DefaultValue("4.1.3-debug")
+    String buyerAppVersion();
+
+    @Key("buyer.app.version.code")
+    @DefaultValue("420")
+    String buyerAppVersionCode();
+
+    @Key("buyer.app.user.segment")
+    @DefaultValue("2")
+    String buyerAppUserSegment();
+
+    @Key("buyer.app.zone")
+    @DefaultValue("india")
+    String buyerAppZone();
+
+    @Key("buyer.app.language")
+    @DefaultValue("en")
+    String buyerAppLanguage();
 }

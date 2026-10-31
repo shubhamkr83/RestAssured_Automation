@@ -25,21 +25,20 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Video Feed")
 @Feature("Video Feed (T.V) API")
+@TmsLink("TC-FEED-003")
+@TmsLink("TC-FEED-001")
+@TmsLink("TC-FEED-002")
 public class VideoFeedTvTest extends BaseTest {
 
     private static Response videoFeedResponse;
     private static VideoFeedResponse videoFeedResponseData;
     private String buyerAppBaseUrl;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-        String token = VariableManager.getBuyerAppToken();
-        if (token == null || token.isEmpty()) {
-            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-        }
         logger.info("Using Buyer App token from VariableManager");
     }
 
@@ -70,10 +69,7 @@ public class VideoFeedTvTest extends BaseTest {
                 .build();
 
         // Send POST request with authentication
-        videoFeedResponse = RestAssured.given()
-                .baseUri(buyerAppBaseUrl)
-                .contentType("application/json")
-                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+        videoFeedResponse = buyerAppSpec()
                 .body(requestBody)
                 .when()
                 .post(BuyerAppEndpoints.FEED_TV);

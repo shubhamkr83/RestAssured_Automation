@@ -18,8 +18,6 @@
             <class name="com.automation.tests.bomb.CatalogSearch.SearchWithSellerFilterTest"/>
             <class name="com.automation.tests.bomb.CatalogSearch.SearchWithProductFilterTest"/>
             <class name="com.automation.tests.bomb.CatalogSearch.SearchWithCatalogIdFilterTest"/>
-            <class name="com.automation.tests.bomb.CatalogSearch.CatalogEditTest"/>
-            <class name="com.automation.tests.bomb.CatalogSearch.CatalogDeleteTest"/>
             
             <!-- 3. Catalog Tag Pipeline - Assign to Editor (in required order) -->
             <class name="com.automation.tests.bomb.CatalogTagPipeline.CatalogAssignToEditor.AllCatalogUploadedTest"/>

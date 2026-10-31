@@ -24,21 +24,19 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Home Page")
 @Feature("Home Catalog Feed API")
+@TmsLink("TC-FEED-002")
+@TmsLink("TC-FEED-001")
 public class CatalogFeedTest extends BaseTest {
 
         private static Response catalogFeedResponse;
         private static HomeCatalogFeedResponse catalogFeedResponseData;
         private String buyerAppBaseUrl;
 
-        @BeforeClass
+        @BeforeClass(alwaysRun = true)
         public void setupBuyerApp() {
                 buyerAppBaseUrl = config.buyerAppBaseUrl();
                 logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-                String token = VariableManager.getBuyerAppToken();
-                if (token == null || token.isEmpty()) {
-                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-                }
                 logger.info("Using Buyer App token from VariableManager");
         }
 
@@ -52,10 +50,7 @@ public class CatalogFeedTest extends BaseTest {
                                 : "saree"; // Default value
 
                 // Send GET request with authentication and query parameters
-                catalogFeedResponse = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                catalogFeedResponse = buyerAppSpec()
                                 .queryParam("size", 6)
                                 .queryParam("page", 0)
                                 .queryParam("suitable_for", suitableForParam)
@@ -121,10 +116,7 @@ public class CatalogFeedTest extends BaseTest {
         @Severity(SeverityLevel.NORMAL)
         public void testEmptySuitableForParameter() {
                 // Test handling of empty suitable_for parameter
-                Response response = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                Response response = buyerAppSpec()
                                 .queryParam("size", 6)
                                 .queryParam("page", 0)
                                 .queryParam("suitable_for", "")
@@ -153,10 +145,7 @@ public class CatalogFeedTest extends BaseTest {
                                 : "saree";
 
                 // Test handling of maximum allowed size parameter
-                Response response = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                Response response = buyerAppSpec()
                                 .queryParam("size", 50)
                                 .queryParam("page", 0)
                                 .queryParam("suitable_for", suitableForParam)
@@ -184,10 +173,7 @@ public class CatalogFeedTest extends BaseTest {
                                 : "saree";
 
                 // Test handling of different Accept-Language headers
-                Response response = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                Response response = buyerAppSpec()
                                 .header("Accept-Language", "hi") // Hindi language
                                 .queryParam("size", 6)
                                 .queryParam("page", 0)

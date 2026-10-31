@@ -25,6 +25,9 @@ import static org.hamcrest.Matchers.*;
  * Implements comprehensive Postman test scripts for video tagging edit
  * validation.
  */
+@TmsLink("TC-ADMIN-004")
+@TmsLink("TC-ADMIN-005")
+@TmsLink("TC-ADMIN-009")
 @Epic("BOMB Video Tagging Pipeline")
 @Feature("Video Tagging")
 public class VideoTaggingEditButtonTest extends BaseTest {

@@ -27,14 +27,14 @@ public class BannerPlacementTest extends BaseTest {
     private String token;
     private static final String CAT = "saree";
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setup() {
         baseUrl = config.buyerAppBaseUrl();
-        token = VariableManager.getBuyerAppToken();
+        token = buyerAppTokenOrNull();
     }
 
     private RequestSpecification guest() {
-        return RestAssured.given().baseUri(baseUrl);
+        return buyerAppGuestSpec();
     }
 
     private RequestSpecification authed() {

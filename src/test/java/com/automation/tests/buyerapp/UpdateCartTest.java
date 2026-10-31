@@ -6,6 +6,7 @@ import com.automation.constants.HttpStatus;
 import com.automation.models.request.UpdateCartRequest;
 import com.automation.models.response.UpdateCartResponse;
 import com.automation.utils.JsonUtils;
+import com.automation.utils.TestDataResolver;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -26,6 +27,9 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Cart")
 @Feature("Update Cart API")
+@TmsLink("TC-USER-003")
+@TmsLink("TC-USER-001")
+@TmsLink("TC-USER-002")
 public class UpdateCartTest extends BaseTest {
 
     private static Response updateCartResponse;
@@ -35,15 +39,11 @@ public class UpdateCartTest extends BaseTest {
     // Test data
     private static final Integer QUANTITY = 1;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-        String token = VariableManager.getBuyerAppToken();
-        if (token == null || token.isEmpty()) {
-            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-        }
         logger.info("Using Buyer App token from VariableManager");
     }
 
@@ -54,15 +54,12 @@ public class UpdateCartTest extends BaseTest {
         // Prepare request body
         UpdateCartRequest requestBody = UpdateCartRequest.builder()
                 .quantity(QUANTITY)
-                .cart_id(VariableManager.get("cart_id", "68383213df5a92a14ddba268"))
-                .cat_id(VariableManager.get("live_catalog_id", "67c59d8ff22202c05e7d612e"))
+                .cart_id(TestDataResolver.cartId(BaseTest::buyerAppSpec))
+                .cat_id(TestDataResolver.cartCatalogId(BaseTest::buyerAppSpec))
                 .build();
 
         // Send POST request with authentication
-        updateCartResponse = RestAssured.given()
-                .baseUri(buyerAppBaseUrl)
-                .contentType("application/json")
-                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+        updateCartResponse = buyerAppSpec()
                 .body(requestBody)
                 .when()
                 .post(BuyerAppEndpoints.USER_UPDATE_CART);

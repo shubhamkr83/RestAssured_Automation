@@ -22,21 +22,19 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Profile Page")
 @Feature("Auth Validate API")
+@TmsLink("TC-AUTH-002")
+@TmsLink("TC-AUTH-001")
 public class AuthValidateTest extends BaseTest {
 
     private static Response authValidateResponse;
     private static AuthValidateResponse authValidateResponseData;
     private String buyerAppBaseUrl;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-        String token = VariableManager.getBuyerAppToken();
-        if (token == null || token.isEmpty()) {
-            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-        }
         logger.info("Using Buyer App token from VariableManager");
     }
 
@@ -45,10 +43,7 @@ public class AuthValidateTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void testResponseStatusCode200() {
         // Send GET request with authentication
-        authValidateResponse = RestAssured.given()
-                .baseUri(buyerAppBaseUrl)
-                .contentType("application/json")
-                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+        authValidateResponse = buyerAppSpec()
                 .when()
                 .get(BuyerAppEndpoints.AUTH_VALIDATE);
 

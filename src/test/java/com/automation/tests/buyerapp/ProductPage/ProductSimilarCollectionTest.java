@@ -23,21 +23,19 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Product Page")
 @Feature("Product Similar Collection API")
+@TmsLink("TC-COLLECTION-002")
+@TmsLink("TC-COLLECTION-001")
 public class ProductSimilarCollectionTest extends BaseTest {
 
         private static Response relatedCollectionResponse;
         private static RelatedCollectionResponse relatedCollectionResponseData;
         private String buyerAppBaseUrl;
 
-        @BeforeClass
+        @BeforeClass(alwaysRun = true)
         public void setupBuyerApp() {
                 buyerAppBaseUrl = config.buyerAppBaseUrl();
                 logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-                String token = VariableManager.getBuyerAppToken();
-                if (token == null || token.isEmpty()) {
-                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-                }
                 logger.info("Using Buyer App token from VariableManager");
         }
 
@@ -46,10 +44,7 @@ public class ProductSimilarCollectionTest extends BaseTest {
         @Severity(SeverityLevel.CRITICAL)
         public void testResponseStatus() {
                 // Send GET request with authentication
-                relatedCollectionResponse = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                relatedCollectionResponse = buyerAppSpec()
                                 .when()
                                 .pathParam("collectionId", VariableManager.get("collection_id"))
                                 .get("/v1/collection/{collectionId}/related");

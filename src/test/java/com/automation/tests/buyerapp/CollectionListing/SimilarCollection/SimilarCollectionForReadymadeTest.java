@@ -30,20 +30,19 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Collection Listing")
 @Feature("Similar Collection for Readymade API")
+@TmsLink("TC-COLLECTION-002")
+@TmsLink("TC-COLLECTION-004")
+@TmsLink("TC-COLLECTION-003")
 public class SimilarCollectionForReadymadeTest extends BaseTest {
 
     private static List<SimilarCollectionData> similarCollectionData;
     private String buyerAppBaseUrl;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-        String token = VariableManager.getBuyerAppToken();
-        if (token == null || token.isEmpty()) {
-            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-        }
         logger.info("Using Buyer App token from VariableManager");
     }
 
@@ -52,10 +51,7 @@ public class SimilarCollectionForReadymadeTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void testFetchAllCollectionsAndSimilar() {
         // Step 1: Get all collections
-        Response allCollectionsResponse = RestAssured.given()
-                .baseUri(buyerAppBaseUrl)
-                .contentType("application/json")
-                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+        Response allCollectionsResponse = buyerAppSpec()
                 .queryParam("suitable_for", "readymade")
                 .when()
                 .get(BuyerAppEndpoints.COLLECTION_ALL);
@@ -76,10 +72,7 @@ public class SimilarCollectionForReadymadeTest extends BaseTest {
                 // Add delay to avoid rate limiting
                 Thread.sleep(200);
 
-                Response similarResponse = RestAssured.given()
-                        .baseUri(buyerAppBaseUrl)
-                        .contentType("application/json")
-                        .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                Response similarResponse = buyerAppSpec()
                         .when()
                         .get("/v1/collection/" + collection.get_id() + "/similar");
 

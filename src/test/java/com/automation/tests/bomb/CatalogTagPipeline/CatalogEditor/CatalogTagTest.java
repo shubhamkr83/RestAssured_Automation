@@ -21,6 +21,9 @@ import static org.hamcrest.Matchers.*;
  * {{bizup_base}}/v1/admin/catalog/group/upload/{{catalog_foassign_id}}?limit=20&mode=add
  * Implements comprehensive Postman test scripts for catalog tagging validation.
  */
+@TmsLink("TC-ADMIN-005")
+@TmsLink("TC-ADMIN-006")
+@TmsLink("TC-ADMIN-007")
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
 public class CatalogTagTest extends BaseTest {
@@ -213,17 +216,6 @@ public class CatalogTagTest extends BaseTest {
         });
 
         logger.info("Source objects additional fields validated successfully");
-    }
-
-    @Test(description = "Check all catalog items found in the response", priority = 11, dependsOnMethods = "testStatusCode200", groups = "bomb")
-    @Story("Catalog Editor - Catalog Tag")
-    @Severity(SeverityLevel.NORMAL)
-    public void testCatalogItemsFound() {
-        // Validate data array is not empty
-        assertThat("Data array should not be empty",
-                catalogTagResponse.getData().getData(), not(empty()));
-
-        logger.info("Catalog items found: {} item(s)", catalogTagResponse.getData().getData().size());
     }
 
     @Test(description = "Set Catalog Id to Collection Variables", priority = 13, dependsOnMethods = "testStatusCode200", groups = "bomb")

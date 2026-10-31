@@ -27,10 +27,10 @@ public class ReferralValidationTest extends BaseTest {
     private String baseUrl;
     private String buyerToken;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setup() {
         baseUrl = config.buyerAppBaseUrl();
-        buyerToken = VariableManager.getBuyerAppToken();
+        buyerToken = buyerAppTokenOrNull();
     }
 
     private void requireBuyerToken() {
@@ -40,7 +40,7 @@ public class ReferralValidationTest extends BaseTest {
     }
 
     private Response refer(String body) {
-        return RestAssured.given().baseUri(baseUrl).contentType("application/json")
+        return buyerAppGuestSpec()
                 .header("Authorization", "JWT " + buyerToken).body(body)
                 .when().post(BuyerAppEndpoints.REFERRAL);
     }
@@ -48,7 +48,7 @@ public class ReferralValidationTest extends BaseTest {
     @Test(description = "TC-REFERRAL-003 — POST /v1/referral with no token", groups = "buyerapp")
     @TmsLink("TC-REFERRAL-003") @Story("Create referral") @Severity(SeverityLevel.CRITICAL)
     public void createWithoutToken() {
-        Response resp = RestAssured.given().baseUri(baseUrl).contentType("application/json")
+        Response resp = buyerAppGuestSpec()
                 .body("{\"referredPhone\":\"+919876543210\"}").when().post(BuyerAppEndpoints.REFERRAL);
         assertApiError(resp, HttpStatus.UNAUTHORIZED);
     }
@@ -100,7 +100,7 @@ public class ReferralValidationTest extends BaseTest {
     @TmsLink("TC-REFERRAL-013") @Story("List referrals") @Severity(SeverityLevel.CRITICAL)
     public void listOwnReferrals() {
         requireBuyerToken();
-        Response resp = RestAssured.given().baseUri(baseUrl)
+        Response resp = buyerAppGuestSpec()
                 .header("Authorization", "JWT " + buyerToken).when().get(BuyerAppEndpoints.REFERRAL);
         assertThat("status", resp.getStatusCode(), equalTo(HttpStatus.OK));
         assertThat("referrals array", resp.jsonPath().getList("data.referrals"), notNullValue());
@@ -110,7 +110,7 @@ public class ReferralValidationTest extends BaseTest {
     @Test(description = "TC-REFERRAL-015 — GET /v1/referral with no token", groups = "buyerapp")
     @TmsLink("TC-REFERRAL-015") @Story("List referrals") @Severity(SeverityLevel.NORMAL)
     public void listWithoutToken() {
-        Response resp = RestAssured.given().baseUri(baseUrl).when().get(BuyerAppEndpoints.REFERRAL);
+        Response resp = buyerAppGuestSpec().when().get(BuyerAppEndpoints.REFERRAL);
         assertApiError(resp, HttpStatus.UNAUTHORIZED);
     }
 }
