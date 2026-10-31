@@ -23,21 +23,19 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Home Page")
 @Feature("Feed Banners API")
+@TmsLink("TC-FEED-004")
+@TmsLink("TC-FEED-003")
 public class BannersTest extends BaseTest {
 
         private static Response bannersResponse;
         private static BannersResponse bannersResponseData;
         private String buyerAppBaseUrl;
 
-        @BeforeClass
+        @BeforeClass(alwaysRun = true)
         public void setupBuyerApp() {
                 buyerAppBaseUrl = config.buyerAppBaseUrl();
                 logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-                String token = VariableManager.getBuyerAppToken();
-                if (token == null || token.isEmpty()) {
-                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-                }
                 logger.info("Using Buyer App token from VariableManager");
         }
 
@@ -57,10 +55,7 @@ public class BannersTest extends BaseTest {
                                 : "saree"; // Default value
 
                 // Send GET request with authentication and query parameter
-                bannersResponse = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                bannersResponse = buyerAppSpec()
                                 .queryParam("suitable_for", suitableForParam)
                                 .when()
                                 .get(BuyerAppEndpoints.FEED_BANNERS);

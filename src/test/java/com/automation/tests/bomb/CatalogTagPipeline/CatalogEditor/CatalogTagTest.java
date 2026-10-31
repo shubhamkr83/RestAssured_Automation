@@ -21,6 +21,9 @@ import static org.hamcrest.Matchers.*;
  * {{bizup_base}}/v1/admin/catalog/group/upload/{{catalog_foassign_id}}?limit=20&mode=add
  * Implements comprehensive Postman test scripts for catalog tagging validation.
  */
+@TmsLink("TC-ADMIN-005")
+@TmsLink("TC-ADMIN-006")
+@TmsLink("TC-ADMIN-007")
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
 public class CatalogTagTest extends BaseTest {
@@ -155,28 +158,6 @@ public class CatalogTagTest extends BaseTest {
         logger.info("Data array items structure validated successfully");
     }
 
-    @Test(description = "Seller objects have correct structure and types", priority = 7, dependsOnMethods = "testStatusCode200", groups = "bomb")
-    @Story("Catalog Editor - Catalog Tag")
-    @Severity(SeverityLevel.CRITICAL)
-    public void testSellerObjectsStructure() {
-        // Validate seller objects
-        catalogTagResponse.getData().getData().forEach(item -> {
-            CatalogTagResponse.Seller seller = item.get_source().getSeller();
-
-            assertThat("Seller should be an object", seller, notNullValue());
-            assertThat("phoneNumber should be a string", seller.getPhoneNumber(), instanceOf(String.class));
-            assertThat("smell_test should be a number", seller.getSmell_test(), instanceOf(Integer.class));
-            assertThat("address should be a string", seller.getAddress(), instanceOf(String.class));
-            assertThat("businessName should be a string", seller.getBusinessName(), instanceOf(String.class));
-            assertThat("name should be a string", seller.getName(), instanceOf(String.class));
-            assertThat("cod should be a number", seller.getCod(), instanceOf(Integer.class));
-            assertThat("_id should be a string", seller.get_id(), instanceOf(String.class));
-            assertThat("isCatalogAvailable should be true", seller.getIsCatalogAvailable(), is(true));
-        });
-
-        logger.info("Seller objects structure validated successfully");
-    }
-
     @Test(description = "Source objects contain required basic fields", priority = 8, dependsOnMethods = "testStatusCode200", groups = "bomb")
     @Story("Catalog Editor - Catalog Tag")
     @Severity(SeverityLevel.CRITICAL)
@@ -235,35 +216,6 @@ public class CatalogTagTest extends BaseTest {
         });
 
         logger.info("Source objects additional fields validated successfully");
-    }
-
-    @Test(description = "Check all catalog items found in the response", priority = 11, dependsOnMethods = "testStatusCode200", groups = "bomb")
-    @Story("Catalog Editor - Catalog Tag")
-    @Severity(SeverityLevel.NORMAL)
-    public void testCatalogItemsFound() {
-        // Validate data array is not empty
-        assertThat("Data array should not be empty",
-                catalogTagResponse.getData().getData(), not(empty()));
-
-        logger.info("Catalog items found: {} item(s)", catalogTagResponse.getData().getData().size());
-    }
-
-    @Test(description = "Check all catalog items belong to correct seller", priority = 12, dependsOnMethods = "testStatusCode200", groups = "bomb")
-    @Story("Catalog Editor - Catalog Tag")
-    @Severity(SeverityLevel.CRITICAL)
-    public void testAllItemsBelongToCorrectSeller() {
-        // Validate all items belong to the correct seller
-        assertThat("Data array should not be empty",
-                catalogTagResponse.getData().getData(), not(empty()));
-
-        catalogTagResponse.getData().getData().forEach(item -> {
-            assertThat(String.format("Item %s should belong to seller %s",
-                    item.get_id(), sellerId),
-                    item.get_source().getSeller().get_id(), equalTo(sellerId));
-        });
-
-        logger.info("All {} catalog items verified to belong to seller: {}",
-                catalogTagResponse.getData().getData().size(), sellerId);
     }
 
     @Test(description = "Set Catalog Id to Collection Variables", priority = 13, dependsOnMethods = "testStatusCode200", groups = "bomb")

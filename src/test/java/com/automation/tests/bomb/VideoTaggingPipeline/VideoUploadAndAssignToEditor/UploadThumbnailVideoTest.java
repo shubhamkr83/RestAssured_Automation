@@ -25,6 +25,8 @@ import static org.hamcrest.Matchers.*;
  * Implements comprehensive Postman test scripts for video and thumbnail upload
  * validation.
  */
+@TmsLink("TC-ADMIN-012")
+@TmsLink("TC-ADMIN-013")
 @Epic("BOMB Video Tagging Pipeline")
 @Feature("Video Upload and Assign to Editor")
 public class UploadThumbnailVideoTest extends BaseTest {

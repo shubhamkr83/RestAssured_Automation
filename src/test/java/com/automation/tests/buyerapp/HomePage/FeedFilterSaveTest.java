@@ -25,6 +25,9 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Home Page")
 @Feature("Feed Filter Save API")
+@TmsLink("TC-FEED-003")
+@TmsLink("TC-FEED-001")
+@TmsLink("TC-FEED-002")
 public class FeedFilterSaveTest extends BaseTest {
 
         public static String suitableFor; // Store suitable_for value for other tests
@@ -32,15 +35,11 @@ public class FeedFilterSaveTest extends BaseTest {
         private static FeedFilterSaveResponse filterSaveResponseData;
         private String buyerAppBaseUrl;
 
-        @BeforeClass
+        @BeforeClass(alwaysRun = true)
         public void setupBuyerApp() {
                 buyerAppBaseUrl = config.buyerAppBaseUrl();
                 logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-                String token = VariableManager.getBuyerAppToken();
-                if (token == null || token.isEmpty()) {
-                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-                }
                 logger.info("Using Buyer App token from VariableManager");
         }
 
@@ -63,10 +62,7 @@ public class FeedFilterSaveTest extends BaseTest {
                                 .build();
 
                 // Send POST request with authentication
-                filterSaveResponse = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                filterSaveResponse = buyerAppSpec()
                                 .body(request)
                                 .when()
                                 .post(BuyerAppEndpoints.FEED_FILTERS_SAVE);

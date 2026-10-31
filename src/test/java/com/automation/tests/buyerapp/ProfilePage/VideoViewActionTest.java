@@ -23,6 +23,8 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Profile Page")
 @Feature("Video View Action API")
+@TmsLink("TC-FEED-003")
+@TmsLink("TC-FEED-002")
 public class VideoViewActionTest extends BaseTest {
 
         private static Response videoViewResponse;
@@ -34,15 +36,11 @@ public class VideoViewActionTest extends BaseTest {
         private String videoId;
         private String userId;
 
-        @BeforeClass
+        @BeforeClass(alwaysRun = true)
         public void setupBuyerApp() {
                 buyerAppBaseUrl = config.buyerAppBaseUrl();
                 logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-                String token = VariableManager.getBuyerAppToken();
-                if (token == null || token.isEmpty()) {
-                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-                }
                 logger.info("Using Buyer App token from VariableManager");
 
                 // Get video ID and user ID after VariableManager is initialized
@@ -64,10 +62,7 @@ public class VideoViewActionTest extends BaseTest {
                                 .build();
 
                 // Send POST request with authentication
-                videoViewResponse = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                videoViewResponse = buyerAppSpec()
                                 .body(requestBody)
                                 .when()
                                 .post(BuyerAppEndpoints.ACTION);

@@ -83,3 +83,5 @@ logs/
 *.temp
 
 .qodo
+# Local test credentials (see src/test/resources/secrets.properties.example)
+src/test/resources/secrets.properties

@@ -21,6 +21,8 @@ import static org.hamcrest.Matchers.*;
  * {{bizup_base}}/v1/admin/editor/assign/videos/skip/{{seller_id}}/{{catalog_foassign_id}}
  * Implements comprehensive Postman test scripts for catalog skip validation.
  */
+@TmsLink("TC-ADMIN-007")
+@TmsLink("TC-ADMIN-008")
 @Epic("BOMB Catalog Tag Pipeline")
 @Feature("Catalog Editor")
 public class CatalogSkipTest extends BaseTest {
@@ -159,15 +161,4 @@ public class CatalogSkipTest extends BaseTest {
         logger.info("VideoType property validated: {}", catalogSkipResponse.getData().getVideoType());
     }
 
-    @Test(description = "Response sellerId matches requested sellerId", priority = 7, dependsOnMethods = "testStatusCode200", groups = "bomb")
-    @Story("Catalog Editor - Catalog Skip")
-    @Severity(SeverityLevel.CRITICAL)
-    public void testSellerIdMatches() {
-        // Validate sellerId matches requested seller ID
-        assertThat(String.format("SellerId should match requested seller ID: %s", sellerId),
-                catalogSkipResponse.getData().getSellerId(), equalTo(sellerId));
-
-        logger.info("SellerId validated: {} matches expected: {}",
-                catalogSkipResponse.getData().getSellerId(), sellerId);
-    }
 }

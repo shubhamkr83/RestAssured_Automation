@@ -25,6 +25,9 @@ import static org.hamcrest.Matchers.*;
  * {{bizup_base}}/v1/admin/editor/edit/videos/{{seller_id}}/{{video_id}}
  * Implements comprehensive Postman test scripts for video tagging validation.
  */
+@TmsLink("TC-ADMIN-009")
+@TmsLink("TC-ADMIN-010")
+@TmsLink("TC-ADMIN-011")
 @Epic("BOMB Video Tagging Pipeline")
 @Feature("Video Tagging")
 public class VideoTaggingTest extends BaseTest {

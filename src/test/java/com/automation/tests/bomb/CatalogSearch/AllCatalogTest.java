@@ -23,6 +23,8 @@ import static org.hamcrest.Matchers.*;
  * Endpoint: {{bizup_base}}/v1/admin/catalog_all?offset=0&limit=20
  * Implements comprehensive Postman test scripts for catalog search validation.
  */
+@TmsLink("TC-ADMIN-001")
+@TmsLink("TC-ADMIN-002")
 @Epic("BOMB Catalog Management")
 @Feature("Catalog Search - All Catalog")
 public class AllCatalogTest extends BaseTest {

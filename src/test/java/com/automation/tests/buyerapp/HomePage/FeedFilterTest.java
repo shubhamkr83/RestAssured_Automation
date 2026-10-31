@@ -22,21 +22,18 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Home Page")
 @Feature("Feed Filters API")
+@TmsLink("TC-FEED-001")
 public class FeedFilterTest extends BaseTest {
 
         private static Response feedFilterResponse;
         private static FeedFilterResponse feedFilterResponseData;
         private String buyerAppBaseUrl;
 
-        @BeforeClass
+        @BeforeClass(alwaysRun = true)
         public void setupBuyerApp() {
                 buyerAppBaseUrl = config.buyerAppBaseUrl();
                 logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-                String token = VariableManager.getBuyerAppToken();
-                if (token == null || token.isEmpty()) {
-                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-                }
                 logger.info("Using Buyer App token from VariableManager");
         }
 
@@ -45,10 +42,7 @@ public class FeedFilterTest extends BaseTest {
         @Severity(SeverityLevel.CRITICAL)
         public void testResponseStatus() {
                 // Send GET request with authentication
-                feedFilterResponse = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                feedFilterResponse = buyerAppSpec()
                                 .when()
                                 .get(BuyerAppEndpoints.FEED_FILTERS);
 

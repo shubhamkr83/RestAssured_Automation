@@ -44,4 +44,33 @@ public final class BuyerAppEndpoints {
     // Cart endpoints
     public static final String CART = "/v1/cart";
     public static final String USER_UPDATE_CART = "/v1/user/update_cart";
+
+    // New backend-api route groups (QA sync 2026-10-30)
+    public static final String BANNER_PLACEMENT = "/v1/banner/{placement}";
+    public static final String MLP = "/v1/mlp";
+    public static final String MLP_BY_OCCASION = "/v1/mlp/{occasion}";
+    public static final String MLP_LIST = "/v1/mlp/list";
+    public static final String MLP_OCCASIONS = "/v1/mlp/occasions";
+    public static final String ADMIN_MLP = "/v1/admin/mlp";
+    public static final String NAVO_LIVE = "/v1/navo-live";
+    public static final String NAVO_LIVE_EVENT_PRODUCTS = "/v1/navo-live/events/{eventId}/products";
+    // Mounted at the root in backend-api's expressLoader.ts — NOT under /v1
+    public static final String EVENTS = "/events";
+    public static final String EVENTS_IMPRESSIONS = "/events/impressions";
+    public static final String EVENTS_V1_NOT_A_ROUTE = "/v1/events";
+    public static final String SUBSELLER_REFRESH_TOKEN = "/v1/subseller/refresh/token";
+    public static final String SUBSELLER_ME = "/v1/subseller/me";
+    public static final String SUBSELLER_CATALOG = "/v1/subseller/catalog";
+    public static final String SUBSELLER_CATALOG_BY_ID = "/v1/subseller/catalog/{id}";
+    public static final String SUBSELLER_CATALOG_CONFIRM_STOCK = "/v1/subseller/catalog/{id}/confirm-stock";
+    public static final String PRISM_CART_BOT_SESSIONS = "/v1/prism/cart-bot/sessions";
+    public static final String PRISM_CHATBOT_FEEDBACK_RUNS = "/v1/prism/chatbot-feedback/runs";
+    public static final String PRISM_CHATBOT_FEEDBACK_CONVERSATION = "/v1/prism/chatbot-feedback/conversations/{evaluationId}";
+    public static final String PRISM_BOT_TRIAL_MESSAGE = "/v1/prism/bot-trial/message";
+    public static final String PRISM_IMAGE_ENHANCEMENT_GENERATE = "/v1/prism/image-enhancement/generate";
+    public static final String PRISM_IMAGE_ENHANCEMENT_EDIT = "/v1/prism/image-enhancement/edit";
+    public static final String PRISM_IMAGE_ENHANCEMENT_SAVE = "/v1/prism/image-enhancement/save-to-catalog";
+    public static final String PRISM_IMAGE_ENHANCEMENT_REMOVE = "/v1/prism/image-enhancement/remove-from-catalog";
+    public static final String REFERRAL = "/v1/referral";
+    public static final String CHATBOT_V2_MESSAGE = "/v2/chatbot/message";
 }

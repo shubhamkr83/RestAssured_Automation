@@ -24,21 +24,19 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Home Page")
 @Feature("Featured Collection API")
+@TmsLink("TC-FEED-002")
+@TmsLink("TC-FEED-001")
 public class FeaturedCollectionTest extends BaseTest {
 
     private static Response featuredCollectionResponse;
     private static FeaturedCollectionResponse featuredCollectionResponseData;
     private String buyerAppBaseUrl;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-        String token = VariableManager.getBuyerAppToken();
-        if (token == null || token.isEmpty()) {
-            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-        }
         logger.info("Using Buyer App token from VariableManager");
     }
 
@@ -52,10 +50,7 @@ public class FeaturedCollectionTest extends BaseTest {
                 : "saree"; // Default value
 
         // Send GET request with authentication and query parameters
-        featuredCollectionResponse = RestAssured.given()
-                .baseUri(buyerAppBaseUrl)
-                .contentType("application/json")
-                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+        featuredCollectionResponse = buyerAppSpec()
                 .queryParam("size", 1)
                 .queryParam("page", 0)
                 .queryParam("suitable_for", suitableForParam)

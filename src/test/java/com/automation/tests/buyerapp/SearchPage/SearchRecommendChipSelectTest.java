@@ -26,21 +26,18 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Search Page")
 @Feature("Search Recommend Chip Select API")
+@TmsLink("TC-USER-005")
 public class SearchRecommendChipSelectTest extends BaseTest {
 
         private static Response searchChipSelectResponse;
         private static SearchRecommendChipSelectResponse searchChipSelectResponseData;
         private String buyerAppBaseUrl;
 
-        @BeforeClass
+        @BeforeClass(alwaysRun = true)
         public void setupBuyerApp() {
                 buyerAppBaseUrl = config.buyerAppBaseUrl();
                 logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-                String token = VariableManager.getBuyerAppToken();
-                if (token == null || token.isEmpty()) {
-                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-                }
                 logger.info("Using Buyer App token from VariableManager");
         }
 
@@ -57,10 +54,7 @@ public class SearchRecommendChipSelectTest extends BaseTest {
                                 : ""; // Default empty
 
                 // Send GET request with authentication and query parameters
-                searchChipSelectResponse = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                searchChipSelectResponse = buyerAppSpec()
                                 .queryParam("q", searchQuery)
                                 .queryParam("product", productId)
                                 .queryParam("page", 1)

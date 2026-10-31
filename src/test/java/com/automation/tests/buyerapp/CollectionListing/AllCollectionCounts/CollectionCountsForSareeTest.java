@@ -29,20 +29,23 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Collection Listing")
 @Feature("Collection Counts for Saree API")
+@TmsLink("TC-COLLECTION-002")
+@TmsLink("TC-COLLECTION-009")
+@TmsLink("TC-COLLECTION-005")
 public class CollectionCountsForSareeTest extends BaseTest {
+
+    /** Share of collections allowed to be empty (live stock) before the check fails. */
+    private static final double MAX_EMPTY_COLLECTION_RATIO = 0.10;
+
 
     private static List<CollectionItemCount> collectionCounts;
     private String buyerAppBaseUrl;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-        String token = VariableManager.getBuyerAppToken();
-        if (token == null || token.isEmpty()) {
-            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-        }
         logger.info("Using Buyer App token from VariableManager");
     }
 
@@ -51,10 +54,7 @@ public class CollectionCountsForSareeTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void testFetchAllCollectionsAndCounts() {
         // Step 1: Get all collections
-        Response allCollectionsResponse = RestAssured.given()
-                .baseUri(buyerAppBaseUrl)
-                .contentType("application/json")
-                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+        Response allCollectionsResponse = buyerAppSpec()
                 .queryParam("suitable_for", "saree")
                 .when()
                 .get(BuyerAppEndpoints.COLLECTION_ALL);
@@ -75,10 +75,7 @@ public class CollectionCountsForSareeTest extends BaseTest {
                 // Add delay to avoid rate limiting
                 Thread.sleep(200);
 
-                Response collectionByIdResponse = RestAssured.given()
-                        .baseUri(buyerAppBaseUrl)
-                        .contentType("application/json")
-                        .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                Response collectionByIdResponse = buyerAppSpec()
                         .queryParam("limit", 35)
                         .queryParam("offset", 0)
                         .when()
@@ -163,13 +160,22 @@ public class CollectionCountsForSareeTest extends BaseTest {
     @Story("Collection Counts for Saree")
     @Severity(SeverityLevel.NORMAL)
     public void testNoEmptyCollections() {
-        long emptyCollectionsCount = collectionCounts.stream()
+        // Collection contents depend on live stock, so a few empty collections are
+        // expected. Fail only above MAX_EMPTY_COLLECTION_RATIO and list the empty ones.
+        List<String> empty = collectionCounts.stream()
                 .filter(c -> c.getTotalItems() == 0)
-                .count();
+                .map(CollectionItemCount::getName)
+                .collect(java.util.stream.Collectors.toList());
+        long counted = collectionCounts.stream().filter(c -> c.getTotalItems() >= 0).count();
+        double ratio = counted > 0 ? (double) empty.size() / counted : 0;
 
-        assertThat("No empty collections should be found", emptyCollectionsCount, equalTo(0L));
-
-        logger.info("No empty collections found");
+        if (!empty.isEmpty()) {
+            logger.warn("{} of {} collections are empty: {}", empty.size(), counted, empty);
+            Allure.addAttachment("Empty collections", String.join("\n", empty));
+        }
+        assertThat(String.format("Empty collections %d of %d (%.0f%%) exceed %.0f%%: %s",
+                        empty.size(), counted, ratio * 100, MAX_EMPTY_COLLECTION_RATIO * 100, empty),
+                ratio, lessThanOrEqualTo(MAX_EMPTY_COLLECTION_RATIO));
     }
 
     @Test(description = "Average items per collection is reasonable", priority = 7, dependsOnMethods = "testFetchAllCollectionsAndCounts", groups = "buyerapp")

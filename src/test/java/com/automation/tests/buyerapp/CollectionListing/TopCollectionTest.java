@@ -22,21 +22,19 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Collection Listing")
 @Feature("Top Collection API")
+@TmsLink("TC-COLLECTION-002")
+@TmsLink("TC-COLLECTION-001")
 public class TopCollectionTest extends BaseTest {
 
     private static Response topCollectionResponse;
     private static TopCollectionResponse topCollectionResponseData;
     private String buyerAppBaseUrl;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-        String token = VariableManager.getBuyerAppToken();
-        if (token == null || token.isEmpty()) {
-            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-        }
         logger.info("Using Buyer App token from VariableManager");
     }
 
@@ -45,10 +43,7 @@ public class TopCollectionTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void testResponseStatusCode200() {
         // Send GET request with authentication
-        topCollectionResponse = RestAssured.given()
-                .baseUri(buyerAppBaseUrl)
-                .contentType("application/json")
-                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+        topCollectionResponse = buyerAppSpec()
                 .when()
                 .get(BuyerAppEndpoints.COLLECTION_TOP);
 

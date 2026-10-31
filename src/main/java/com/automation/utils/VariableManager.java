@@ -365,63 +365,21 @@ public class VariableManager {
     }
 
     /**
-     * Save a specific property to the properties file.
-     * This updates both the global properties and the file.
-     * 
+     * Share a runtime value (e.g. a login token) with every test class in this run.
+     * Updates the in-memory globals and the current thread's map only: tokens are
+     * deliberately NOT written back to test-variables.properties, which is tracked
+     * in git.
+     *
      * @param key Property key
      * @param value Property value
      */
     private static synchronized void savePropertyToFile(String key, String value) {
-        try {
-            // Get the properties file path from classpath (points to target/test-classes)
-            String classpathPath = VariableManager.class.getClassLoader()
-                    .getResource(PROPERTIES_FILE).getPath();
-            
-            // Handle Windows paths (remove leading slash if present)
-            if (classpathPath.startsWith("/") && classpathPath.contains(":")) {
-                classpathPath = classpathPath.substring(1);
-            }
-            
-            // Convert target path to source path
-            // Example: c:/project/target/test-classes/file -> c:/project/src/test/resources/file
-            String propertiesPath = classpathPath.replace("target\\test-classes", "src\\test\\resources")
-                                                  .replace("target/test-classes", "src/test/resources");
-            
-            java.io.File file = new java.io.File(propertiesPath);
-            
-            // If source file doesn't exist, fall back to target file (shouldn't happen in normal cases)
-            if (!file.exists()) {
-                logger.warn("Source properties file not found at {}, using classpath location", propertiesPath);
-                file = new java.io.File(classpathPath);
-            }
-            
-            // Load current properties
-            Properties props = new Properties();
-            try (java.io.FileInputStream in = new java.io.FileInputStream(file)) {
-                props.load(in);
-            }
-            
-            // Update the property
-            props.setProperty(key, value);
-            globalProperties.setProperty(key, value);
-            
-            // Also update the current thread's local map if it exists
-            Map<String, String> currentThreadVars = threadLocalVariables.get();
-            if (currentThreadVars != null) {
-                currentThreadVars.put(key, value);
-            }
-
-            // Save back to file
-            try (java.io.FileOutputStream out = new java.io.FileOutputStream(file)) {
-                props.store(out, "Test Variables Configuration - Updated by VariableManager");
-            }
-            
-            logger.info("Successfully saved {} to {}", key, file.getAbsolutePath());
-            
-        } catch (Exception e) {
-            logger.error("Failed to save property {} to file: {}", key, e.getMessage());
-            // Don't throw exception - just log the error
+        globalProperties.setProperty(key, value);
+        Map<String, String> currentThreadVars = threadLocalVariables.get();
+        if (currentThreadVars != null) {
+            currentThreadVars.put(key, value);
         }
+        logger.info("Stored {} in memory for this run (not persisted to disk)", key);
     }
 
 

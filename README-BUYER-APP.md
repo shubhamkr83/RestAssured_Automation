@@ -166,6 +166,31 @@ Complete end-to-end validation of the Navo Fashion consumer-facing API, includin
 
 ---
 
+## 🆕 **New APIs (backend-api QA sync, 2026-10-30)**
+
+**Location:** `src/test/java/com/automation/tests/buyerapp/newapis/` — registered in `testng-buyerapp.xml`, Allure epic **"Buyer App – New APIs"**.
+
+| Class | Endpoints | Tests |
+|---|---|---|
+| `BannerPlacementTest` | `GET /v1/banner/{home,collection,pdp,search}` (incl. guest) | 13 |
+| `MlpPublicReadTest` | `GET /v1/mlp/:occasion`, `/v1/mlp?occasion=`, `/list`, `/occasions`; `/v1/admin/mlp` (403) | 12 |
+| `NavoLiveTest` | `GET /v1/navo-live`, `/v1/navo-live/events/:eventId/products` | 13 |
+| `EventsIngestionNegativeTest` | `POST /events`, `/events/impressions` (root, not `/v1`) | 6 |
+| `SubSellerAuthTest` | `/v1/subseller/*` | 8 |
+| `PrismAccessTest` | `/v1/prism/*` access control | 9 |
+| `ReferralValidationTest` | `/v1/referral` | 8 |
+| `ChatbotV2ValidationTest` | `POST /v2/chatbot/message` | 7 |
+
+**Production-safety rule.** These tests run against production, so they only send GETs or requests that backend-api rejects **before** any DB write, Kafka publish or LLM call (missing/invalid token → 401, staff gate → 403, validation → 400). No valid event, referral, chat message or stock update is ever sent. `PrismAccessTest` sends two valid-shaped bodies only after a read-only probe confirms the test buyer is refused by the same staff gate; otherwise those tests skip. Prod data that may not exist (an MLP occasion, a live event) is discovered at runtime and the test skips if absent.
+
+**Test-case traceability.** Each test has `@TmsLink("TC-…")` with the id from `backend-api/QA/test_cases_doc/`; `allure.properties` turns it into a link that searches the backend-api repo for that id.
+
+**Error envelope.** `ApiErrorAssertions.assertApiError(...)` checks backend-api's `{ statusCode, message }` errors: `statusCode` is `"101"` for thrown errors (validation, staff gate), `"10001"` for direct failure responses, `"10003"` for an invalid token. The events routes use a Go-style `{ status, message, data }` envelope instead.
+
+**Run only these:** `mvn test -Dsurefire.suiteXmlFiles= -Dtest='LoginTest,BannerPlacementTest,MlpPublicReadTest,NavoLiveTest,EventsIngestionNegativeTest,SubSellerAuthTest,PrismAccessTest,ReferralValidationTest,ChatbotV2ValidationTest' -DfailIfNoTests=false`. Build with **JDK 17** — Lombok 1.18.30 fails on newer JDKs.
+
+---
+
 ## ⚙️ **Configuration**
 
 ### **📦 Updated Configuration**

@@ -24,21 +24,19 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Home Page")
 @Feature("Continue Your Journey API")
+@TmsLink("TC-FEED-002")
+@TmsLink("TC-FEED-001")
 public class ContinueYourJourneyTest extends BaseTest {
 
         private static Response journeyCollectionResponse;
         private static JourneyCollectionResponse journeyCollectionResponseData;
         private String buyerAppBaseUrl;
 
-        @BeforeClass
+        @BeforeClass(alwaysRun = true)
         public void setupBuyerApp() {
                 buyerAppBaseUrl = config.buyerAppBaseUrl();
                 logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-                String token = VariableManager.getBuyerAppToken();
-                if (token == null || token.isEmpty()) {
-                        throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-                }
                 logger.info("Using Buyer App token from VariableManager");
         }
 
@@ -53,10 +51,7 @@ public class ContinueYourJourneyTest extends BaseTest {
         @Severity(SeverityLevel.CRITICAL)
         public void testResponseStatus() {
                 // Send GET request with authentication
-                journeyCollectionResponse = RestAssured.given()
-                                .baseUri(buyerAppBaseUrl)
-                                .contentType("application/json")
-                                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                journeyCollectionResponse = buyerAppSpec()
                                 .when()
                                 .get(BuyerAppEndpoints.FEED_JOURNEY_COLLECTION);
 

@@ -5,6 +5,7 @@ import com.automation.constants.BuyerAppEndpoints;
 import com.automation.constants.HttpStatus;
 import com.automation.models.response.CatalogByIdDetailResponse;
 import com.automation.utils.JsonUtils;
+import com.automation.utils.TestDataResolver;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -22,21 +23,20 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Catalog")
 @Feature("Catalog By ID API")
+@TmsLink("TC-CATALOG-009")
+@TmsLink("TC-CATALOG-008")
+@TmsLink("TC-CATALOG-004")
 public class CatalogByIdTest extends BaseTest {
 
     private static Response catalogResponse;
     private static CatalogByIdDetailResponse catalogResponseData;
     private String buyerAppBaseUrl;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-        String token = VariableManager.getBuyerAppToken();
-        if (token == null || token.isEmpty()) {
-            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-        }
         logger.info("Using Buyer App token from VariableManager");
     }
 
@@ -45,12 +45,9 @@ public class CatalogByIdTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void testResponseStatusCode200() {
         // Send GET request with authentication
-        catalogResponse = RestAssured.given()
-                .baseUri(buyerAppBaseUrl)
-                .contentType("application/json")
-                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+        catalogResponse = buyerAppSpec()
                 .when()
-                .pathParam("catalogId", VariableManager.get("live_catalog_id", "67c59d8ff22202c05e7d612e"))
+                .pathParam("catalogId", TestDataResolver.liveCatalogId(BaseTest::buyerAppSpec))
                 .get("/v1/catalog/{catalogId}");
 
         // Parse response for other tests
@@ -215,8 +212,8 @@ public class CatalogByIdTest extends BaseTest {
             assertThat("state should be present", market.getState(), notNullValue());
             assertThat("name should be present", market.getName(), notNullValue());
             assertThat("marketNumber should be present", market.getMarketNumber(), notNullValue());
-            assertThat("createdAt should be present", market.getCreatedAt(), notNullValue());
-            assertThat("updatedAt should be present", market.getUpdatedAt(), notNullValue());
+            // createdAt/updatedAt are not asserted: markets created before the Market
+            // schema gained timestamps have neither, and the catalog is picked at run time.
 
             logger.info("Market object validated: {}, {}", market.getName(), market.getCity());
         }

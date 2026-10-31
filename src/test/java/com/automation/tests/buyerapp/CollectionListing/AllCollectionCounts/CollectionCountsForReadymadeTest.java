@@ -29,20 +29,19 @@ import static org.hamcrest.Matchers.*;
  */
 @Epic("Buyer App Collection Listing")
 @Feature("Collection Counts for Readymade API")
+@TmsLink("TC-COLLECTION-002")
+@TmsLink("TC-COLLECTION-009")
+@TmsLink("TC-COLLECTION-005")
 public class CollectionCountsForReadymadeTest extends BaseTest {
 
     private static List<CollectionItemCount> collectionCounts;
     private String buyerAppBaseUrl;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setupBuyerApp() {
         buyerAppBaseUrl = config.buyerAppBaseUrl();
         logger.info("Buyer App Base URL: {}", buyerAppBaseUrl);
 
-        String token = VariableManager.getBuyerAppToken();
-        if (token == null || token.isEmpty()) {
-            throw new RuntimeException("Buyer App token not available. Please run LoginTest first.");
-        }
         logger.info("Using Buyer App token from VariableManager");
     }
 
@@ -51,10 +50,7 @@ public class CollectionCountsForReadymadeTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void testFetchAllCollectionsAndCounts() {
         // Step 1: Get all collections
-        Response allCollectionsResponse = RestAssured.given()
-                .baseUri(buyerAppBaseUrl)
-                .contentType("application/json")
-                .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+        Response allCollectionsResponse = buyerAppSpec()
                 .queryParam("suitable_for", "readymade")
                 .when()
                 .get(BuyerAppEndpoints.COLLECTION_ALL);
@@ -75,10 +71,7 @@ public class CollectionCountsForReadymadeTest extends BaseTest {
                 // Add delay to avoid rate limiting
                 Thread.sleep(200);
 
-                Response collectionByIdResponse = RestAssured.given()
-                        .baseUri(buyerAppBaseUrl)
-                        .contentType("application/json")
-                        .header("Authorization", "JWT " + VariableManager.getBuyerAppToken())
+                Response collectionByIdResponse = buyerAppSpec()
                         .queryParam("limit", 35)
                         .queryParam("offset", 0)
                         .when()
